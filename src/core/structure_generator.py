@@ -458,6 +458,13 @@ Archiva análisis y reportes."""
                     if 'reporte' in template['nombre'].lower() or 'excel' in template['nombre'].lower():
                         return self.template_manager.load_template(template['id'])
 
+            # Special cases for DOCX files - try advanced template
+            if extension == 'docx':
+                # Try to find advanced business document template
+                for template in templates:
+                    if 'advanced' in template['nombre'].lower() or 'business' in template['nombre'].lower():
+                        return self.template_manager.load_template(template['id'])
+
         except Exception:
             pass
         return None

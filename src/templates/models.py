@@ -133,6 +133,12 @@ class TemplateManager:
                 'nombre': template.get('name', 'External Template')
             }
             return self.render_template(db_template, params)
+        elif 'document' in template and template.get('extension') == 'docx':
+            # Advanced DOCX template with structured content
+            return self._render_docx_template(template, params)
+        elif 'document' in template and template.get('extension') == 'html':
+            # Advanced HTML template with structured content
+            return self._render_html_template(template, params)
         elif 'sheets' in template and template.get('extension') == 'xlsx':
             # Excel multi-sheet template
             return self._render_excel_template(template, params)
@@ -164,4 +170,50 @@ class TemplateManager:
                 return obj
 
         rendered_template = replace_placeholders(rendered_template)
+        return json.dumps(rendered_template, indent=2, ensure_ascii=False)
+
+    def _render_docx_template(self, template: Dict[str, Any], params: Dict[str, str]) -> str:
+        """Render an advanced DOCX template with structured content."""
+        # For DOCX templates, we return the structured JSON that the renderer will handle
+        # The renderer will create the actual DOCX file
+
+        def replace_placeholders(obj: Any) -> Any:
+            if isinstance(obj, str):
+                for key, value in params.items():
+                    obj = obj.replace(f"{{{{{key}}}}}", str(value))
+                return obj
+            elif isinstance(obj, dict):
+                return {k: replace_placeholders(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [replace_placeholders(item) for item in obj]
+            else:
+                return obj
+
+        # Replace placeholders in the template
+        rendered_template = replace_placeholders(template.copy())
+
+        # Return the structured JSON for the DOCX renderer
+        return json.dumps(rendered_template, indent=2, ensure_ascii=False)
+
+    def _render_html_template(self, template: Dict[str, Any], params: Dict[str, str]) -> str:
+        """Render an advanced HTML template with structured content."""
+        # For HTML templates, we return the structured JSON that the renderer will handle
+        # The renderer will create the actual HTML file
+
+        def replace_placeholders(obj: Any) -> Any:
+            if isinstance(obj, str):
+                for key, value in params.items():
+                    obj = obj.replace(f"{{{{{key}}}}}", str(value))
+                return obj
+            elif isinstance(obj, dict):
+                return {k: replace_placeholders(v) for k, v in obj.items()}
+            elif isinstance(obj, list):
+                return [replace_placeholders(item) for item in obj]
+            else:
+                return obj
+
+        # Replace placeholders in the template
+        rendered_template = replace_placeholders(template.copy())
+
+        # Return the structured JSON for the HTML renderer
         return json.dumps(rendered_template, indent=2, ensure_ascii=False)

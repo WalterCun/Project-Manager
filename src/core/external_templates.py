@@ -546,7 +546,20 @@ def get_external_template_params(file_name: str) -> Dict[str, str]:
         "version": "1.0",
         "autor": "Sistema Automático",
         "estado_general": "Operativo",
-        "tendencia": "Estable"
+        "tendencia": "Estable",
+
+        # Analysis fields
+        "analisis1": "Muestra resultados positivos",
+        "proyeccion2": "Se espera crecimiento del 15%",
+        "recomendacion3": "Implementar mejoras de eficiencia",
+        "tendencia1": "↗️ Ascendente",
+        "tendencia2": "➡️ Estable",
+        "tendencia3": "↘️ Descendente",
+
+        # Calculations
+        "total_general": "150",
+        "promedio_general": "85.5",
+        "maximo_general": "95"
     }
 
     # Customize based on file name

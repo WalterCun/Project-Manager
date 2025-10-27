@@ -1,6 +1,6 @@
 import os
 from abc import ABC, abstractmethod
-from typing import Dict, Any
+from typing import Dict, Any, List
 from .models import TemplateManager
 
 class FileRenderer(ABC):
@@ -24,9 +24,237 @@ class DocxRenderer(FileRenderer):
 
     def render(self, content: str, output_path: str) -> None:
         from docx import Document
+        from docx.shared import Inches, Cm
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        from docx.enum.table import WD_TABLE_ALIGNMENT
+        import json
+
         doc = Document()
-        doc.add_paragraph(content)
+
+        # Try to parse content as structured JSON
+        try:
+            if '{' in content and '}' in content:
+                start = content.find('{')
+                end = content.rfind('}') + 1
+                if start != -1 and end > start:
+                    json_str = content[start:end]
+                    data = json.loads(json_str)
+                    self._render_structured_docx(doc, data)
+                else:
+                    self._render_simple_docx(doc, content)
+            else:
+                self._render_simple_docx(doc, content)
+        except Exception as e:
+            print(f"Warning: Failed to render structured DOCX: {e}")
+            self._render_simple_docx(doc, content)
+
         doc.save(output_path)
+
+    def _render_simple_docx(self, doc, content: str) -> None:
+        """Render simple text content to DOCX."""
+        # Split content into paragraphs
+        paragraphs = content.split('\n\n')
+        for para_text in paragraphs:
+            if para_text.strip():
+                doc.add_paragraph(para_text.strip())
+
+    def _render_structured_docx(self, doc, data: Dict[str, Any]) -> None:
+        """Render structured JSON template to DOCX."""
+        from docx.shared import Inches, Cm
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        from docx.enum.table import WD_TABLE_ALIGNMENT
+
+        # Apply document settings
+        if 'document' in data and 'settings' in data['document']:
+            self._apply_document_settings(doc, data['document']['settings'])
+
+        # Get global styles
+        global_styles = {}
+        if 'document' in data and 'styles' in data['document']:
+            global_styles = data['document']['styles']
+
+        # Render sections
+        if 'document' in data and 'sections' in data['document']:
+            self._render_sections(doc, data['document']['sections'], global_styles)
+
+        # Add footer if specified
+        if 'document' in data and 'footer' in data['document']:
+            self._add_footer(doc, data['document']['footer'])
+
+    def _apply_document_settings(self, doc, settings: Dict[str, Any]) -> None:
+        """Apply document-level settings."""
+        # Note: python-docx has limited support for document settings
+        # These would need to be applied after document creation
+        pass
+
+    def _render_sections(self, doc, sections: List[Dict[str, Any]], global_styles: Dict[str, Any]) -> None:
+        """Render document sections."""
+        for section in sections:
+            section_type = section.get('type', 'paragraph')
+
+            if section_type == 'header':
+                self._render_header(doc, section, global_styles)
+            elif section_type == 'paragraph':
+                self._render_paragraph(doc, section, global_styles)
+            elif section_type == 'table':
+                self._render_table(doc, section, global_styles)
+            elif section_type == 'list':
+                self._render_list(doc, section, global_styles)
+            elif section_type == 'table_of_contents':
+                self._render_table_of_contents(doc, section, global_styles)
+            elif section_type == 'section_break':
+                self._add_section_break(doc, section)
+
+    def _render_header(self, doc, section: Dict[str, Any], global_styles: Dict[str, Any]) -> None:
+        """Render a header section."""
+        content = section.get('content', '')
+        level = section.get('level', 1)
+        style_name = section.get('style', 'heading1_style')
+
+        # Get style configuration
+        style = global_styles.get(style_name, {})
+
+        # Create paragraph with content
+        para = doc.add_paragraph(content)
+
+        # Apply styling
+        self._apply_paragraph_style(para, style)
+
+        # Apply level-based formatting
+        if level == 1:
+            para.style = 'Heading 1'
+        elif level == 2:
+            para.style = 'Heading 2'
+        elif level == 3:
+            para.style = 'Heading 3'
+
+    def _render_paragraph(self, doc, section: Dict[str, Any], global_styles: Dict[str, Any]) -> None:
+        """Render a paragraph section."""
+        content = section.get('content', '')
+        style_name = section.get('style', 'normal_style')
+        style = global_styles.get(style_name, {})
+
+        para = doc.add_paragraph(content)
+        self._apply_paragraph_style(para, style)
+
+    def _render_table(self, doc, section: Dict[str, Any], global_styles: Dict[str, Any]) -> None:
+        """Render a table section."""
+        headers = section.get('headers', [])
+        rows = section.get('rows', [])
+        style = section.get('style', {})
+
+        if not headers and not rows:
+            return
+
+        # Create table
+        num_cols = max(len(headers), max(len(row) for row in rows) if rows else 0)
+        table = doc.add_table(rows=len(rows) + (1 if headers else 0), cols=num_cols)
+
+        # Add headers
+        if headers:
+            header_row = table.rows[0]
+            for i, header in enumerate(headers):
+                if i < len(header_row.cells):
+                    header_row.cells[i].text = header
+                    self._apply_cell_style(header_row.cells[i], style.get('header_style', {}))
+
+        # Add data rows
+        for row_idx, row in enumerate(rows):
+            table_row = table.rows[row_idx + (1 if headers else 0)]
+            for col_idx, cell_content in enumerate(row):
+                if col_idx < len(table_row.cells):
+                    table_row.cells[col_idx].text = cell_content
+                    self._apply_cell_style(table_row.cells[col_idx], style.get('cell_style', {}))
+
+        # Apply table-level styling
+        if style.get('border'):
+            # Apply borders to all cells
+            for row in table.rows:
+                for cell in row.cells:
+                    self._apply_cell_borders(cell, style['border'])
+
+    def _render_list(self, doc, section: Dict[str, Any], global_styles: Dict[str, Any]) -> None:
+        """Render a list section."""
+        items = section.get('items', [])
+        list_type = section.get('list_type', 'bullet')
+        style_name = section.get('style', 'normal_style')
+        style = global_styles.get(style_name, {})
+
+        for item in items:
+            para = doc.add_paragraph(item, style='List Bullet' if list_type == 'bullet' else 'List Number')
+            self._apply_paragraph_style(para, style)
+
+    def _render_table_of_contents(self, doc, section: Dict[str, Any], global_styles: Dict[str, Any]) -> None:
+        """Render table of contents (placeholder)."""
+        title = section.get('title', 'Tabla de Contenido')
+        style_name = section.get('style', 'heading1_style')
+        style = global_styles.get(style_name, {})
+
+        para = doc.add_paragraph(f"[{title} - Auto-generated]")
+        self._apply_paragraph_style(para, style)
+
+    def _add_section_break(self, doc, section: Dict[str, Any]) -> None:
+        """Add a section break."""
+        break_type = section.get('break_type', 'page')
+        # Note: python-docx has limited section break support
+        doc.add_paragraph(f"[Section Break: {break_type}]")
+
+    def _add_footer(self, doc, footer_config: Dict[str, Any]) -> None:
+        """Add document footer."""
+        # Note: python-docx footer support is limited in simple usage
+        pass
+
+    def _apply_paragraph_style(self, paragraph, style: Dict[str, Any]) -> None:
+        """Apply styling to a paragraph."""
+        from docx.shared import Inches, Cm
+
+        if 'font_size' in style:
+            paragraph.style.font.size = Inches(style['font_size'] / 72)  # Convert points to inches
+
+        if 'bold' in style and style['bold']:
+            paragraph.style.font.bold = True
+
+        if 'italic' in style and style['italic']:
+            paragraph.style.font.italic = True
+
+        if 'underline' in style and style['underline']:
+            paragraph.style.font.underline = True
+
+        if 'font_color' in style:
+            # Note: Font color requires RGB values
+            pass
+
+        if 'alignment' in style:
+            align_map = {
+                'left': WD_ALIGN_PARAGRAPH.LEFT,
+                'center': WD_ALIGN_PARAGRAPH.CENTER,
+                'right': WD_ALIGN_PARAGRAPH.RIGHT,
+                'justify': WD_ALIGN_PARAGRAPH.JUSTIFY
+            }
+            if style['alignment'] in align_map:
+                paragraph.alignment = align_map[style['alignment']]
+
+        if 'spacing' in style:
+            spacing = style['spacing']
+            if 'before' in spacing:
+                paragraph.paragraph_format.space_before = Inches(spacing['before'] / 72)
+            if 'after' in spacing:
+                paragraph.paragraph_format.space_after = Inches(spacing['after'] / 72)
+
+        if 'line_spacing' in style:
+            # Line spacing is more complex in python-docx
+            pass
+
+    def _apply_cell_style(self, cell, style: Dict[str, Any]) -> None:
+        """Apply styling to a table cell."""
+        for paragraph in cell.paragraphs:
+            self._apply_paragraph_style(paragraph, style)
+
+    def _apply_cell_borders(self, cell, border_type: str) -> None:
+        """Apply borders to a table cell."""
+        # Note: Border styling in python-docx is complex
+        # This is a placeholder for future implementation
+        pass
 
 class XlsxRenderer(FileRenderer):
     """Renderer for .xlsx files using openpyxl."""
@@ -295,6 +523,26 @@ class HtmlRenderer(FileRenderer):
         return 'html'
 
     def render(self, content: str, output_path: str) -> None:
+        import json
+
+        # Try to parse content as structured JSON
+        try:
+            if '{' in content and '}' in content:
+                start = content.find('{')
+                end = content.rfind('}') + 1
+                if start != -1 and end > start:
+                    json_str = content[start:end]
+                    data = json.loads(json_str)
+                    self._render_structured_html(data, output_path)
+                    return
+        except Exception:
+            pass
+
+        # Fallback to simple HTML rendering
+        self._render_simple_html(content, output_path)
+
+    def _render_simple_html(self, content: str, output_path: str) -> None:
+        """Render simple text content to HTML."""
         html_content = f"""
 <!DOCTYPE html>
 <html>
@@ -310,8 +558,163 @@ class HtmlRenderer(FileRenderer):
 </body>
 </html>
         """
-        with open(output_path, 'w') as f:
+        with open(output_path, 'w', encoding='utf-8') as f:
             f.write(html_content)
+
+    def _render_structured_html(self, data: Dict[str, Any], output_path: str) -> None:
+        """Render structured JSON template to HTML."""
+        # Handle advanced HTML template format
+        if 'document' in data:
+            self._render_advanced_html(data['document'], output_path)
+        else:
+            self._render_simple_html(str(data), output_path)
+
+    def _render_advanced_html(self, document: Dict[str, Any], output_path: str) -> None:
+        """Render advanced HTML document with sections."""
+        html_parts = []
+
+        # HTML header
+        html_parts.append("<!DOCTYPE html>")
+        html_parts.append('<html lang="es">')
+        html_parts.append("<head>")
+        html_parts.append(f'    <title>{document.get("title", "Generated Document")}</title>')
+        html_parts.append('    <meta charset="UTF-8">')
+        html_parts.append('    <meta name="viewport" content="width=device-width, initial-scale=1.0">')
+
+        # Include CSS frameworks
+        includes = document.get('includes', {})
+        for lib_name, lib_url in includes.items():
+            if 'bootstrap' in lib_name.lower():
+                html_parts.append(f'    <link href="{lib_url}" rel="stylesheet">')
+
+        # Custom styles
+        html_parts.append('    <style>')
+        styles = document.get('styles', {})
+        for selector, style_dict in styles.items():
+            html_parts.append(f'        {selector} {{')
+            for prop, value in style_dict.items():
+                html_parts.append(f'            {prop.replace("_", "-")}: {value};')
+            html_parts.append('        }')
+        html_parts.append('    </style>')
+
+        html_parts.append("</head>")
+        html_parts.append("<body>")
+
+        # Render sections
+        sections = document.get('sections', [])
+        for section in sections:
+            section_type = section.get('type', 'paragraph')
+
+            if section_type == 'header':
+                content = section.get('content', '')
+                subtitle = section.get('subtitle', '')
+                metadata = section.get('metadata', '')
+
+                html_parts.append('    <div class="header">')
+                html_parts.append(f'        <h1>{content}</h1>')
+                if subtitle:
+                    html_parts.append(f'        <h2>{subtitle}</h2>')
+                if metadata:
+                    html_parts.append(f'        <p>{metadata}</p>')
+                html_parts.append('    </div>')
+
+            elif section_type == 'metric_grid':
+                columns = section.get('columns', 3)
+                metrics = section.get('metrics', [])
+
+                html_parts.append(f'    <div class="row">')
+                for metric in metrics:
+                    html_parts.append('        <div class="col-md-{12//columns}">')
+                    html_parts.append('            <div class="metric-card text-center">')
+                    html_parts.append(f'                <i class="{metric.get("icon", "fas fa-chart-bar")}"></i>')
+                    html_parts.append(f'                <h5>{metric.get("title", "")}</h5>')
+                    html_parts.append(f'                <h3>{metric.get("value", "")}</h3>')
+                    html_parts.append(f'                <span class="status-badge {metric.get("status_class", "")}">{metric.get("status", "")}</span>')
+                    html_parts.append(f'                <p>{metric.get("description", "")}</p>')
+                    html_parts.append('            </div>')
+                    html_parts.append('        </div>')
+                html_parts.append('    </div>')
+
+            elif section_type == 'content_section':
+                title = section.get('title', '')
+                content = section.get('content', '')
+                icon = section.get('icon', '')
+
+                html_parts.append('    <div class="metric-card">')
+                html_parts.append(f'        <h4><i class="{icon}"></i> {title}</h4>')
+                html_parts.append(f'        <p>{content}</p>')
+                html_parts.append('    </div>')
+
+            elif section_type == 'chart_section':
+                title = section.get('title', '')
+                chart_type = section.get('chart_type', 'bar')
+                chart_id = section.get('chart_id', 'chart1')
+
+                html_parts.append('    <div class="metric-card">')
+                html_parts.append(f'        <h4>{title}</h4>')
+                html_parts.append(f'        <div class="chart-container">')
+                html_parts.append(f'            <canvas id="{chart_id}"></canvas>')
+                html_parts.append('        </div>')
+                html_parts.append('    </div>')
+
+            elif section_type == 'analysis_section':
+                title = section.get('title', '')
+                content = section.get('content', '')
+                highlights = section.get('highlights', [])
+                icon = section.get('icon', '')
+
+                html_parts.append('    <div class="metric-card">')
+                html_parts.append(f'        <h4><i class="{icon}"></i> {title}</h4>')
+                html_parts.append(f'        <p>{content}</p>')
+                if highlights:
+                    html_parts.append('        <ul>')
+                    for highlight in highlights:
+                        html_parts.append(f'            <li>{highlight}</li>')
+                    html_parts.append('        </ul>')
+                html_parts.append('    </div>')
+
+            elif section_type == 'conclusions_section':
+                title = section.get('title', '')
+                content = section.get('content', '')
+                recommendations = section.get('recommendations', [])
+                icon = section.get('icon', '')
+
+                html_parts.append('    <div class="metric-card">')
+                html_parts.append(f'        <h4><i class="{icon}"></i> {title}</h4>')
+                html_parts.append(f'        <p>{content}</p>')
+                if recommendations:
+                    html_parts.append('        <ul>')
+                    for rec in recommendations:
+                        html_parts.append(f'            <li>{rec}</li>')
+                    html_parts.append('        </ul>')
+                html_parts.append('    </div>')
+
+            elif section_type == 'footer':
+                content = section.get('content', '')
+                style = section.get('style', {})
+
+                style_str = ' '.join([f'{k.replace("_", "-")}: {v};' for k, v in style.items()])
+                html_parts.append(f'    <footer style="{style_str}">')
+                html_parts.append(f'        <p>{content}</p>')
+                html_parts.append('    </footer>')
+
+        # Add scripts
+        scripts = document.get('scripts', {})
+        if scripts:
+            html_parts.append('    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>')
+            html_parts.append('    <script>')
+            html_parts.append('        function initializeCharts() {')
+            html_parts.append('            // Chart initialization code would go here')
+            html_parts.append('        }')
+            html_parts.append('        document.addEventListener("DOMContentLoaded", initializeCharts);')
+            html_parts.append('    </script>')
+
+        html_parts.append("</body>")
+        html_parts.append("</html>")
+
+        # Write HTML file
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(html_parts))
 
 class MdRenderer(FileRenderer):
     """Renderer for .md files."""
