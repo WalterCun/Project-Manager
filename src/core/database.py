@@ -59,6 +59,10 @@ class DatabaseManager:
         from .base_templates import initialize_base_templates
         initialize_base_templates(self)
 
+        # Initialize external templates
+        from .external_templates import initialize_external_templates
+        initialize_external_templates()
+
     def save_project(self, name: str, structure: Dict[str, Any], path: Optional[str] = None) -> int:
         session = self.Session()
         try:

@@ -371,9 +371,9 @@ Archiva análisis y reportes."""
             folder_path = os.path.join(base_path, folder)
             os.makedirs(folder_path, exist_ok=True)
 
-            # Create INFO.md for main folders
+            # Create README.md for main folders
             if is_root and folder in self.folder_descriptions:
-                readme_path = os.path.join(folder_path, "INFO.md")
+                readme_path = os.path.join(folder_path, "README.md")
                 with open(readme_path, 'w', encoding='utf-8') as f:
                     f.write(self.folder_descriptions[folder])
 
@@ -389,15 +389,30 @@ Archiva análisis y reportes."""
         for file_name in file_list:
             file_path = os.path.join(folder_path, file_name)
 
-            # Try to find a template for this file
+            # Try to find a template for this file (external first, then database)
             template = self._find_template_for_file(file_name)
             if template:
                 try:
-                    # Render template with default parameters
-                    default_params = self._get_default_params_for_file(file_name)
-                    content = self.template_manager.render_template(template, default_params)
-                    renderer = RendererFactory.get_renderer(template['extension'])
-                    renderer.render(content, file_path)
+                    # Check if it's an external template
+                    if 'content' in template or 'sheets' in template:
+                        # External template - use external rendering
+                        content = self.template_manager.render_external_template(file_name)
+                        if content:
+                            extension = file_name.split('.')[-1] if '.' in file_name else 'txt'
+                            renderer = RendererFactory.get_renderer(extension)
+                            renderer.render(content, file_path)
+                        else:
+                            # Fallback to default parameters
+                            default_params = self._get_default_params_for_file(file_name)
+                            content = self.template_manager.render_template(template, default_params)
+                            renderer = RendererFactory.get_renderer(template.get('extension', 'txt'))
+                            renderer.render(content, file_path)
+                    else:
+                        # Database template - use traditional rendering
+                        default_params = self._get_default_params_for_file(file_name)
+                        content = self.template_manager.render_template(template, default_params)
+                        renderer = RendererFactory.get_renderer(template.get('extension', 'txt'))
+                        renderer.render(content, file_path)
                 except Exception as e:
                     # If template rendering fails, create the empty file
                     print(f"Warning: Failed to render template for {file_name}: {e}")
@@ -414,10 +429,17 @@ Archiva análisis y reportes."""
     def _find_template_for_file(self, file_name: str) -> Optional[Dict[str, Any]]:
         """Find a template that matches the file name or extension."""
         try:
-            templates = self.template_manager.list_templates()
             extension = file_name.split('.')[-1] if '.' in file_name else ''
 
-            # First, try to find by exact name (without extension)
+            # First, try to find external template
+            external_template = self.template_manager.find_external_template(file_name)
+            if external_template:
+                return external_template
+
+            # Fallback to database templates
+            templates = self.template_manager.list_templates()
+
+            # Try to find by exact name (without extension)
             base_name = file_name.replace('.' + extension, '').lower()
             for template in templates:
                 template_base_name = template['nombre'].lower().replace('plantilla ', '').replace(' base', '')
@@ -442,7 +464,9 @@ Archiva análisis y reportes."""
 
     def _get_default_params_for_file(self, file_name: str) -> Dict[str, str]:
         """Get default parameters for a file based on its name."""
-        return get_template_params_for_file(file_name)
+        # Try external template parameters first
+        from core.external_templates import get_external_template_params
+        return get_external_template_params(file_name)
 
     def save_to_db(self, project_name: str, structure: Dict[str, Any], path: Optional[str] = None) -> int:
         return self.db_manager.save_project(project_name, structure, path)

@@ -15,11 +15,11 @@ def create_project(args: argparse.Namespace) -> None:
     elif hasattr(args, 'restart') and args.restart:
         action = 'restart'
 
-    # Check if project already exists
+    # Check if the project already exists
     if generator.check_duplicate_name(args.name):
         existing_project = db_manager.get_project_by_name(args.name)
 
-        # If non-interactive mode with specific action
+        # If non-interactive mode with a specific action
         if action:
             if action == 'regenerate':
                 print(f"Regenerating project '{args.name}'...")
