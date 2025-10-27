@@ -1,0 +1,12 @@
+{
+  "name": "Business Document",
+  "extension": "docx",
+  "description": "Professional Word document template",
+  "content": "{{titulo}}\n\n{{empresa}}\nFecha: {{fecha}} | Hora: {{hora}}\n\nÍNDICE\n\n1. Introducción\n2. Objetivo\n3. Contenido\n4. Conclusiones\n\nINTRODUCCIÓN\n\n{{introduccion}}\n\nOBJETIVO\n\n{{objetivo}}\n\nCONTENIDO\n\nMétricas del Proyecto:\n- {{metrica1}}: {{valor1}} ({{estado1}})\n- {{metrica2}}: {{valor2}} ({{estado2}})\n- {{metrica3}}: {{valor3}} ({{estado3}})\n\nANÁLISIS\n\n{{analisis}}\n\nCONCLUSIONES\n\n{{conclusiones}}\n\n---\nGenerado automáticamente por Project Manager\n{{empresa}} | {{fecha}} | {{hora}}",
+  "styles": {
+    "title": {"bold": true, "font_size": 18},
+    "heading1": {"bold": true, "font_size": 16},
+    "heading2": {"bold": true, "font_size": 14},
+    "normal": {"font_size": 12}
+  }
+}

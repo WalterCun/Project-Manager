@@ -1,0 +1,8 @@
+{
+  "name": "Custom Excel Template",
+  "extension": "xlsx",
+  "description": "Custom Excel template for testing",
+  "content": "Custom content here",
+  "version": "1.0",
+  "author": "User"
+}

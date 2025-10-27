@@ -1,0 +1,175 @@
+{
+  "name": "Multi-Sheet Dashboard",
+  "extension": "xlsx",
+  "description": "Excel template with data, summary, and dashboard sheets",
+  "version": "1.0",
+  "author": "Project Manager",
+  "sheets": {
+    "Data": {
+      "description": "Raw data input sheet",
+      "cells": {
+        "A1": {
+          "value": "📊 {{titulo}}",
+          "style": {
+            "bold": true,
+            "font_size": 16,
+            "font_color": "1F4E79",
+            "fill": {"pattern": "solid", "color": "E6F3FF"}
+          }
+        },
+        "A2": {
+          "value": "{{empresa}}",
+          "style": {"italic": true, "font_size": 12}
+        },
+        "A3": {
+          "value": "Fecha: {{fecha}} | Hora: {{hora}}",
+          "style": {"font_size": 10, "font_color": "666666"}
+        },
+        "A5": {
+          "value": "📋 DATOS PRINCIPALES",
+          "style": {
+            "bold": true,
+            "font_size": 14,
+            "fill": {"pattern": "solid", "color": "F2F2F2"}
+          }
+        },
+        "B7": {"value": "{{metrica1}}"},
+        "C7": {"value": "{{metrica2}}"},
+        "D7": {"value": "{{metrica3}}"},
+        "B8": {"value": "{{valor1}}", "style": {"bold": true}},
+        "C8": {"value": "{{valor2}}", "style": {"bold": true}},
+        "D8": {"value": "{{valor3}}", "style": {"bold": true}},
+        "B9": {"value": "{{estado1}}", "style": {"font_color": "28A745"}},
+        "C9": {"value": "{{estado2}}", "style": {"font_color": "28A745"}},
+        "D9": {"value": "{{estado3}}", "style": {"font_color": "28A745"}}
+      },
+      "tables": {
+        "DataTable": {
+          "range": "B7:D9",
+          "headers": true,
+          "style": {
+            "header_fill": "0070C0",
+            "header_font_color": "FFFFFF",
+            "border": "thin"
+          }
+        }
+      }
+    },
+    "Summary": {
+      "description": "Summary and calculations sheet",
+      "cells": {
+        "A1": {
+          "value": "📈 RESUMEN EJECUTIVO",
+          "style": {
+            "bold": true,
+            "font_size": 16,
+            "font_color": "1F4E79",
+            "fill": {"pattern": "solid", "color": "E6F3FF"}
+          }
+        },
+        "A3": {
+          "value": "Indicadores Clave",
+          "style": {"bold": true, "font_size": 12}
+        },
+        "B4": {"value": "Total Items"},
+        "C4": {"formula": "COUNTA(Data!B8:D8)"},
+        "B5": {"value": "Promedio"},
+        "C5": {"formula": "AVERAGE(Data!C8:D8)"},
+        "B6": {"value": "Máximo"},
+        "C6": {"formula": "MAX(Data!C8:D8)"},
+        "B7": {"value": "Mínimo"},
+        "C7": {"formula": "MIN(Data!C8:D8)"},
+        "A9": {
+          "value": "💡 ANÁLISIS",
+          "style": {"bold": true, "font_size": 12}
+        },
+        "B10": {"value": "{{analisis}}"}
+      }
+    },
+    "Dashboard": {
+      "description": "Visual dashboard with KPIs and insights",
+      "cells": {
+        "A1": {
+          "value": "🎯 DASHBOARD EJECUTIVO",
+          "style": {
+            "bold": true,
+            "font_size": 18,
+            "font_color": "1F4E79",
+            "fill": {"pattern": "solid", "color": "E6F3FF"}
+          }
+        },
+        "A3": {
+          "value": "KPIs Principales",
+          "style": {"bold": true, "font_size": 14}
+        },
+        "B5": {
+          "value": "Estado General",
+          "style": {"bold": true}
+        },
+        "C5": {
+          "value": "{{estado_general}}",
+          "style": {
+            "bold": true,
+            "font_size": 14,
+            "font_color": "28A745"
+          }
+        },
+        "B6": {
+          "value": "Tendencia",
+          "style": {"bold": true}
+        },
+        "C6": {
+          "value": "{{tendencia}}",
+          "style": {"font_color": "0070C0"}
+        },
+        "A8": {
+          "value": "📊 GRÁFICOS Y VISUALIZACIONES",
+          "style": {"bold": true, "font_size": 12}
+        },
+        "B10": {"value": "Gráfico de barras: Métricas vs Valores"},
+        "B11": {"value": "Gráfico circular: Distribución por estados"},
+        "B12": {"value": "Gráfico de líneas: Tendencia temporal"},
+        "A14": {
+          "value": "🔍 CONCLUSIONES",
+          "style": {"bold": true, "font_size": 12}
+        },
+        "B15": {"value": "{{conclusiones}}"}
+      },
+      "charts": {
+        "MetricsChart": {
+          "type": "bar",
+          "title": "Métricas Principales",
+          "data_range": "Data!B7:D8",
+          "position": "B10:D15",
+          "style": {
+            "chart_type": "clustered_bar",
+            "legend": true,
+            "data_labels": true
+          }
+        },
+        "StatusChart": {
+          "type": "pie",
+          "title": "Distribución por Estados",
+          "data_range": "Data!B9:D9",
+          "position": "B16:D20",
+          "style": {
+            "legend": true,
+            "data_labels": true,
+            "colors": ["28A745", "FFC107", "DC3545"]
+          }
+        }
+      }
+    }
+  },
+  "global_styles": {
+    "header_style": {
+      "bold": true,
+      "font_size": 12,
+      "fill": {"pattern": "solid", "color": "F2F2F2"}
+    },
+    "data_style": {
+      "border": "thin",
+      "alignment": "center"
+    }
+  }
+}

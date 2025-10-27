@@ -1,0 +1,6 @@
+{
+  "name": "Technical Documentation",
+  "extension": "md",
+  "description": "Technical markdown documentation template",
+  "content": "# {{titulo}}\n\n**{{empresa}}**\n\n*Fecha: {{fecha}} | Hora: {{hora}}*\n\n---\n\n## 📋 Tabla de Contenido\n\n1. [Introducción](#introducción)\n2. [Objetivo](#objetivo)\n3. [Contenido](#contenido)\n4. [Análisis](#análisis)\n5. [Conclusiones](#conclusiones)\n\n---\n\n## Introducción\n\n{{introduccion}}\n\n## Objetivo\n\n{{objetivo}}\n\n## Contenido\n\n### Métricas Principales\n\n| Métrica | Valor | Estado |\n|---------|-------|--------|\n| {{metrica1}} | {{valor1}} | {{estado1}} |\n| {{metrica2}} | {{valor2}} | {{estado2}} |\n| {{metrica3}} | {{valor3}} | {{estado3}} |\n\n### Análisis Detallado\n\n{{analisis}}\n\n## Conclusiones\n\n{{conclusiones}}\n\n---\n\n*Este documento fue generado automáticamente por Project Manager*\n\n*{{empresa}} | {{fecha}} | {{hora}}*"
+}
