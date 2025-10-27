@@ -1,0 +1,208 @@
+{
+  "name": "Advanced Business Document",
+  "extension": "docx",
+  "description": "Advanced Word document with structured sections, tables, and styling",
+  "version": "2.0",
+  "author": "Project Manager",
+  "document": {
+    "settings": {
+      "page_size": "A4",
+      "orientation": "portrait",
+      "margins": {
+        "top": 2.54,
+        "bottom": 2.54,
+        "left": 2.54,
+        "right": 2.54
+      }
+    },
+    "styles": {
+      "title_style": {
+        "font_size": 18,
+        "bold": true,
+        "underline": false,
+        "font_color": "1F4E79",
+        "alignment": "center",
+        "spacing": {"before": 24, "after": 12}
+      },
+      "heading1_style": {
+        "font_size": 16,
+        "bold": true,
+        "font_color": "2E75B6",
+        "spacing": {"before": 18, "after": 6}
+      },
+      "heading2_style": {
+        "font_size": 14,
+        "bold": true,
+        "italic": false,
+        "spacing": {"before": 12, "after": 6}
+      },
+      "normal_style": {
+        "font_size": 12,
+        "line_spacing": 1.5,
+        "spacing": {"before": 0, "after": 6}
+      },
+      "table_header_style": {
+        "bold": true,
+        "font_size": 12,
+        "background_color": "E6F3FF",
+        "alignment": "center"
+      },
+      "table_cell_style": {
+        "font_size": 11,
+        "alignment": "center"
+      }
+    },
+    "sections": [
+      {
+        "type": "header",
+        "level": 1,
+        "content": "{{titulo}}",
+        "style": "title_style"
+      },
+      {
+        "type": "paragraph",
+        "content": "{{empresa}}",
+        "style": "heading2_style"
+      },
+      {
+        "type": "paragraph",
+        "content": "Fecha: {{fecha}} | Hora: {{hora}}",
+        "style": "normal_style"
+      },
+      {
+        "type": "table_of_contents",
+        "title": "ÍNDICE",
+        "style": "heading1_style",
+        "levels": 2,
+        "show_page_numbers": true
+      },
+      {
+        "type": "section_break",
+        "break_type": "page"
+      },
+      {
+        "type": "header",
+        "level": 2,
+        "content": "Introducción",
+        "style": "heading1_style"
+      },
+      {
+        "type": "paragraph",
+        "content": "{{introduccion}}",
+        "style": "normal_style"
+      },
+      {
+        "type": "header",
+        "level": 2,
+        "content": "Objetivo",
+        "style": "heading1_style"
+      },
+      {
+        "type": "paragraph",
+        "content": "{{objetivo}}",
+        "style": "normal_style"
+      },
+      {
+        "type": "header",
+        "level": 2,
+        "content": "Contenido",
+        "style": "heading1_style"
+      },
+      {
+        "type": "table",
+        "title": "Métricas Principales",
+        "headers": [
+          "Métrica",
+          "Valor",
+          "Estado",
+          "Tendencia"
+        ],
+        "rows": [
+          ["{{metrica1}}", "{{valor1}}", "{{estado1}}", "{{tendencia1}}"],
+          ["{{metrica2}}", "{{valor2}}", "{{estado2}}", "{{tendencia2}}"],
+          ["{{metrica3}}", "{{valor3}}", "{{estado3}}", "{{tendencia3}}"]
+        ],
+        "style": {
+          "header_style": "table_header_style",
+          "cell_style": "table_cell_style",
+          "border": "single",
+          "widths": [3, 2, 2, 2]
+        }
+      },
+      {
+        "type": "paragraph",
+        "content": "La tabla anterior muestra los indicadores clave del proyecto con sus respectivos valores y tendencias.",
+        "style": "normal_style"
+      },
+      {
+        "type": "list",
+        "list_type": "bullet",
+        "items": [
+          "Análisis de {{metrica1}}: {{analisis1}}",
+          "Proyecciones para {{metrica2}}: {{proyeccion2}}",
+          "Recomendaciones basadas en {{metrica3}}: {{recomendacion3}}"
+        ],
+        "style": "normal_style"
+      },
+      {
+        "type": "header",
+        "level": 2,
+        "content": "Análisis Detallado",
+        "style": "heading1_style"
+      },
+      {
+        "type": "paragraph",
+        "content": "{{analisis}}",
+        "style": "normal_style"
+      },
+      {
+        "type": "header",
+        "level": 2,
+        "content": "Conclusiones",
+        "style": "heading1_style"
+      },
+      {
+        "type": "paragraph",
+        "content": "{{conclusiones}}",
+        "style": "normal_style"
+      },
+      {
+        "type": "section_break",
+        "break_type": "page"
+      },
+      {
+        "type": "header",
+        "level": 2,
+        "content": "Anexos",
+        "style": "heading1_style"
+      },
+      {
+        "type": "table",
+        "title": "Anexo 1: Detalle de Cálculos",
+        "headers": [
+          "Cálculo",
+          "Fórmula",
+          "Resultado"
+        ],
+        "rows": [
+          ["Total General", "SUM(B8:D8)", "{{total_general}}"],
+          ["Promedio", "AVERAGE(B8:D8)", "{{promedio_general}}"],
+          ["Máximo", "MAX(B8:D8)", "{{maximo_general}}"]
+        ],
+        "style": {
+          "header_style": "table_header_style",
+          "cell_style": "table_cell_style",
+          "border": "double"
+        }
+      }
+    ],
+    "footer": {
+      "content": "Generado automáticamente por Project Manager | {{fecha}} {{hora}} | Página {{page_number}}",
+      "style": {
+        "font_size": 10,
+        "italic": true,
+        "alignment": "center"
+      }
+    }
+  }
+}
