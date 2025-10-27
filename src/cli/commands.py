@@ -4,6 +4,7 @@ import os
 from typing import Dict, Any
 from ..core.structure_generator import StructureGenerator
 from ..core.database import DatabaseManager
+from ..templates.cli import setup_template_parser
 
 def create_project(args: argparse.Namespace) -> None:
     db_manager = DatabaseManager()
@@ -67,6 +68,9 @@ def main() -> None:
     export_parser.add_argument('id', type=int, help='Project ID')
     export_parser.add_argument('file', help='Output JSON file')
     export_parser.set_defaults(func=export_json)
+
+    # Setup template commands
+    setup_template_parser(subparsers)
 
     args = parser.parse_args()
     if hasattr(args, 'func'):

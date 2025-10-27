@@ -15,12 +15,6 @@ class Project(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     changes = relationship("Change", back_populates="project")
 
-class Template(Base):
-    __tablename__ = 'templates'
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
-    structure = Column(JSON, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
 
 class Change(Base):
     __tablename__ = 'changes'
@@ -30,6 +24,20 @@ class Change(Base):
     details = Column(Text)
     timestamp = Column(DateTime, default=datetime.utcnow)
     project = relationship("Project", back_populates="changes")
+
+class Template(Base):
+    __tablename__ = 'templates'
+    __table_args__ = {'extend_existing': True}
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String, nullable=False)
+    contenido = Column(Text, nullable=False)
+    padre_id = Column(Integer, ForeignKey('templates.id'), nullable=True)
+    extension = Column(String, nullable=False)
+    project_id = Column(Integer, ForeignKey('projects.id'), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    padre = relationship("Template", remote_side=[id], backref="hijos")
+    project = relationship("Project", backref="templates")
 
 class DatabaseManager:
     def __init__(self, db_path: str = 'project_structure.db'):
@@ -95,27 +103,6 @@ class DatabaseManager:
         finally:
             session.close()
 
-    def save_template(self, name: str, structure: Dict[str, Any]) -> None:
-        session = self.Session()
-        try:
-            template = Template(name=name, structure=structure)
-            session.add(template)
-            session.commit()
-        except Exception as e:
-            session.rollback()
-            raise RuntimeError(f"Failed to save template: {e}")
-        finally:
-            session.close()
-
-    def get_templates(self) -> List[Dict[str, Any]]:
-        session = self.Session()
-        try:
-            templates = session.query(Template).all()
-            return [{'id': t.id, 'name': t.name, 'structure': t.structure} for t in templates]
-        except Exception as e:
-            raise RuntimeError(f"Failed to get templates: {e}")
-        finally:
-            session.close()
 
     def log_change(self, project_id: int, change_type: str, details: str) -> None:
         session = self.Session()
@@ -136,5 +123,95 @@ class DatabaseManager:
             return [{'change_type': c.change_type, 'details': c.details, 'timestamp': c.timestamp.isoformat() if c.timestamp else None} for c in changes]
         except Exception as e:
             raise RuntimeError(f"Failed to get change history: {e}")
+        finally:
+            session.close()
+
+    def save_template(self, nombre: str, contenido: str, extension: str, padre_id: Optional[int] = None, project_id: Optional[int] = None) -> int:
+        session = self.Session()
+        try:
+            template = Template(nombre=nombre, contenido=contenido, extension=extension, padre_id=padre_id, project_id=project_id)
+            session.add(template)
+            session.commit()
+            return template.id
+        except Exception as e:
+            session.rollback()
+            raise RuntimeError(f"Failed to save template: {e}")
+        finally:
+            session.close()
+
+    def update_template(self, template_id: int, nombre: Optional[str] = None, contenido: Optional[str] = None, extension: Optional[str] = None, padre_id: Optional[int] = None, project_id: Optional[int] = None) -> None:
+        session = self.Session()
+        try:
+            template = session.query(Template).filter_by(id=template_id).first()
+            if template:
+                if nombre is not None:
+                    template.nombre = nombre
+                if contenido is not None:
+                    template.contenido = contenido
+                if extension is not None:
+                    template.extension = extension
+                if padre_id is not None:
+                    template.padre_id = padre_id
+                if project_id is not None:
+                    template.project_id = project_id
+                template.updated_at = datetime.utcnow()
+                session.commit()
+        except Exception as e:
+            session.rollback()
+            raise RuntimeError(f"Failed to update template: {e}")
+        finally:
+            session.close()
+
+    def get_template(self, template_id: int) -> Optional[Dict[str, Any]]:
+        session = self.Session()
+        try:
+            template = session.query(Template).filter_by(id=template_id).first()
+            if template:
+                return {
+                    'id': template.id,
+                    'nombre': template.nombre,
+                    'contenido': template.contenido,
+                    'padre_id': template.padre_id,
+                    'extension': template.extension,
+                    'project_id': template.project_id,
+                    'created_at': template.created_at.isoformat() if template.created_at else None,
+                    'updated_at': template.updated_at.isoformat() if template.updated_at else None
+                }
+            return None
+        except Exception as e:
+            raise RuntimeError(f"Failed to get template: {e}")
+        finally:
+            session.close()
+
+    def list_templates(self, project_id: Optional[int] = None) -> List[Dict[str, Any]]:
+        session = self.Session()
+        try:
+            query = session.query(Template)
+            if project_id is not None:
+                query = query.filter_by(project_id=project_id)
+            templates = query.all()
+            return [{
+                'id': t.id,
+                'nombre': t.nombre,
+                'extension': t.extension,
+                'padre_id': t.padre_id,
+                'project_id': t.project_id,
+                'updated_at': t.updated_at.isoformat() if t.updated_at else None
+            } for t in templates]
+        except Exception as e:
+            raise RuntimeError(f"Failed to list templates: {e}")
+        finally:
+            session.close()
+
+    def delete_template(self, template_id: int) -> None:
+        session = self.Session()
+        try:
+            template = session.query(Template).filter_by(id=template_id).first()
+            if template:
+                session.delete(template)
+                session.commit()
+        except Exception as e:
+            session.rollback()
+            raise RuntimeError(f"Failed to delete template: {e}")
         finally:
             session.close()
