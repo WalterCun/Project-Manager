@@ -7,11 +7,92 @@ from ..templates.cli import setup_template_parser
 def create_project(args: argparse.Namespace) -> None:
     db_manager = DatabaseManager()
     generator = StructureGenerator(db_manager)
+
+    # Determine action based on arguments
+    action = None
+    if hasattr(args, 'regenerate') and args.regenerate:
+        action = 'regenerate'
+    elif hasattr(args, 'restart') and args.restart:
+        action = 'restart'
+
+    # Check if project already exists
     if generator.check_duplicate_name(args.name):
-        print(f"Project with name '{args.name}' already exists.")
+        existing_project = db_manager.get_project_by_name(args.name)
+
+        # If non-interactive mode with specific action
+        if action:
+            if action == 'regenerate':
+                print(f"Regenerating project '{args.name}'...")
+                try:
+                    path = generator.regenerate_structure(args.name, args.path)
+                    print(f"Project '{args.name}' regenerated at: {path}")
+                    return
+                except Exception as e:
+                    print(f"Error regenerating project: {e}")
+                    return
+            elif action == 'restart':
+                print(f"Restarting project '{args.name}' with default structure...")
+                try:
+                    path = generator.restart_structure(args.name, args.path)
+                    print(f"Project '{args.name}' restarted at: {path}")
+                    return
+                except Exception as e:
+                    print(f"Error restarting project: {e}")
+                    return
+
+        # Interactive mode
+        print(f"Project '{args.name}' already exists in the database.")
+        if existing_project and existing_project['path']:
+            print(f"Current path: {existing_project['path']}")
+
+        print("\nWhat would you like to do?")
+        print("1. Regenerate existing structure (keep current structure, recreate files)")
+        print("2. Restart with default structure (replace with new default structure)")
+        print("3. Cancel")
+
+        try:
+            choice = input("\nEnter your choice (1-3): ").strip()
+
+            if choice == '1':
+                print(f"Regenerating project '{args.name}'...")
+                try:
+                    path = generator.regenerate_structure(args.name, args.path)
+                    print(f"Project '{args.name}' regenerated at: {path}")
+                except Exception as e:
+                    print(f"Error regenerating project: {e}")
+            elif choice == '2':
+                print(f"Restarting project '{args.name}' with default structure...")
+                try:
+                    path = generator.restart_structure(args.name, args.path)
+                    print(f"Project '{args.name}' restarted at: {path}")
+                except Exception as e:
+                    print(f"Error restarting project: {e}")
+            else:
+                print("Operation cancelled.")
+        except (KeyboardInterrupt, EOFError):
+            print("\nOperation cancelled (non-interactive environment detected).")
         return
-    path = generator.create_structure_and_save(args.name, args.path, generator.default_structure)
-    print(f"Project '{args.name}' created and structure generated at: {path}")
+
+    # Check for path conflicts for new projects
+    conflict = generator.check_path_conflict(args.name, args.path)
+    if conflict == "path_exists":
+        print(f"Warning: Directory '{args.path}' already exists.")
+        print("This may overwrite existing files.")
+
+        # In non-interactive mode, require explicit confirmation or fail
+        if not hasattr(args, 'force') or not args.force:
+            print("Use --force to override this check in non-interactive mode.")
+            print("Operation cancelled.")
+            return
+
+        print("Continuing with --force flag...")
+
+    # Create new project
+    try:
+        path = generator.create_structure_and_save(args.name, args.path, generator.default_structure)
+        print(f"Project '{args.name}' created and structure generated at: {path}")
+    except Exception as e:
+        print(f"Error creating project: {e}")
 
 def list_projects(args: argparse.Namespace) -> None:
     db_manager = DatabaseManager()
@@ -79,6 +160,9 @@ def main() -> None:
     create_parser = subparsers.add_parser('create-project', help='Create a new project')
     create_parser.add_argument('name', help='Name of the project')
     create_parser.add_argument('--path', default='.', help='Path to generate the project structure (default: current directory)')
+    create_parser.add_argument('--regenerate', action='store_true', help='Regenerate existing project structure (non-interactive)')
+    create_parser.add_argument('--restart', action='store_true', help='Restart project with default structure (non-interactive)')
+    create_parser.add_argument('--force', action='store_true', help='Force overwrite existing directories (non-interactive)')
     create_parser.set_defaults(func=create_project)
 
     # List projects

@@ -371,7 +371,7 @@ Archiva análisis y reportes."""
             folder_path = os.path.join(base_path, folder)
             os.makedirs(folder_path, exist_ok=True)
 
-            # Create README.md for main folders
+            # Create INFO.md for main folders
             if is_root and folder in self.folder_descriptions:
                 readme_path = os.path.join(folder_path, "INFO.md")
                 with open(readme_path, 'w', encoding='utf-8') as f:
@@ -444,8 +444,8 @@ Archiva análisis y reportes."""
         """Get default parameters for a file based on its name."""
         return get_template_params_for_file(file_name)
 
-    def save_to_db(self, project_name: str, structure: Dict[str, Any]) -> int:
-        return self.db_manager.save_project(project_name, structure)
+    def save_to_db(self, project_name: str, structure: Dict[str, Any], path: Optional[str] = None) -> int:
+        return self.db_manager.save_project(project_name, structure, path)
 
     def load_from_db(self, project_id: int) -> Optional[Dict[str, Any]]:
         return self.db_manager.get_project(project_id)
@@ -480,15 +480,42 @@ Archiva análisis y reportes."""
         return self.save_to_db(project_name, structure)
 
     def create_structure_and_save(self, project_name: str, base_path: str,
-                                  structure: Optional[Dict[str, Any]] = None) -> str:
+                                   structure: Optional[Dict[str, Any]] = None) -> str:
         """Create a structure and save to the database."""
         if structure is None:
             structure = self.default_structure
         root_path = self.create_structure(project_name, base_path, structure)
-        project_id = self.save_to_db(project_name, structure)
+        project_id = self.save_to_db(project_name, structure, root_path)
         return root_path
 
     def check_duplicate_name(self, project_name: str) -> bool:
         """Check if a project name already exists."""
-        projects = self.db_manager.list_projects()
-        return any(p['name'] == project_name for p in projects)
+        return self.db_manager.check_duplicate_name(project_name)
+
+    def regenerate_structure(self, project_name: str, base_path: str) -> str:
+        """Regenerate existing project structure."""
+        existing_project = self.db_manager.get_project_by_name(project_name)
+        if not existing_project:
+            raise RuntimeError(f"Project '{project_name}' not found in database.")
+
+        root_path = self.create_structure(project_name, base_path, existing_project['structure'])
+        self.db_manager.update_project(existing_project['id'], path=root_path)
+        return root_path
+
+    def restart_structure(self, project_name: str, base_path: str) -> str:
+        """Restart project with default structure."""
+        root_path = self.create_structure(project_name, base_path, self.default_structure)
+        existing_project = self.db_manager.get_project_by_name(project_name)
+
+        if existing_project:
+            # Update existing project
+            self.db_manager.update_project(existing_project['id'], structure=self.default_structure, path=root_path)
+        else:
+            # Create new project
+            self.save_to_db(project_name, self.default_structure, root_path)
+
+        return root_path
+
+    def check_path_conflict(self, project_name: str, path: str) -> Optional[str]:
+        """Check if there's a conflict with the project path."""
+        return self.db_manager.check_project_path_conflict(project_name, path)

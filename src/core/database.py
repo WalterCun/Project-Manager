@@ -11,6 +11,7 @@ class Project(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     structure = Column(JSON, nullable=False)
+    path = Column(String, nullable=True)  # Path where the project structure is generated
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     changes = relationship("Change", back_populates="project")
@@ -43,35 +44,71 @@ class DatabaseManager:
     def __init__(self, db_path: str = 'project-manager.db'):
         self.db_path = db_path
         self.engine = create_engine(f'sqlite:///{db_path}', echo=False)
-        Base.metadata.create_all(self.engine)
+
+        # Create all tables (including new columns)
+        try:
+            Base.metadata.create_all(self.engine)
+        except Exception as e:
+            # Handle potential column addition issues
+            print(f"Warning: Database schema update issue: {e}")
+            # Try to continue anyway
+            pass
+
         self.Session = sessionmaker(bind=self.engine)
         # Initialize base templates (import here to avoid circular import)
         from .base_templates import initialize_base_templates
         initialize_base_templates(self)
 
-    def save_project(self, name: str, structure: Dict[str, Any]) -> int:
+    def save_project(self, name: str, structure: Dict[str, Any], path: Optional[str] = None) -> int:
         session = self.Session()
         try:
-            project = Project(name=name, structure=structure)
-            session.add(project)
-            session.commit()
-            self.log_change(project.id, 'CREATE', f'Project {name} created')
-            return project.id
+            # Handle case where path column might not exist in older databases
+            try:
+                project = Project(name=name, structure=structure, path=path)
+                session.add(project)
+                session.commit()
+                self.log_change(project.id, 'CREATE', f'Project {name} created at {path or "default location"}')
+                return project.id
+            except Exception:
+                # Fallback for databases without path column
+                project = Project(name=name, structure=structure)
+                session.add(project)
+                session.commit()
+                if path:
+                    print(f"Warning: Path column not available in database. Project created without path tracking.")
+                self.log_change(project.id, 'CREATE', f'Project {name} created')
+                return project.id
         except Exception as e:
             session.rollback()
             raise RuntimeError(f"Failed to save project: {e}")
         finally:
             session.close()
 
-    def update_project(self, project_id: int, structure: Dict[str, Any]) -> None:
+    def update_project(self, project_id: int, structure: Optional[Dict[str, Any]] = None, path: Optional[str] = None) -> None:
         session = self.Session()
         try:
-            project = session.query(Project).filter_by(id=project_id).first()
-            if project:
-                project.structure = structure
-                project.updated_at = datetime.utcnow()
-                session.commit()
-                self.log_change(project_id, 'UPDATE', 'Structure updated')
+            # Try to query with path column first
+            try:
+                project = session.query(Project).filter_by(id=project_id).first()
+                if project:
+                    if structure is not None:
+                        project.structure = structure
+                    # Only try to update path if the column exists
+                    if path is not None and hasattr(project, 'path'):
+                        project.path = path
+                    project.updated_at = datetime.utcnow()
+                    session.commit()
+                    action = 'Structure and path updated' if structure and path else ('Structure updated' if structure else 'Path updated')
+                    self.log_change(project_id, 'UPDATE', action)
+            except Exception:
+                # Fallback for databases without path column
+                project = session.query(Project).filter_by(id=project_id).first()
+                if project:
+                    if structure is not None:
+                        project.structure = structure
+                    project.updated_at = datetime.utcnow()
+                    session.commit()
+                    self.log_change(project_id, 'UPDATE', 'Structure updated')
         except Exception as e:
             session.rollback()
             raise RuntimeError(f"Failed to update project: {e}")
@@ -81,15 +118,30 @@ class DatabaseManager:
     def get_project(self, project_id: int) -> Optional[Dict[str, Any]]:
         session = self.Session()
         try:
-            project = session.query(Project).filter_by(id=project_id).first()
-            if project:
-                return {
-                    'id': project.id,
-                    'name': project.name,
-                    'structure': project.structure,
-                    'created_at': project.created_at.isoformat() if project.created_at else None,
-                    'updated_at': project.updated_at.isoformat() if project.updated_at else None
-                }
+            # Try to query with path column first
+            try:
+                project = session.query(Project).filter_by(id=project_id).first()
+                if project:
+                    return {
+                        'id': project.id,
+                        'name': project.name,
+                        'structure': project.structure,
+                        'path': getattr(project, 'path', None),
+                        'created_at': project.created_at.isoformat() if project.created_at else None,
+                        'updated_at': project.updated_at.isoformat() if project.updated_at else None
+                    }
+            except Exception:
+                # Fallback for databases without path column
+                project = session.query(Project.id, Project.name, Project.structure, Project.created_at, Project.updated_at).filter_by(id=project_id).first()
+                if project:
+                    return {
+                        'id': project.id,
+                        'name': project.name,
+                        'structure': project.structure,
+                        'path': None,
+                        'created_at': project.created_at.isoformat() if project.created_at else None,
+                        'updated_at': project.updated_at.isoformat() if project.updated_at else None
+                    }
             return None
         except Exception as e:
             raise RuntimeError(f"Failed to get project: {e}")
@@ -99,12 +151,74 @@ class DatabaseManager:
     def list_projects(self) -> List[Dict[str, Any]]:
         session = self.Session()
         try:
-            projects = session.query(Project).all()
-            return [{'id': p.id, 'name': p.name, 'updated_at': p.updated_at.isoformat() if p.updated_at else None} for p in projects]
+            # Try to query with path column first
+            try:
+                projects = session.query(Project).all()
+                return [{'id': p.id, 'name': p.name, 'path': getattr(p, 'path', None), 'updated_at': p.updated_at.isoformat() if p.updated_at else None} for p in projects]
+            except Exception:
+                # Fallback for databases without path column
+                projects = session.query(Project.id, Project.name, Project.updated_at).all()
+                return [{'id': p.id, 'name': p.name, 'path': None, 'updated_at': p.updated_at.isoformat() if p.updated_at else None} for p in projects]
         except Exception as e:
             raise RuntimeError(f"Failed to list projects: {e}")
         finally:
             session.close()
+
+    def get_project_by_name(self, project_name: str) -> Optional[Dict[str, Any]]:
+        """Get project by name."""
+        session = self.Session()
+        try:
+            # Try to query with path column first
+            try:
+                project = session.query(Project).filter_by(name=project_name).first()
+                if project:
+                    return {
+                        'id': project.id,
+                        'name': project.name,
+                        'structure': project.structure,
+                        'path': getattr(project, 'path', None),
+                        'created_at': project.created_at.isoformat() if project.created_at else None,
+                        'updated_at': project.updated_at.isoformat() if project.updated_at else None
+                    }
+            except Exception:
+                # Fallback for databases without path column
+                project = session.query(Project.id, Project.name, Project.structure, Project.created_at, Project.updated_at).filter_by(name=project_name).first()
+                if project:
+                    return {
+                        'id': project.id,
+                        'name': project.name,
+                        'structure': project.structure,
+                        'path': None,
+                        'created_at': project.created_at.isoformat() if project.created_at else None,
+                        'updated_at': project.updated_at.isoformat() if project.updated_at else None
+                    }
+            return None
+        except Exception as e:
+            raise RuntimeError(f"Failed to get project by name: {e}")
+        finally:
+            session.close()
+
+    def check_duplicate_name(self, project_name: str) -> bool:
+        """Check if a project name already exists."""
+        projects = self.list_projects()
+        return any(p['name'] == project_name for p in projects)
+
+    def check_path_exists(self, path: str) -> bool:
+        """Check if a directory exists at the given path."""
+        import os
+        return os.path.exists(path)
+
+    def check_project_path_conflict(self, project_name: str, path: str) -> Optional[str]:
+        """Check if there's a conflict with an existing project path."""
+        existing_project = self.get_project_by_name(project_name)
+        if existing_project and existing_project['path']:
+            if existing_project['path'] == path:
+                return "same_path"  # Same project, same path
+            elif self.check_path_exists(path):
+                return "path_exists"  # Different project but path exists
+        elif self.check_path_exists(path):
+            return "path_exists"  # New project but path exists
+        return None  # No conflict
 
 
     def log_change(self, project_id: int, change_type: str, details: str) -> None:
