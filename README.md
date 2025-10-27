@@ -9,6 +9,9 @@ A CLI tool for generating standardized business project folder structures. This 
 - **List Projects**: View all saved projects with their details.
 - **Export Structures**: Export project structures to JSON files for sharing or backup.
 - **Default Structure**: Includes a comprehensive default structure for business projects, covering administrative, strategic, legal, operational, and other key areas.
+- **Dynamic Templates**: Create, manage, and render dynamic templates with inheritance support for multiple file formats (DOCX, XLSX, HTML, MD, TXT).
+- **Template Inheritance**: Templates can inherit from parent templates, allowing for reusable and customizable content.
+- **Multi-Format Rendering**: Generate files in various formats with dynamic placeholder replacement.
 
 ## Installation
 
@@ -75,6 +78,46 @@ Example:
 project-manager export-json 1 project-structure.json
 ```
 
+### Template Management
+
+The tool now supports dynamic templates with inheritance and multi-format rendering.
+
+#### Create a Template
+```bash
+project-manager template crear "Contract Template" --extension docx --contenido "This is a contract for {{client}} from {{company}}."
+```
+Creates a new template with placeholders.
+
+#### Create a Template with Inheritance
+```bash
+project-manager template heredar "Specific Contract" --padre 1 --extension docx
+```
+Creates a child template inheriting from template ID 1.
+
+#### Render a Template
+```bash
+project-manager template render 1 --output ./contract.docx client "John Doe" company "Acme Corp"
+```
+Renders the template with provided parameters and generates the file.
+
+#### List Templates
+```bash
+project-manager template listar
+```
+Lists all templates.
+
+#### Modify a Template
+```bash
+project-manager template modificar 1 --contenido "Updated content with {{new_placeholder}}."
+```
+Updates the content of template ID 1.
+
+#### Delete a Template
+```bash
+project-manager template eliminar 1
+```
+Deletes template ID 1.
+
 ### Default Project Structure
 
 The tool includes a comprehensive default structure organized into the following main categories:
@@ -97,16 +140,24 @@ The tool includes a comprehensive default structure organized into the following
 base-de-proyecto/
 ├── __main__.py              # CLI entry point
 ├── pyproject.toml           # Project configuration and dependencies
-├── project_structure.db     # SQLite database for projects (created on first run)
+├── project_structure.db     # SQLite database for projects and templates (created on first run)
 ├── README.md                # This file
+├── tests/
+│   └── templates/
+│       └── test_models.py   # Unit tests for template functionality
 ├── src/
 │   ├── cli/
 │   │   ├── __init__.py
 │   │   └── commands.py      # CLI command implementations
-│   └── core/
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── database.py      # Database management (SQLAlchemy models and operations)
+│   │   └── structure_generator.py  # Structure generation logic
+│   └── templates/
 │       ├── __init__.py
-│       ├── database.py      # Database management (SQLAlchemy models and operations)
-│       └── structure_generator.py  # Structure generation logic
+│       ├── models.py        # Template management and inheritance logic
+│       ├── renderers.py     # File format renderers (DOCX, XLSX, HTML, MD, TXT)
+│       └── cli.py           # Template-specific CLI commands
 ```
 
 ## Development
@@ -131,6 +182,10 @@ base-de-proyecto/
 ### Database
 
 The tool uses SQLite (`project_structure.db`) for persistence. The database is created automatically on first run. It includes tables for projects, templates, and change history.
+
+- **Projects Table**: Stores project structures and metadata.
+- **Templates Table**: Stores dynamic templates with inheritance support.
+- **Changes Table**: Logs all modifications for audit purposes.
 
 ### Adding New Features
 
