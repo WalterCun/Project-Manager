@@ -78,6 +78,28 @@ Example:
 project-manager export-json 1 project-structure.json
 ```
 
+#### Import Structure from JSON
+```bash
+project-manager import-json <project-name> <input-file>
+```
+Imports a project structure from a JSON file and saves it to the database.
+
+Example:
+```bash
+project-manager import-json "My Imported Project" project-structure.json
+```
+
+#### Scan Directory and Save
+```bash
+project-manager scan-directory <project-name> <directory-path>
+```
+Scans an existing directory structure and saves it to the database.
+
+Example:
+```bash
+project-manager scan-directory "Scanned Project" ./existing-project
+```
+
 ### Template Management
 
 The tool now supports dynamic templates with inheritance and multi-format rendering.

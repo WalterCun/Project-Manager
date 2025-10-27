@@ -1,7 +1,8 @@
 import argparse
+import sys
 import os
-from typing import Dict, Any
-from ..core.database import DatabaseManager
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from core.database import DatabaseManager
 from .models import TemplateManager, TemplateNotFoundError, InvalidPlaceholderError
 from .renderers import RendererFactory
 

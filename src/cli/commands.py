@@ -1,7 +1,5 @@
 import argparse
 import json
-import os
-from typing import Dict, Any
 from ..core.structure_generator import StructureGenerator
 from ..core.database import DatabaseManager
 from ..templates.cli import setup_template_parser
@@ -9,9 +7,11 @@ from ..templates.cli import setup_template_parser
 def create_project(args: argparse.Namespace) -> None:
     db_manager = DatabaseManager()
     generator = StructureGenerator(db_manager)
-    project_id = generator.save_to_db(args.name, generator.default_structure)
-    path = generator.create_structure(args.name, args.path, generator.default_structure)
-    print(f"Project '{args.name}' created with ID: {project_id} and structure generated at: {path}")
+    if generator.check_duplicate_name(args.name):
+        print(f"Project with name '{args.name}' already exists.")
+        return
+    path = generator.create_structure_and_save(args.name, args.path, generator.default_structure)
+    print(f"Project '{args.name}' created and structure generated at: {path}")
 
 def list_projects(args: argparse.Namespace) -> None:
     db_manager = DatabaseManager()
@@ -43,11 +43,39 @@ def export_json(args: argparse.Namespace) -> None:
         json.dump(project['structure'], f, indent=4)
     print(f"Structure exported to {args.file}")
 
+def import_json(args: argparse.Namespace) -> None:
+    db_manager = DatabaseManager()
+    generator = StructureGenerator(db_manager)
+    if generator.check_duplicate_name(args.name):
+        print(f"Project with name '{args.name}' already exists.")
+        return
+    try:
+        with open(args.file, 'r') as f:
+            structure = json.load(f)
+        project_id = generator.save_to_db(args.name, structure)
+        print(f"Structure imported as project '{args.name}' with ID: {project_id}")
+    except FileNotFoundError:
+        print(f"File {args.file} not found.")
+    except json.JSONDecodeError:
+        print(f"Invalid JSON in {args.file}.")
+
+def scan_directory(args: argparse.Namespace) -> None:
+    db_manager = DatabaseManager()
+    generator = StructureGenerator(db_manager)
+    if generator.check_duplicate_name(args.name):
+        print(f"Project with name '{args.name}' already exists.")
+        return
+    try:
+        project_id = generator.save_scanned_structure(args.name, args.path)
+        print(f"Directory scanned and saved as project '{args.name}' with ID: {project_id}")
+    except RuntimeError as e:
+        print(f"Error: {e}")
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Project Structure Manager CLI")
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
-    # Create project
+    # Create the project
     create_parser = subparsers.add_parser('create-project', help='Create a new project')
     create_parser.add_argument('name', help='Name of the project')
     create_parser.add_argument('--path', default='.', help='Path to generate the project structure (default: current directory)')
@@ -68,6 +96,18 @@ def main() -> None:
     export_parser.add_argument('id', type=int, help='Project ID')
     export_parser.add_argument('file', help='Output JSON file')
     export_parser.set_defaults(func=export_json)
+
+    # Import JSON
+    import_parser = subparsers.add_parser('import-json', help='Import project structure from JSON file')
+    import_parser.add_argument('name', help='Name of the project')
+    import_parser.add_argument('file', help='Input JSON file')
+    import_parser.set_defaults(func=import_json)
+
+    # Scan directory
+    scan_parser = subparsers.add_parser('scan-directory', help='Scan a directory and save structure to database')
+    scan_parser.add_argument('name', help='Name of the project')
+    scan_parser.add_argument('path', help='Path to the directory to scan')
+    scan_parser.set_defaults(func=scan_directory)
 
     # Setup template commands
     setup_template_parser(subparsers)

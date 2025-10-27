@@ -1,2 +1,0 @@
-[console_scripts]
-project-manager = base_de_proyecto.__main__:main

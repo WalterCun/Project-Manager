@@ -40,11 +40,14 @@ class Template(Base):
     project = relationship("Project", backref="templates")
 
 class DatabaseManager:
-    def __init__(self, db_path: str = 'project_structure.db'):
+    def __init__(self, db_path: str = 'project-manager.db'):
         self.db_path = db_path
         self.engine = create_engine(f'sqlite:///{db_path}', echo=False)
         Base.metadata.create_all(self.engine)
         self.Session = sessionmaker(bind=self.engine)
+        # Initialize base templates (import here to avoid circular import)
+        from .base_templates import initialize_base_templates
+        initialize_base_templates(self)
 
     def save_project(self, name: str, structure: Dict[str, Any]) -> int:
         session = self.Session()
