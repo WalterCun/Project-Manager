@@ -1,3 +1,4 @@
+import os
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ForeignKey, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
@@ -214,14 +215,21 @@ class DatabaseManager:
 
     def check_project_path_conflict(self, project_name: str, path: str) -> Optional[str]:
         """Check if there's a conflict with an existing project path."""
+        full_path = os.path.join(path, project_name)
         existing_project = self.get_project_by_name(project_name)
         if existing_project and existing_project['path']:
-            if existing_project['path'] == path:
+            if existing_project['path'] == full_path:
                 return "same_path"  # Same project, same path
-            elif self.check_path_exists(path):
-                return "path_exists"  # Different project but path exists
-        elif self.check_path_exists(path):
-            return "path_exists"  # New project but path exists
+            elif os.path.exists(full_path):
+                if os.listdir(full_path):
+                    return "path_exists_with_files"  # Directory exists with files
+                else:
+                    return "path_exists_empty"  # Directory exists but is empty
+        elif os.path.exists(full_path):
+            if os.listdir(full_path):
+                return "path_exists_with_files"  # Directory exists with files
+            else:
+                return "path_exists_empty"  # Directory exists but is empty
         return None  # No conflict
 
 

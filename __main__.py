@@ -7,4 +7,5 @@ def main() -> None:
     cli_main()
 
 if __name__ == "__main__":
+    sys.argv += ['create-project', 'Estructura Documental de Empresa', '--force']
     main()

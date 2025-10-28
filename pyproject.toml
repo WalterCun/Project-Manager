@@ -20,5 +20,19 @@ project-manager = "__main__:main"
 [tool.setuptools]
 package-dir = {"" = "src"}
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
 [tool.pyinstaller]
 main = "__main__.py"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "pytest-mock>=3.15.1",
+]

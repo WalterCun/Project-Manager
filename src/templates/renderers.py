@@ -723,7 +723,7 @@ class MdRenderer(FileRenderer):
         return 'md'
 
     def render(self, content: str, output_path: str) -> None:
-        with open(output_path, 'w') as f:
+        with open(output_path, 'w', encoding='utf-8') as f:
             f.write(content)
 
 class TxtRenderer(FileRenderer):
@@ -733,7 +733,7 @@ class TxtRenderer(FileRenderer):
         return 'txt'
 
     def render(self, content: str, output_path: str) -> None:
-        with open(output_path, 'w') as f:
+        with open(output_path, 'w', encoding='utf-8') as f:
             f.write(content)
 
 class RendererFactory:

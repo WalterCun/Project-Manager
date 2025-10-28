@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 from ..core.structure_generator import StructureGenerator
 from ..core.database import DatabaseManager
 from ..templates.cli import setup_template_parser
@@ -18,7 +19,7 @@ def create_project(args: argparse.Namespace) -> None:
     # Check if the project already exists
     if generator.check_duplicate_name(args.name):
         existing_project = db_manager.get_project_by_name(args.name)
-
+ 
         # If non-interactive mode with a specific action
         if action:
             if action == 'regenerate':
@@ -39,20 +40,31 @@ def create_project(args: argparse.Namespace) -> None:
                 except Exception as e:
                     print(f"Error restarting project: {e}")
                     return
-
+ 
+        # If --force is specified, skip interactive menu and regenerate
+        if hasattr(args, 'force') and args.force:
+            print(f"Regenerating project '{args.name}' with --force...")
+            try:
+                path = generator.regenerate_structure(args.name, args.path)
+                print(f"Project '{args.name}' regenerated at: {path}")
+                return
+            except Exception as e:
+                print(f"Error regenerating project: {e}")
+                return
+ 
         # Interactive mode
         print(f"Project '{args.name}' already exists in the database.")
         if existing_project and existing_project['path']:
             print(f"Current path: {existing_project['path']}")
-
+ 
         print("\nWhat would you like to do?")
         print("1. Regenerate existing structure (keep current structure, recreate files)")
         print("2. Restart with default structure (replace with new default structure)")
         print("3. Cancel")
-
+ 
         try:
             choice = input("\nEnter your choice (1-3): ").strip()
-
+ 
             if choice == '1':
                 print(f"Regenerating project '{args.name}'...")
                 try:
@@ -75,17 +87,20 @@ def create_project(args: argparse.Namespace) -> None:
 
     # Check for path conflicts for new projects
     conflict = generator.check_path_conflict(args.name, args.path)
-    if conflict == "path_exists":
-        print(f"Warning: Directory '{args.path}' already exists.")
+    if conflict == "path_exists_with_files":
+        print(f"Warning: Directory '{os.path.join(args.path, args.name)}' already exists and contains files.")
         print("This may overwrite existing files.")
-
+ 
         # In non-interactive mode, require explicit confirmation or fail
         if not hasattr(args, 'force') or not args.force:
             print("Use --force to override this check in non-interactive mode.")
             print("Operation cancelled.")
             return
-
+ 
         print("Continuing with --force flag...")
+    elif conflict == "path_exists_empty":
+        print(f"Directory '{os.path.join(args.path, args.name)}' already exists but is empty. Proceeding without --force.")
+        # Continue to creation
 
     # Create new project
     try:
@@ -120,7 +135,7 @@ def export_json(args: argparse.Namespace) -> None:
     if not project:
         print(f"Project with ID {args.id} not found.")
         return
-    with open(args.file, 'w') as f:
+    with open(args.file, 'w', encoding='utf-8') as f:
         json.dump(project['structure'], f, indent=4)
     print(f"Structure exported to {args.file}")
 
@@ -131,7 +146,7 @@ def import_json(args: argparse.Namespace) -> None:
         print(f"Project with name '{args.name}' already exists.")
         return
     try:
-        with open(args.file, 'r') as f:
+        with open(args.file, 'r', encoding='utf-8') as f:
             structure = json.load(f)
         project_id = generator.save_to_db(args.name, structure)
         print(f"Structure imported as project '{args.name}' with ID: {project_id}")
