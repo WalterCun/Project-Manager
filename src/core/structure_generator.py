@@ -3,6 +3,7 @@ from typing import Dict, Any, Optional, List
 from .database import DatabaseManager
 import sys
 import os
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from templates.models import TemplateManager
 from templates.renderers import RendererFactory
@@ -21,137 +22,343 @@ class StructureGenerator:
     def _get_default_structure() -> Dict[str, Any]:
         # Integrated from generate_architecture.py with improvements
         return {
-            "00_ADMINISTRATIVO": {
-                "Información General del Proyecto": {},
-                "Datos Legales - RUC - Permisos": {},
-                "Contratos - Acuerdos": {},
-                "Documentos de Propiedad Intelectual": {},
-                "Correspondencia Oficial - Ofertas - Licencias": {}
+            "00 ADMINISTRATIVO": {
+                "Información General del Proyecto": [
+                    "Resumen_Ejecutivo.docx",
+                    "Ficha_Técnica_Proyecto.docx",
+                    "Datos_Contacto_Equipo.docx",
+                    "Cronograma_Global.xlsx",
+                    "Presentación_Corporativa.pptx"
+                ],
+                "Contratos - Acuerdos": [
+                    "Contrato_Servicios.docx",
+                    "Contrato_Confidencialidad_NDA.docx",
+                    "Acuerdo_Colaboración.docx"
+                ],
+                "Documentos de Propiedad Intelectual": [
+                    "Registro_Marca.pdf",
+                    "Derechos_Autor.pdf",
+                    "Patentes_y_Modelos_Utilidad.pdf"
+                ],
+                "Correspondencia Oficial - Ofertas - Licencias": [
+                    "Carta_Presentación.docx",
+                    "Solicitud_Licencia.docx",
+                    "Ofertas_Comerciales.docx"
+                ]
             },
-            "01_ESTRATÉGICO": {
-                "Visión - Misión - Valores": {},
-                "Business Model Canvas": {},
-                "Plan de Negocios": {},
-                "Análisis de Mercado y Competencia": {},
-                "Roadmap Estratégico (Anual - Semestral)": {},
-                "Objetivos y KPIs": {},
-                "Proyecciones Financieras": {}
+            "01 ESTRATÉGICO": {
+                "Visión - Misión - Valores": [
+                    "Declaración_Estrategica.docx"
+                ],
+                "Business Model Canvas": [
+                    "Canvas_Modelo_Negocio.pdf",
+                    "Propuesta_Valor.docx"
+                ],
+                "Plan de Negocios": [
+                    "Plan_Negocio_Completo.docx",
+                    "Resumen_Ejecutivo.pdf"
+                ],
+                "Análisis de Mercado y Competencia": [
+                    "Estudio_Mercado.pdf",
+                    "Competencia_Directa_Indirecta.xlsx",
+                    "Benchmarking.docx"
+                ],
+                "Roadmap Estratégico (Anual - Semestral)": [
+                    "Roadmap_2025.xlsx",
+                    "Metas_Trimestrales.docx"
+                ],
+                "Objetivos y KPIs": [
+                    "OKRs_Globales.xlsx",
+                    "Indicadores_Estrategicos.docx"
+                ],
+                "Proyecciones Financieras": [
+                    "Proyeccion_5_Años.xlsx",
+                    "Escenarios_Optimista_Pesimista.xlsx"
+                ]
             },
-            "02_LEGAL_Y_CONSTITUCIÓN": {
-                "RUC y documentos fiscales": {},
-                "Permisos de Operaciones": {},
-                "Póliza de Seguros": {},
-                "Acuerdo entre Socios Fundadores": {},
-                "Términos y Condiciones Clientes": {},
-                "Contrato Servicios (Cliente)": {},
-                "Waiver - Liberación Responsabilidad": {},
-                "Plantilla Contrato Proveedores": {}
+            "02 LEGAL Y CONSTITUCIÓN": {
+                "RUC y documentos fiscales": [
+                    "Certificado_RUC.pdf",
+                    "Constancia_Inscripción.pdf"
+                ],
+                "Permisos de Operaciones": [
+                    "Permiso_Municipal.pdf",
+                    "Certificado_Seguridad.pdf"
+                ],
+                "Póliza de Seguros": [
+                    "Seguro_Responsabilidad_Civil.pdf",
+                    "Seguro_Equipo.pdf"
+                ],
+                "Acuerdo entre Socios Fundadores": [
+                    "Pacto_Socios.docx",
+                    "Acta_Constitución.pdf"
+                ],
+                "Términos y Condiciones Clientes": [
+                    "Términos_Servicio.docx",
+                    "Política_Privacidad.docx"
+                ],
+                "Contrato Servicios (Cliente)": [
+                    "Plantilla_Contrato_Cliente.docx"
+                ],
+                "Waiver - Liberación Responsabilidad": [
+                    "Documento_Waiver.docx"
+                ],
+                "Plantilla Contrato Proveedores": [
+                    "Plantilla_Proveedor.docx"
+                ]
             },
-            "03_OPERACIONES": {
-                "Manuales": {},
-                "Procesos": {},
-                "Protocolos y Checklists": {},
-                "Control de Proveedores": {},
-                "Manual de Calidad - Estándares": {},
-                "Calendario Operativo - Cronogramas": {}
+            "03 OPERACIONES": {
+                "Manuales": [
+                    "Manual_Operativo.docx",
+                    "Guía_Logística.docx"
+                ],
+                "Procesos": [
+                    "Mapa_Procesos.pdf",
+                    "Procedimientos_Operativos_Estandar.docx"
+                ],
+                "Protocolos y Checklists": [
+                    "Checklist_Control_Calidad.xlsx",
+                    "Protocolo_Seguridad.docx"
+                ],
+                "Control de Proveedores": [
+                    "Base_Proveedores.xlsx",
+                    "Evaluación_Proveedores.xlsx"
+                ],
+                "Manual de Calidad - Estándares": [
+                    "Normas_ISO_Requeridas.pdf",
+                    "Manual_Calidad.docx"
+                ],
+                "Calendario Operativo - Cronogramas": [
+                    "Cronograma_Mensual.xlsx",
+                    "Plan_Actividades_Semanales.xlsx"
+                ]
             },
-            "04_COMERCIAL_Y_VENTAS": {
-               "Manual de Ventas": {},
-               "Scripts de Venta WhatsApp": {},
-               "Respuestas a Objeciones Comunes": {},
-               "Política de Precios y Descuentos": {},
-               "Paquetes y Promociones Vigentes": {},
-               "Calculadora de Costos": {},
-               "Análisis de Rentabilidad": {},
-               "Plantillas Propuestas Corporativas": {},
-               "Base de Datos de Clientes.xlsx": {}
-           },
-            "05_MARKETING_Y_CONTENIDO": {
-                "Plan de Marketing": {},
-                "Calendario Editorial": {},
-                "Guía de Marca (Brand Guidelines)": {},
+            "04 COMERCIAL Y VENTAS": {
+                "Manual de Ventas": [
+                    "Proceso_Ventas.docx"
+                ],
+                "Scripts de Venta WhatsApp": [
+                    "Mensajes_Promocionales.docx"
+                ],
+                "Respuestas a Objeciones Comunes": [
+                    "Listado_Objeciones.docx"
+                ],
+                "Política de Precios y Descuentos": [
+                    "Lista_Precios.xlsx",
+                    "Política_Descuentos.docx"
+                ],
+                "Paquetes y Promociones Vigentes": [
+                    "Promociones_2025.xlsx"
+                ],
+                "Calculadora de Costos": [
+                    "Costeo_Productos.xlsx"
+                ],
+                "Análisis de Rentabilidad": [
+                    "Rentabilidad_Lineas_Negocio.xlsx"
+                ],
+                "Plantillas Propuestas Corporativas": [
+                    "Plantilla_Propuesta_Corporativa.docx"
+                ],
+                "Base de Datos de Clientes": [
+                    "Base_de_Datos_Clientes.xlsx"
+                ]
+            },
+            "05 MARKETING Y CONTENIDO": {
+                "Plan de Marketing": [
+                    "Plan_Marketing_Anual.docx"
+                ],
+                "Calendario Editorial": [
+                    "Calendario_Contenido.xlsx"
+                ],
+                "Guía de Marca (Brand Guidelines)": [
+                    "Manual_Marca.pdf",
+                    "Paleta_Colores.png",
+                    "Tipografías.pdf"
+                ],
                 "Banco de Contenido (Posts pre-creados)": {
-                    "Material Promocional": {},
-                    "Diseños": {},
-                    "Plantillas": {}
+                    "Material Promocional": [
+                        "Banners.jpg",
+                        "Post_Instagram.docx"
+                    ],
+                    "Diseños": [
+                        "Flyers.png",
+                        "Plantillas_Canva.pdf"
+                    ],
+                    "Plantillas": [
+                        "Plantilla_Post_Redes.docx",
+                        "Plantilla_Reel.docx"
+                    ]
                 },
-                "Estrategia Comercial": {},
-                "Plantillas de Diseño": {},
-                "Análisis de Mercado y Competencia": {},
-                "Reportes de Marketing": {}
+                "Estrategia Comercial": [
+                    "Campañas_Promocionales.docx",
+                    "Buyer_Personas.docx"
+                ],
+                "Plantillas de Diseño": [
+                    "Plantillas_Canales_Sociales.zip"
+                ],
+                "Análisis de Mercado y Competencia": [
+                    "Analisis_Redes.xlsx",
+                    "Benchmark_Marketing.docx"
+                ],
+                "Reportes de Marketing": [
+                    "Reporte_Mensual.pdf",
+                    "Reporte_Anual.pdf"
+                ]
             },
-            "06_CLIENTES_Y_USUARIOS": {
+            "06 CLIENTES Y USUARIOS": {
                 "CRM": {
-                    "Base de Datos - CRM": {}
+                    "Base de Datos - CRM": [
+                        "Clientes_Activos.xlsx",
+                        "Historial_Interacciones.xlsx"
+                    ]
                 },
                 "Plantillas de Comunicación": {
                     "Emails Templates": [
-                        "Confirmación_Reserva.html",
+                        "Confirmación.html",
                         "Recordatorio_48h.html",
                         "Recordatorio_24h.html",
-                        "Recordatorio_Día_Tour.html",
-                        "Agradecimiento_Post_Tour.html",
+                        "Recordatorio_Día.html",
+                        "Agradecimiento_Post_Venta.html",
                         "Solicitud_Review.html",
                         "Newsletter_Mensual.html"
                     ],
                     "Whatsapp": [
-                        "Respuestas_Rápidas.docx"
+                        "Respuestas_Rápidas.docx",
+                        "Mensajes_Automáticos.docx"
                     ]
                 },
-                "Contratos o Acuerdos con Clientes": {},
-                "Formulario de Feedback": {},
-                "Registro de Reviews y Testimonios": {},
-                "Programa de Fidelización y Referidos": {}
+                "Contratos o Acuerdos con Clientes": [
+                    "Contrato_Servicio_Cliente.docx"
+                ],
+                "Formulario de Feedback": [
+                    "Encuesta_Satisfacción.docx",
+                    "Formulario_Google_Link.txt"
+                ],
+                "Registro de Reviews y Testimonios": [
+                    "Testimonios_Clientes.xlsx"
+                ],
+                "Programa de Fidelización y Referidos": [
+                    "Programa_Referidos.docx",
+                    "Bonificaciones.xlsx"
+                ]
             },
-            "07_FINANZAS_Y_CONTABILIDAD": {
-               "Balance Inicial": {},
-               "Presupuesto Anual": {},
-               "Control de Gastos e Ingresos": {},
-               "Flujo de Caja Proyectado": {},
-               "Reportes Financieros": {},
-               "Proyecciones": {},
-               "Calculadora Financiera.xlsx": {}
-           },
-            "08_RECURSOS_HUMANOS_Y_EQUIPO": {
-                "Organigrama": {},
-                "Roles y Responsabilidades": {},
-                "Job Descriptions": {},
+            "07 FINANZAS Y CONTABILIDAD": {
+                "Balance Inicial": [
+                    "Balance_2025.xlsx"
+                ],
+                "Presupuesto Anual": [
+                    "Presupuesto_Anual.xlsx"
+                ],
+                "Control de Gastos e Ingresos": [
+                    "Registro_Gastos.xlsx",
+                    "Ingresos_Mensuales.xlsx"
+                ],
+                "Flujo de Caja Proyectado": [
+                    "Cash_Flow_Proyectado.xlsx"
+                ],
+                "Reportes Financieros": [
+                    "Reporte_Trimestral.pdf",
+                    "Estado_Resultados.pdf"
+                ],
+                "Proyecciones": [
+                    "Proyeccion_Crecimiento.xlsx"
+                ],
+                "Calculadora Financiera": [
+                    "Calculadora_Financiera.xlsx"
+                ]
+            },
+            "08 RECURSOS HUMANOS Y EQUIPO": {
+                "Organigrama": [
+                    "Organigrama_Actualizado.pdf"
+                ],
+                "Roles y Responsabilidades": [
+                    "Matriz_Roles.xlsx"
+                ],
+                "Job Descriptions": [
+                    "JD_Marketing.docx",
+                    "JD_Operaciones.docx",
+                    "JD_Admin.docx"
+                ],
                 "KPIs": [
                     "Rol.docx",
                     "Evaluaciones.docx"
                 ],
-                "Manual de Cultura Organizacional": {},
-                "Descripciones de Puesto": {},
-                "Contratos - Freelancers": {},
-                "Políticas Internas - Cultura": {},
-                "Política de Compensaciones": {},
-                "Contratos Guías Freelance": {},
-                "Evaluaciones de Desempeño": {}
+                "Manual de Cultura Organizacional": [
+                    "Valores_Corporativos.docx"
+                ],
+                "Descripciones de Puesto": [
+                    "Perfil_Puesto.docx"
+                ],
+                "Contratos - Freelancers": [
+                    "Contrato_Freelancer_Base.docx"
+                ],
+                "Políticas Internas - Cultura": [
+                    "Código_Conducta.docx",
+                    "Política_Teletrabajo.docx"
+                ],
+                "Política de Compensaciones": [
+                    "Tabla_Salarial.xlsx",
+                    "Bonos_Incentivos.docx"
+                ],
+                "Contratos Guías Freelance": [
+                    "Guía_Freelancer.docx"
+                ],
+                "Evaluaciones de Desempeño": [
+                    "Plantilla_Evaluacion.xlsx"
+                ]
             },
-            "09_CAPACITACIÓN_Y_DOCUMENTACIÓN_INTERNA": {
+            "09_CAPACITACIÓN Y DOCUMENTACIÓN INTERNA": {
                 "Manuales": [
                     "Manual_de_Inducción_Nuevos_Miembros.docx",
                     "Manual_de_Inducción.docx"
                 ],
-                "Guías Operativas": {},
+                "Guías Operativas": [
+                    "Guía_Atención_Cliente.docx",
+                    "Guía_Procesos_Internos.docx"
+                ],
                 "Capacitación Técnica": [
                     "Atencion_al_Cliente.docx",
                     "Ventas.docx",
                     "Operaciones.docx",
                     "Uso_de_Herramientas.docx"
                 ],
-                "Videos - Material Didáctico": {},
-                "Registro de Capacitación": {}
+                "Videos - Material Didáctico": [
+                    "Video_Inducción.mp4",
+                    "Demo_Herramientas.mp4"
+                ],
+                "Registro de Capacitación": [
+                    "Asistencia_Capacitaciones.xlsx",
+                    "Historial_Entrenamientos.xlsx"
+                ]
             },
-            "10_ANALÍTICA_Y_REPORTES": {
-               "Dashboards (Operativos - Financieros - Marketing)": {},
-               "Reportes Periódicos (Semanal - Mensual - Trimestral)": {},
-               "Lecciones Aprendidas - Retrospectivas": {},
-               "Indicadores de Desempeño (KPIs globales)": {},
-               "Dashboard Principal.xlsx": {},
-               "KPIs Operativos.xlsx": {},
-               "Análisis de Tendencias.xlsx": {}
-           }
+            "10 ANALÍTICA Y REPORTES": {
+                "Dashboards (Operativos - Financieros - Marketing)": [
+                    "Dashboard_PowerBI.pbix",
+                    "Dashboard_Online_Link.txt"
+                ],
+                "Reportes Periódicos (Semanal - Mensual - Trimestral)": [
+                    "Reporte_Semanal.xlsx",
+                    "Reporte_Mensual.xlsx",
+                    "Reporte_Trimestral.pdf"
+                ],
+                "Lecciones Aprendidas - Retrospectivas": [
+                    "Retrospectiva_Q1.docx",
+                    "Lecciones_Proyecto.docx"
+                ],
+                "Indicadores de Desempeño (KPIs globales)": [
+                    "KPIs_Globales.xlsx",
+                    "Indicadores_Por_Area.xlsx"
+                ],
+                "Dashboard Principal": [
+                    "Dashboard_Principal.xlsx"
+                ],
+                "KPIs Operativos": [
+                    "KPIs_Operativos.xlsx"
+                ],
+                "Análisis de Tendencias": [
+                    "Analisis_Tendencias.xlsx"
+                ]
+            }
         }
 
     @staticmethod
@@ -362,6 +569,8 @@ Archiva análisis y reportes."""
         try:
             os.makedirs(root_path, exist_ok=True)
             self._create_folders(root_path, structure, is_root=True)
+            # Create root INFO.md file
+            self._create_root_info_md(root_path, structure)
             return root_path
         except OSError as e:
             raise RuntimeError(f"Failed to create structure: {e}")
@@ -371,9 +580,9 @@ Archiva análisis y reportes."""
             folder_path = os.path.join(base_path, folder)
             os.makedirs(folder_path, exist_ok=True)
 
-            # Create README.md for main folders
+            # Create INFO.md for main folders
             if is_root and folder in self.folder_descriptions:
-                readme_path = os.path.join(folder_path, "README.md")
+                readme_path = os.path.join(folder_path, "INFO.md")
                 with open(readme_path, 'w', encoding='utf-8') as f:
                     f.write(self.folder_descriptions[folder])
 
@@ -426,12 +635,290 @@ Archiva análisis y reportes."""
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(f"# {os.path.basename(file_path)}\n\nContenido base para {os.path.basename(file_path)}.")
 
+    def _create_root_info_md(self, root_path: str, structure: Dict[str, Any]) -> None:
+        """Create INFO.md file in the root directory with complete structure information."""
+        info_content = f"""# Estructura del Proyecto: {os.path.basename(root_path)}
+
+Esta carpeta contiene la estructura completa del proyecto organizacional, diseñada para empresas de servicios turísticos y similares.
+
+## Propósito General
+Proporcionar una organización sistemática y profesional para todos los aspectos de gestión empresarial, desde lo administrativo hasta lo operativo, financiero y de recursos humanos.
+
+## Árbol de Carpetas Completo
+
+```
+{os.path.basename(root_path)}/
+{self._generate_tree_structure(structure, "", 0)}
+```
+
+## Estructura Detallada del Proyecto
+
+"""
+
+        # Add main folders with detailed descriptions
+        for folder_name, folder_content in structure.items():
+            if folder_name in self.folder_descriptions:
+                # Add the full description from folder_descriptions
+                info_content += self.folder_descriptions[folder_name]
+                info_content += "\n\n"
+
+                # Add detailed content breakdown
+                info_content += "### Contenido Específico:\n\n"
+                info_content += self._get_detailed_folder_contents(folder_name, folder_content, level=0)
+                info_content += "\n---\n\n"
+
+        # Add summary statistics
+        total_folders, total_files = self._count_structure_items(structure)
+        info_content += f"""## Estadísticas de la Estructura
+
+- **Total de carpetas principales**: {len(structure)}
+- **Total de subcarpetas**: {total_folders}
+- **Total de archivos**: {total_files}
+
+## Uso Recomendado
+
+1. **Organización**: Mantén la estructura de carpetas tal como está definida
+2. **Nomenclatura**: Usa nombres descriptivos para los archivos
+3. **Versionado**: Implementa control de versiones para documentos importantes
+4. **Acceso**: Define permisos apropiados según el nivel de confidencialidad
+5. **Backup**: Realiza copias de seguridad regulares
+
+## Mantenimiento
+
+- Revisa periódicamente la estructura para asegurar que se adapte a las necesidades cambiantes
+- Actualiza documentos según evolucione el negocio
+- Mantén consistencia en la nomenclatura y organización
+
+---
+*Estructura generada automáticamente por Project Structure Manager*
+"""
+
+        info_path = os.path.join(root_path, "INFO.md")
+        with open(info_path, 'w', encoding='utf-8') as f:
+            f.write(info_content)
+
+    def _generate_tree_structure(self, structure: Dict[str, Any], prefix: str = "", level: int = 0) -> str:
+        """Generate a tree-like structure representation."""
+        result = ""
+        items = list(structure.items())
+
+        for i, (key, value) in enumerate(items):
+            is_last = (i == len(items) - 1)
+            current_prefix = "└── " if is_last else "├── "
+            next_prefix = prefix + ("    " if is_last else "│   ")
+
+            result += f"{prefix}{current_prefix}{key}/\n"
+
+            if isinstance(value, dict):
+                result += self._generate_tree_structure(value, next_prefix, level + 1)
+            elif isinstance(value, list):
+                for j, item in enumerate(value):
+                    item_is_last = (j == len(value) - 1)
+                    item_prefix = "└── " if item_is_last else "├── "
+                    result += f"{next_prefix}{item_prefix}{item}\n"
+
+        return result
+
+    def _get_folder_contents(self, content: Any, level: int = 0) -> str:
+        """Recursively get folder contents as formatted text."""
+        indent = "  " * (level + 1)
+        result = ""
+
+        if isinstance(content, dict):
+            for key, value in content.items():
+                if isinstance(value, dict):
+                    if value:  # Has subcontent
+                        result += f"{indent}- **{key}**\n"
+                        result += self._get_folder_contents(value, level + 1)
+                    else:  # Empty folder
+                        result += f"{indent}- **{key}** (carpeta)\n"
+                elif isinstance(value, list):
+                    result += f"{indent}- **{key}**\n"
+                    for item in value:
+                        result += f"{indent}  - {item}\n"
+                else:
+                    result += f"{indent}- {key}\n"
+        elif isinstance(content, list):
+            for item in content:
+                result += f"{indent}- {item}\n"
+
+        return result
+
+    def _get_detailed_folder_contents(self, folder_name: str, content: Any, level: int = 0) -> str:
+        """Get detailed folder contents with descriptions of what goes in each folder/file."""
+        result = ""
+
+        if isinstance(content, dict):
+            for key, value in content.items():
+                if isinstance(value, dict):
+                    if value:  # Has subcontent
+                        result += f"#### 📁 {key}\n"
+                        result += f"**Propósito**: {self._get_folder_purpose(key)}\n\n"
+                        result += f"**Contenido**:\n"
+                        result += self._get_detailed_folder_contents(folder_name, value, level + 1)
+                    else:  # Empty folder
+                        result += f"#### 📁 {key}\n"
+                        result += f"**Propósito**: {self._get_folder_purpose(key)}\n\n"
+                        result += f"**Contenido**: Carpeta destinada para {key.lower()}\n\n"
+                elif isinstance(value, list):
+                    result += f"#### 📄 Archivos en {key}\n"
+                    result += f"**Propósito**: {self._get_folder_purpose(key)}\n\n"
+                    result += f"**Archivos incluidos**:\n"
+                    for item in value:
+                        result += f"- **{item}**: {self._get_file_description(item)}\n"
+                    result += "\n"
+                else:
+                    result += f"#### 📄 {key}\n"
+                    result += f"**Propósito**: {self._get_file_description(key)}\n\n"
+        elif isinstance(content, list):
+            for item in content:
+                result += f"- **{item}**: {self._get_file_description(item)}\n"
+
+        return result
+
+    @staticmethod
+    def _get_folder_purpose(folder_name: str) -> str:
+        """Get a brief description of what goes in a folder."""
+        purposes = {
+            "Información General del Proyecto": "Documentos básicos del proyecto como descripción, alcance y objetivos",
+            "Datos Legales - RUC - Permisos": "Documentación legal, RUC, permisos y licencias necesarias",
+            "Contratos - Acuerdos": "Todos los contratos y acuerdos firmados",
+            "Documentos de Propiedad Intelectual": "Patentes, marcas, derechos de autor y propiedad intelectual",
+            "Correspondencia Oficial - Ofertas - Licencias": "Cartas oficiales, ofertas comerciales y licencias",
+            "Visión - Misión - Valores": "Declaraciones estratégicas de la empresa",
+            "Business Model Canvas": "Modelo de negocio canvas con componentes clave",
+            "Plan de Negocios": "Plan detallado del negocio con proyecciones",
+            "Análisis de Mercado y Competencia": "Estudios de mercado y análisis competitivo",
+            "Roadmap Estratégico (Anual - Semestral)": "Planificación estratégica temporal",
+            "Objetivos y KPIs": "Objetivos específicos e indicadores clave de rendimiento",
+            "Proyecciones Financieras": "Proyecciones y presupuestos financieros",
+            "RUC y documentos fiscales": "Documentos fiscales y RUC de la empresa",
+            "Permisos de Operaciones": "Permisos necesarios para operar legalmente",
+            "Póliza de Seguros": "Pólizas de seguro vigentes",
+            "Acuerdo entre Socios Fundadores": "Acuerdos entre los fundadores",
+            "Términos y Condiciones Clientes": "T&C para clientes",
+            "Contrato Servicios (Cliente)": "Plantillas de contratos de servicios",
+            "Waiver - Liberación Responsabilidad": "Documentos de liberación de responsabilidad",
+            "Plantilla Contrato Proveedores": "Plantillas para contratos con proveedores",
+            "Manuales": "Manuales de procedimientos operativos",
+            "Procesos": "Definición de procesos operativos",
+            "Protocolos y Checklists": "Protocolos y listas de verificación",
+            "Control de Proveedores": "Gestión y control de proveedores",
+            "Manual de Calidad - Estándares": "Estándares de calidad y procedimientos",
+            "Calendario Operativo - Cronogramas": "Calendarios y cronogramas operativos",
+            "Manual de Ventas": "Guías y procedimientos de ventas",
+            "Scripts de Venta WhatsApp": "Scripts para ventas por WhatsApp",
+            "Respuestas a Objeciones Comunes": "Respuestas estándar a objeciones de venta",
+            "Política de Precios y Descuentos": "Políticas de pricing y descuentos",
+            "Paquetes y Promociones Vigentes": "Ofertas y promociones actuales",
+            "Calculadora de Costos": "Herramientas para calcular costos",
+            "Análisis de Rentabilidad": "Análisis de rentabilidad de productos/servicios",
+            "Plantillas Propuestas Corporativas": "Plantillas para propuestas comerciales",
+            "Base de Datos de Clientes.xlsx": "Base de datos de clientes en Excel",
+            "Plan de Marketing": "Estrategia general de marketing",
+            "Calendario Editorial": "Calendario de publicaciones y contenido",
+            "Guía de Marca (Brand Guidelines)": "Directrices de marca e identidad",
+            "Banco de Contenido (Posts pre-creados)": "Contenido preparado para redes sociales",
+            "Estrategia Comercial": "Estrategias comerciales específicas",
+            "Plantillas de Diseño": "Plantillas para diseños gráficos",
+            "Análisis de Mercado y Competencia": "Estudios de mercado y competencia",
+            "Reportes de Marketing": "Reportes de campañas de marketing",
+            "CRM": "Sistema de gestión de relaciones con clientes",
+            "Plantillas de Comunicación": "Templates para emails y WhatsApp",
+            "Contratos o Acuerdos con Clientes": "Contratos y acuerdos con clientes",
+            "Formulario de Feedback": "Formularios para retroalimentación",
+            "Registro de Reviews y Testimonios": "Reseñas y testimonios de clientes",
+            "Programa de Fidelización y Referidos": "Programas de lealtad y referidos",
+            "Balance Inicial": "Balance inicial del negocio",
+            "Presupuesto Anual": "Presupuesto anual detallado",
+            "Control de Gastos e Ingresos": "Control financiero diario",
+            "Flujo de Caja Proyectado": "Proyecciones de flujo de caja",
+            "Reportes Financieros": "Reportes financieros periódicos",
+            "Proyecciones": "Proyecciones financieras futuras",
+            "Calculadora Financiera.xlsx": "Herramientas financieras en Excel",
+            "Organigrama": "Estructura organizacional de la empresa",
+            "Roles y Responsabilidades": "Definición de roles y responsabilidades",
+            "Job Descriptions": "Descripciones detalladas de puestos",
+            "KPIs": "Indicadores clave de rendimiento",
+            "Manual de Cultura Organizacional": "Cultura y valores de la empresa",
+            "Descripciones de Puesto": "Detalles específicos de cada puesto",
+            "Contratos - Freelancers": "Contratos con freelancers",
+            "Políticas Internas - Cultura": "Políticas internas y cultura",
+            "Política de Compensaciones": "Políticas de compensación y beneficios",
+            "Contratos Guías Freelance": "Plantillas de contratos freelance",
+            "Evaluaciones de Desempeño": "Evaluaciones de empleados",
+            "Manuales": "Manuales de inducción y procedimientos",
+            "Guías Operativas": "Guías para operaciones diarias",
+            "Capacitación Técnica": "Material de capacitación técnica",
+            "Videos - Material Didáctico": "Contenido audiovisual educativo",
+            "Registro de Capacitación": "Registros de capacitaciones realizadas",
+            "Dashboards (Operativos - Financieros - Marketing)": "Paneles de control interactivos",
+            "Reportes Periódicos (Semanal - Mensual - Trimestral)": "Reportes regulares de rendimiento",
+            "Lecciones Aprendidas - Retrospectivas": "Análisis de experiencias y mejoras",
+            "Indicadores de Desempeño (KPIs globales)": "KPIs generales del negocio",
+            "Dashboard Principal.xlsx": "Dashboard principal en Excel",
+            "KPIs Operativos.xlsx": "KPIs operativos en Excel",
+            "Análisis de Tendencias.xlsx": "Análisis de tendencias en Excel"
+        }
+        return purposes.get(folder_name, f"Contenido relacionado con {folder_name.lower()}")
+
+    @staticmethod
+    def _get_file_description(file_name: str) -> str:
+        """Get description of what goes in a specific file."""
+        descriptions = {
+            "Confirmación_Reserva.html": "Email template para confirmar reservas de clientes",
+            "Recordatorio_48h.html": "Email recordatorio 48 horas antes del servicio",
+            "Recordatorio_24h.html": "Email recordatorio 24 horas antes del servicio",
+            "Recordatorio_Día_Tour.html": "Email recordatorio el día del tour",
+            "Agradecimiento_Post_Tour.html": "Email de agradecimiento después del servicio",
+            "Solicitud_Review.html": "Email solicitando reseñas y testimonios",
+            "Newsletter_Mensual.html": "Boletín mensual informativo",
+            "Respuestas_Rápidas.docx": "Documento con respuestas rápidas para WhatsApp",
+            "Rol.docx": "Documento con definición de roles",
+            "Evaluaciones.docx": "Documento de evaluaciones de desempeño",
+            "Manual_de_Inducción_Nuevos_Miembros.docx": "Manual completo de inducción",
+            "Manual_de_Inducción.docx": "Manual de inducción para nuevos miembros",
+            "Atencion_al_Cliente.docx": "Manual de atención al cliente",
+            "Ventas.docx": "Manual de procedimientos de ventas",
+            "Operaciones.docx": "Manual de operaciones",
+            "Uso_de_Herramientas.docx": "Guía de uso de herramientas",
+            "Base de Datos de Clientes.xlsx": "Base de datos completa de clientes",
+            "Calculadora Financiera.xlsx": "Herramientas de cálculo financiero",
+            "Dashboard Principal.xlsx": "Dashboard principal con métricas clave",
+            "KPIs Operativos.xlsx": "Indicadores operativos en Excel",
+            "Análisis de Tendencias.xlsx": "Análisis de tendencias del negocio"
+        }
+        return descriptions.get(file_name, f"Archivo {file_name} con contenido específico del área")
+
+    @staticmethod
+    def _count_structure_items(structure: Dict[str, Any]) -> tuple[int, int]:
+        """Count total folders and files in the structure."""
+        total_folders = 0
+        total_files = 0
+
+        def count_recursive(content: Any) -> None:
+            nonlocal total_folders, total_files
+            if isinstance(content, dict):
+                for key, value in content.items():
+                    if isinstance(value, dict):
+                        total_folders += 1
+                        count_recursive(value)
+                    elif isinstance(value, list):
+                        total_files += len(value)
+                    else:
+                        total_files += 1
+            elif isinstance(content, list):
+                total_files += len(content)
+
+        count_recursive(structure)
+        return total_folders, total_files
+
     def _find_template_for_file(self, file_name: str) -> Optional[Dict[str, Any]]:
         """Find a template that matches the file name or extension."""
         try:
             extension = file_name.split('.')[-1] if '.' in file_name else ''
 
-            # First, try to find external template
+            # First, try to find an external template
             external_template = self.template_manager.find_external_template(file_name)
             if external_template:
                 return external_template
@@ -460,16 +947,15 @@ Archiva análisis y reportes."""
 
             # Special cases for DOCX files - try advanced template
             if extension == 'docx':
-                # Try to find advanced business document template
+                # Try to find an advanced business document template
                 for template in templates:
                     if 'advanced' in template['nombre'].lower() or 'business' in template['nombre'].lower():
                         return self.template_manager.load_template(template['id'])
-
         except Exception:
-            pass
-        return None
+            return None
 
-    def _get_default_params_for_file(self, file_name: str) -> Dict[str, str]:
+    @staticmethod
+    def _get_default_params_for_file(file_name: str) -> Dict[str, str]:
         """Get default parameters for a file based on its name."""
         # Try external template parameters first
         from core.external_templates import get_external_template_params
@@ -511,7 +997,7 @@ Archiva análisis y reportes."""
         return self.save_to_db(project_name, structure)
 
     def create_structure_and_save(self, project_name: str, base_path: str,
-                                   structure: Optional[Dict[str, Any]] = None) -> str:
+                                  structure: Optional[Dict[str, Any]] = None) -> str:
         """Create a structure and save to the database."""
         if structure is None:
             structure = self.default_structure

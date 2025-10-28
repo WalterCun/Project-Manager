@@ -1,0 +1,9 @@
+{
+  "TestFolder": {
+    "subfolder": {},
+    "test_file.txt": "Sample content for testing"
+  },
+  "AnotherFolder": {
+    "readme.md": "This is a test structure"
+  }
+}
