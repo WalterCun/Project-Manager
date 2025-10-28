@@ -1,0 +1,584 @@
+{
+  "name": "Default Business Structure",
+  "description": "Complete business project structure for service companies with 10 main folders and detailed sub-organization",
+  "version": "1.0",
+  "author": "Project Manager",
+  "structure": {
+    "00 ADMINISTRATIVO": {
+      "Información General del Proyecto": [
+        "Resumen Ejecutivo.docx",
+        "Ficha Técnica_Proyecto.docx",
+        "Datos Contacto_Equipo.docx",
+        "Cronograma Global.xlsx",
+        "Presentación Corporativa.pptx"
+      ],
+      "Contratos - Acuerdos": [
+        "Contrato Servicios.docx",
+        "Contrato Confidencialidad NDA.docx",
+        "Acuerdo Colaboración.docx"
+      ],
+      "Documentos de Propiedad Intelectual": [
+        "Registro Marca.pdf",
+        "Derechos Autor.pdf",
+        "Patentes y Modelos Utilidad.pdf"
+      ],
+      "Correspondencia Oficial - Ofertas - Licencias": [
+        "Carta Presentación.docx",
+        "Solicitud Licencia.docx",
+        "Ofertas Comerciales.docx"
+      ]
+    },
+    "01 ESTRATÉGICO": {
+      "Informacion Base": [
+        "Visión - Misión - Valores.docx"
+      ],
+      "Business Model Canvas": [
+        "Canvas Modelo Negocio.pdf",
+        "Propuesta Valor.docx"
+      ],
+      "Plan de Negocios": [
+        "Plan Negocio Completo.docx",
+        "Resumen Ejecutivo.pdf"
+      ],
+      "Análisis de Mercado y Competencia": [
+        "Estudio Mercado.pdf",
+        "Competencia Directa Indirecta.xlsx",
+        "Benchmarking.docx"
+      ],
+      "Roadmap Estratégico (Anual - Semestral)": [
+        "Roadmap 2025.xlsx",
+        "Metas Trimestrales.docx"
+      ],
+      "Objetivos y KPIs": [
+        "OKRs Globales.xlsx",
+        "Indicadores Estrategicos.docx"
+      ],
+      "Proyecciones Financieras": [
+        "Proyeccion 5 Años.xlsx",
+        "Escenarios Optimista Pesimista.xlsx"
+      ],
+      "FODA - Análisis Estratégico": [
+        "Matriz FODA.xlsx",
+        "Análisis PESTEL.docx"
+      ]
+    },
+    "02 LEGAL Y CONSTITUCIÓN": {
+      "RUC y documentos fiscales": [
+        "Certificado RUC.pdf",
+        "Constancia Inscripción.pdf"
+      ],
+      "Permisos de Operaciones": [
+        "Permiso Municipal.pdf",
+        "Certificado Seguridad.pdf",
+        "Licencia Funcionamiento.pdf"
+      ],
+      "Póliza de Seguros": [
+        "Seguro Responsabilidad_Civil.pdf",
+        "Seguro Equipo.pdf",
+        "Seguro Empleados.pdf"
+      ],
+      "Acuerdo entre Socios Fundadores": [
+        "Pacto Socios.docx",
+        "Acta Constitución.pdf",
+        "Estatutos Sociales.pdf"
+      ],
+      "Términos y Condiciones Clientes": [
+        "Términos Servicio.docx",
+        "Política Privacidad.docx",
+        "Política Cookies.docx"
+      ],
+      "Contrato Servicios (Cliente)": [
+        "Plantilla Contrato Cliente.docx"
+      ],
+      "Waiver - Liberación Responsabilidad": [
+        "Documento Waiver.docx"
+      ],
+      "Plantilla Contrato Proveedores": [
+        "Plantilla_Proveedor.docx"
+      ],
+      "Registro de Documentos Legales": [
+        "Índice Documentos_Legales.xlsx",
+        "Vencimientos Permisos.xlsx"
+      ]
+    },
+    "03 OPERACIONES": {
+      "Manuales": [
+        "Manual Operativo.docx",
+        "Guía Logística.docx"
+      ],
+      "Procesos": [
+        "Mapa_Procesos.pdf",
+        "Procedimientos Operativos Estandar.docx",
+        "Diagrama Flujo Procesos.pdf"
+      ],
+      "Protocolos y Checklists": [
+        "Checklist Control Calidad.xlsx",
+        "Protocolo Seguridad.docx",
+        "Checklist Apertura Cierre.xlsx"
+      ],
+      "Control de Proveedores": [
+        "Base Proveedores.xlsx",
+        "Evaluación Proveedores.xlsx",
+        "Contratos Proveedores.xlsx"
+      ],
+      "Manual de Calidad - Estándares": [
+        "Normas ISO Requeridas.pdf",
+        "Manual Calidad.docx",
+        "Certificaciones.pdf"
+      ],
+      "Calendario Operativo - Cronogramas": [
+        "Cronograma Mensual.xlsx",
+        "Plan Actividades Semanales.xlsx"
+      ],
+      "Inventario y Logística": [
+        "Control Inventario.xlsx",
+        "Kardex.xlsx",
+        "Gestión Almacén.docx"
+      ]
+    },
+    "04 COMERCIAL Y VENTAS": {
+      "Manual de Ventas": [
+        "Proceso_Ventas.docx",
+        "Embudo Ventas.pdf"
+      ],
+      "Scripts de Venta WhatsApp": [
+        "Mensajes Promocionales.docx",
+        "Plantillas Conversación.docx"
+      ],
+      "Respuestas a Objeciones Comunes": [
+        "Listado Objeciones.docx",
+        "Guía Manejo Objeciones.docx"
+      ],
+      "Política de Precios y Descuentos": [
+        "Lista Precios.xlsx",
+        "Política Descuentos.docx",
+        "Matriz Precios.xlsx"
+      ],
+      "Paquetes y Promociones Vigentes": [
+        "Promociones 2025.xlsx",
+        "Combos Productos.docx"
+      ],
+      "Calculadora de Costos": [
+        "Costeo Productos.xlsx",
+        "Margen Contribución.xlsx"
+      ],
+      "Análisis de Rentabilidad": [
+        "Rentabilidad Lineas Negocio.xlsx",
+        "Análisis Producto.xlsx"
+      ],
+      "Plantillas Propuestas Corporativas": [
+        "Plantilla_Propuesta_Corporativa.docx",
+        "Portafolio_Servicios.pdf"
+      ],
+      "Base de Datos de Clientes": [
+        "Base de Datos Clientes.xlsx",
+        "Segmentación Clientes.xlsx"
+      ],
+      "Pipeline y Pronóstico de Ventas": [
+        "Pipeline Ventas.xlsx",
+        "Pronóstico Mensual.xlsx"
+      ]
+    },
+    "05 MARKETING Y CONTENIDO": {
+      "Plan de Marketing": [
+        "Plan Marketing Anual.docx",
+        "Estrategia Digital.docx"
+      ],
+      "Calendario Editorial": [
+        "Calendario Contenido.xlsx",
+        "Planificación Mensual.xlsx"
+      ],
+      "Guía de Marca (Brand Guidelines)": [
+        "Manual_Marca.pdf",
+        "Paleta_Colores.png",
+        "Tipografías.pdf"
+      ],
+      "Banco de Contenido (Posts pre-creados)": {
+        "Material Promocional": [
+          "Banners.jpg",
+          "Post_Instagram.docx",
+          "Stories.png"
+        ],
+        "Diseños": [
+          "Flyers.png",
+          "Plantillas_Canva.pdf",
+          "Brochures.pdf"
+        ],
+        "Plantillas": [
+          "Plantilla Post Redes.docx",
+          "Plantilla Reel.docx",
+          "Plantilla Carrusel.pptx"
+        ],
+        "Fotografías y Videos": [
+          "Banco_Fotos_README.txt",
+          "Videos_Corporativos_README.txt"
+        ]
+      },
+      "Estrategia Comercial": [
+        "Campañas_Promocionales.docx",
+        "Buyer_Personas.docx",
+        "Customer_Journey.pdf"
+      ],
+      "Plantillas de Diseño": [
+        "Plantillas Canales Sociales_README.txt"
+      ],
+      "Análisis de Marketing Digital": [
+        "Analisis_Redes.xlsx",
+        "Benchmark_Marketing.docx",
+        "SEO_Keywords.xlsx"
+      ],
+      "Reportes de Marketing": [
+        "Reporte Mensual.pdf",
+        "Reporte Anual.pdf",
+        "Métricas Redes Sociales.xlsx"
+      ],
+      "Publicidad y Medios": [
+        "Presupuesto Publicidad.xlsx",
+        "Campañas Activas.docx",
+        "ROI Publicidad.xlsx"
+      ]
+    },
+    "06 CLIENTES Y USUARIOS": {
+      "CRM": {
+        "Base de Datos - CRM": [
+          "Clientes_Activos.xlsx",
+          "Historial_Interacciones.xlsx",
+          "Leads.xlsx"
+        ]
+      },
+      "Plantillas de Comunicación": {
+        "Emails Templates": [
+          "Confirmación.html",
+          "Recordatorio 48h.html",
+          "Recordatorio 24h.html",
+          "Recordatorio Día.html",
+          "Agradecimiento Post Venta.html",
+          "Solicitud Review.html",
+          "Newsletter Mensual.html",
+          "Recuperación Cliente.html"
+        ],
+        "Whatsapp": [
+          "Respuestas Rápidas.docx",
+          "Mensajes Automáticos.docx",
+          "Plantillas Seguimiento.docx"
+        ]
+      },
+      "Contratos o Acuerdos con Clientes": [
+        "Contrato Servicio Cliente.docx",
+        "Términos Condiciones Cliente.docx"
+      ],
+      "Formulario de Feedback": [
+        "Encuesta Satisfacción.docx",
+        "Formulario Google Link.txt",
+        "NPS Survey.docx"
+      ],
+      "Registro de Reviews y Testimonios": [
+        "Testimonios Clientes.xlsx",
+        "Reviews Plataformas.xlsx"
+      ],
+      "Programa de Fidelización y Referidos": [
+        "Programa Referidos.docx",
+        "Bonificaciones.xlsx",
+        "Club Lealtad.docx"
+      ],
+      "Gestión de Quejas y Reclamos": [
+        "Registro Quejas.xlsx",
+        "Protocolo Reclamos.docx",
+        "Resolución Casos.xlsx"
+      ],
+      "Políticas de Atención al Cliente": [
+        "Política Devoluciones.docx",
+        "Política Reembolsos.docx",
+        "Garantías.docx"
+      ]
+    },
+    "07 FINANZAS Y CONTABILIDAD": {
+      "Balance Inicial": [
+        "Balance 2025.xlsx",
+        "Balance Apertura.xlsx"
+      ],
+      "Presupuesto Anual": [
+        "Presupuesto Anual.xlsx",
+        "Presupuesto Departamentos.xlsx"
+      ],
+      "Control de Gastos e Ingresos": [
+        "Registro Gastos.xlsx",
+        "Ingresos Mensuales.xlsx",
+        "Libro Diario.xlsx"
+      ],
+      "Flujo de Caja Proyectado": [
+        "Cash Flow Proyectado.xlsx",
+        "Flujo Caja Semanal.xlsx"
+      ],
+      "Reportes Financieros": [
+        "Reporte_Trimestral.pdf",
+        "Estado_Resultados.pdf",
+        "Balance_General.pdf"
+      ],
+      "Proyecciones": [
+        "Proyeccion Crecimiento.xlsx",
+        "Análisis Sensibilidad.xlsx"
+      ],
+      "Calculadora Financiera": [
+        "Calculadora Financiera.xlsx",
+        "ROI Calculator.xlsx"
+      ],
+      "Facturación": [
+        "Facturas Emitidas.xlsx",
+        "Facturas Recibidas.xlsx",
+        "Control Cobros.xlsx"
+      ],
+      "Conciliaciones Bancarias": [
+        "Conciliación Mensual.xlsx",
+        "Estados Cuenta.pdf"
+      ],
+      "Declaraciones Fiscales": [
+        "Declaración IVA.xlsx",
+        "Declaración Renta.pdf",
+        "Retenciones.xlsx"
+      ],
+      "Cuentas por Cobrar - Pagar": [
+        "Cuentas Cobrar.xlsx",
+        "Cuentas Pagar.xlsx",
+        "Antigüedad Saldos.xlsx"
+      ]
+    },
+    "08 RECURSOS HUMANOS Y EQUIPO": {
+      "Organigrama": [
+        "Organigrama Actualizado.pdf",
+        "Estructura Organizacional.png"
+      ],
+      "Roles y Responsabilidades": [
+        "Matriz Roles.xlsx",
+        "RACI Matrix.xlsx"
+      ],
+      "Job Descriptions": [
+        "JD Marketing.docx",
+        "JD Operaciones.docx",
+        "JD Admin.docx",
+        "JD Ventas.docx"
+      ],
+      "KPIs": [
+        "KPIs Rol.xlsx",
+        "Evaluaciones.docx",
+        "Metas Individuales.xlsx"
+      ],
+      "Manual de Cultura Organizacional": [
+        "Valores Corporativos.docx",
+        "Cultura Empresa.pdf"
+      ],
+      "Descripciones de Puesto": [
+        "Perfil Puesto.docx",
+        "Requisitos Posición.docx"
+      ],
+      "Contratos - Freelancers": [
+        "Contrato Freelancer Base.docx",
+        "Contrato Temporal.docx"
+      ],
+      "Políticas Internas - Cultura": [
+        "Código Conducta.docx",
+        "Política Teletrabajo.docx",
+        "Reglamento Interno.docx"
+      ],
+      "Política de Compensaciones": [
+        "Tabla Salarial.xlsx",
+        "Bonos Incentivos.docx",
+        "Beneficios.docx"
+      ],
+      "Contratos Guías Freelance": [
+        "Guía_Freelancer.docx"
+      ],
+      "Evaluaciones de Desempeño": [
+        "Plantilla Evaluacion.xlsx",
+        "Feedback_360.docx"
+      ],
+      "Nómina y Planillas": [
+        "Registro Nómina.xlsx",
+        "Planilla Mensual.xlsx",
+        "Aportes IESS.xlsx"
+      ],
+      "Reclutamiento y Selección": [
+        "Proceso Reclutamiento.docx",
+        "Banco Candidatos.xlsx",
+        "Evaluación Candidatos.xlsx"
+      ],
+      "Expedientes de Personal": [
+        "Expediente Empleado Plantilla.docx",
+        "Documentos Ingreso.xlsx"
+      ],
+      "Vacaciones y Permisos": [
+        "Control Vacaciones.xlsx",
+        "Solicitud Permisos.docx",
+        "Calendario Ausencias.xlsx"
+      ]
+    },
+    "09 CAPACITACIÓN Y DOCUMENTACIÓN INTERNA": {
+      "Manuales": [
+        "Manual_de_Inducción_Nuevos_Miembros.docx",
+        "Manual_de_Inducción.docx",
+        "Manual_Bienvenida.pdf"
+      ],
+      "Guías Operativas": [
+        "Guía Atención Cliente.docx",
+        "Guía Procesos Internos.docx",
+        "Guía Uso Sistemas.docx"
+      ],
+      "Capacitación Técnica": [
+        "Atencion al Cliente.docx",
+        "Ventas.docx",
+        "Operaciones.docx",
+        "Uso de Herramientas.docx",
+        "Seguridad Información.docx"
+      ],
+      "Videos - Material Didáctico": [
+        "Video_Inducción.mp4",
+        "Demo_Herramientas.mp4"
+      ],
+      "Registro de Capacitación": [
+        "Asistencia Capacitaciones.xlsx",
+        "Historial Entrenamientos.xlsx",
+        "Certificaciones_Personal.xlsx"
+      ],
+      "Plan de Desarrollo": [
+        "Plan_Capacitación_Anual.docx",
+        "Desarrollo_Carrera.xlsx"
+      ]
+    },
+    "10 ANALÍTICA Y REPORTES": {
+      "Dashboards (Operativos - Financieros - Marketing)": [
+        "Dashboard PowerBI.pbix",
+        "Dashboard Online_Link.txt",
+        "Dashboard Ejecutivo.xlsx"
+      ],
+      "Reportes Periódicos (Semanal - Mensual - Trimestral)": [
+        "Reporte Semanal.xlsx",
+        "Reporte Mensual.xlsx",
+        "Reporte Trimestral.pdf"
+      ],
+      "Lecciones Aprendidas - Retrospectivas": [
+        "Retrospectiva Q1.docx",
+        "Lecciones Proyecto.docx",
+        "Post Mortem.docx"
+      ],
+      "Indicadores de Desempeño (KPIs globales)": [
+        "KPIs Globales.xlsx",
+        "Indicadores Por Area.xlsx",
+        "Balanced Scorecard.xlsx"
+      ],
+      "Dashboard Principal": [
+        "Dashboard Principal.xlsx"
+      ],
+      "KPIs Operativos": [
+        "KPIs Operativos.xlsx",
+        "Métricas Tiempo Real.xlsx"
+      ],
+      "Análisis de Tendencias": [
+        "Analisis Tendencias.xlsx",
+        "Pronósticos.xlsx"
+      ]
+    },
+    "11 TECNOLOGÍA E IT": {
+      "Infraestructura Tecnológica": [
+        "Inventario Hardware.xlsx",
+        "Inventario Software.xlsx",
+        "Diagrama Red.pdf"
+      ],
+      "Licencias de Software": [
+        "Licencias Activas.xlsx",
+        "Renovaciones Software.xlsx",
+        "Credenciales Sistemas.xlsx"
+      ],
+      "Backup y Seguridad": [
+        "Política Backup.docx",
+        "Plan Recuperación Desastres.docx",
+        "Registro Backups.xlsx"
+      ],
+      "Documentación Técnica": [
+        "Arquitectura Sistemas.pdf",
+        "Manual Técnico.docx",
+        "APIs Documentación.pdf"
+      ],
+      "Seguridad Informática": [
+        "Política_Seguridad_IT.docx",
+        "Control Accesos.xlsx",
+        "Incidentes Seguridad.xlsx"
+      ],
+      "Soporte Técnico": [
+        "Tickets Soporte.xlsx",
+        "FAQ Técnico.docx",
+        "Procedimientos Soporte.docx"
+      ]
+    },
+    "12 GESTIÓN DE RIESGOS Y COMPLIANCE": {
+      "Matriz de Riesgos": [
+        "Matriz Riesgos.xlsx",
+        "Mapa Calor Riesgos.pdf"
+      ],
+      "Plan de Contingencia": [
+        "Plan Continuidad Negocio.docx",
+        "Protocolos Emergencia.docx"
+      ],
+      "Auditorías": [
+        "Calendario Auditorías.xlsx",
+        "Reportes Auditoría.pdf",
+        "Plan Acción Hallazgos.xlsx"
+      ],
+      "Cumplimiento Regulatorio": [
+        "Check Cumplimiento.xlsx",
+        "Regulaciones Aplicables.docx",
+        "Certificados Cumplimiento.pdf"
+      ],
+      "Políticas de Compliance": [
+        "Política Anticorrupción.docx",
+        "Política Antilavado.docx",
+        "Código Ética.docx"
+      ]
+    },
+    "13 INNOVACIÓN Y DESARROLLO": {
+      "Proyectos I+D": [
+        "Proyectos Investigación.xlsx",
+        "Propuestas Innovación.docx"
+      ],
+      "Pruebas de Concepto": [
+        "POC Activos.xlsx",
+        "Resultados Pruebas.docx"
+      ],
+      "Proyectos Piloto": [
+        "Plan Piloto.docx",
+        "Evaluación Piloto.xlsx"
+      ],
+      "Ideas y Mejoras": [
+        "Buzón Ideas.xlsx",
+        "Evaluación Ideas.docx",
+        "Pipeline Innovación.xlsx"
+      ],
+      "Alianzas Estratégicas": [
+        "Partners Tecnológicos.xlsx",
+        "Acuerdos Colaboración.docx"
+      ]
+    },
+    "14 SOSTENIBILIDAD Y RSE": {
+      "Responsabilidad Social Empresarial": [
+        "Plan RSE.docx",
+        "Proyectos Sociales.xlsx"
+      ],
+      "Sostenibilidad": [
+        "Política Ambiental.docx",
+        "Huella Carbono.xlsx",
+        "Iniciativas Verdes.docx"
+      ],
+      "Reportes de Sostenibilidad": [
+        "Reporte Anual RSE.pdf",
+        "Indicadores Sostenibilidad.xlsx"
+      ]
+    },
+    "15 ARCHIVO HISTÓRICO": {
+      "Documentos Históricos": [
+        "Archivo_2024_README.txt"
+      ],
+      "Proyectos Cerrados": [
+        "Proyectos Finalizados.xlsx"
+      ]
+    }
+  }
+}
