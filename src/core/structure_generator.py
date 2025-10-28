@@ -1,13 +1,12 @@
-import os
 from typing import Dict, Any, Optional, List
 from .database import DatabaseManager
+from .enhanced_template_manager import EnhancedTemplateManager
 import sys
 import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from templates.models import TemplateManager
 from templates.renderers import RendererFactory
-from .base_templates import get_template_params_for_file
 
 
 class StructureGenerator:
@@ -16,350 +15,17 @@ class StructureGenerator:
         self.default_structure = self._get_default_structure()
 
         self.template_manager = TemplateManager(db_manager)
+        self.enhanced_template_manager = EnhancedTemplateManager(db_manager)
         self.folder_descriptions = self._get_folder_descriptions()
 
-    @staticmethod
-    def _get_default_structure() -> Dict[str, Any]:
-        # Integrated from generate_architecture.py with improvements
-        return {
-            "00 ADMINISTRATIVO": {
-                "Información General del Proyecto": [
-                    "Resumen_Ejecutivo.docx",
-                    "Ficha_Técnica_Proyecto.docx",
-                    "Datos_Contacto_Equipo.docx",
-                    "Cronograma_Global.xlsx",
-                    "Presentación_Corporativa.pptx"
-                ],
-                "Contratos - Acuerdos": [
-                    "Contrato_Servicios.docx",
-                    "Contrato_Confidencialidad_NDA.docx",
-                    "Acuerdo_Colaboración.docx"
-                ],
-                "Documentos de Propiedad Intelectual": [
-                    "Registro_Marca.pdf",
-                    "Derechos_Autor.pdf",
-                    "Patentes_y_Modelos_Utilidad.pdf"
-                ],
-                "Correspondencia Oficial - Ofertas - Licencias": [
-                    "Carta_Presentación.docx",
-                    "Solicitud_Licencia.docx",
-                    "Ofertas_Comerciales.docx"
-                ]
-            },
-            "01 ESTRATÉGICO": {
-                "Visión - Misión - Valores": [
-                    "Declaración_Estrategica.docx"
-                ],
-                "Business Model Canvas": [
-                    "Canvas_Modelo_Negocio.pdf",
-                    "Propuesta_Valor.docx"
-                ],
-                "Plan de Negocios": [
-                    "Plan_Negocio_Completo.docx",
-                    "Resumen_Ejecutivo.pdf"
-                ],
-                "Análisis de Mercado y Competencia": [
-                    "Estudio_Mercado.pdf",
-                    "Competencia_Directa_Indirecta.xlsx",
-                    "Benchmarking.docx"
-                ],
-                "Roadmap Estratégico (Anual - Semestral)": [
-                    "Roadmap_2025.xlsx",
-                    "Metas_Trimestrales.docx"
-                ],
-                "Objetivos y KPIs": [
-                    "OKRs_Globales.xlsx",
-                    "Indicadores_Estrategicos.docx"
-                ],
-                "Proyecciones Financieras": [
-                    "Proyeccion_5_Años.xlsx",
-                    "Escenarios_Optimista_Pesimista.xlsx"
-                ]
-            },
-            "02 LEGAL Y CONSTITUCIÓN": {
-                "RUC y documentos fiscales": [
-                    "Certificado_RUC.pdf",
-                    "Constancia_Inscripción.pdf"
-                ],
-                "Permisos de Operaciones": [
-                    "Permiso_Municipal.pdf",
-                    "Certificado_Seguridad.pdf"
-                ],
-                "Póliza de Seguros": [
-                    "Seguro_Responsabilidad_Civil.pdf",
-                    "Seguro_Equipo.pdf"
-                ],
-                "Acuerdo entre Socios Fundadores": [
-                    "Pacto_Socios.docx",
-                    "Acta_Constitución.pdf"
-                ],
-                "Términos y Condiciones Clientes": [
-                    "Términos_Servicio.docx",
-                    "Política_Privacidad.docx"
-                ],
-                "Contrato Servicios (Cliente)": [
-                    "Plantilla_Contrato_Cliente.docx"
-                ],
-                "Waiver - Liberación Responsabilidad": [
-                    "Documento_Waiver.docx"
-                ],
-                "Plantilla Contrato Proveedores": [
-                    "Plantilla_Proveedor.docx"
-                ]
-            },
-            "03 OPERACIONES": {
-                "Manuales": [
-                    "Manual_Operativo.docx",
-                    "Guía_Logística.docx"
-                ],
-                "Procesos": [
-                    "Mapa_Procesos.pdf",
-                    "Procedimientos_Operativos_Estandar.docx"
-                ],
-                "Protocolos y Checklists": [
-                    "Checklist_Control_Calidad.xlsx",
-                    "Protocolo_Seguridad.docx"
-                ],
-                "Control de Proveedores": [
-                    "Base_Proveedores.xlsx",
-                    "Evaluación_Proveedores.xlsx"
-                ],
-                "Manual de Calidad - Estándares": [
-                    "Normas_ISO_Requeridas.pdf",
-                    "Manual_Calidad.docx"
-                ],
-                "Calendario Operativo - Cronogramas": [
-                    "Cronograma_Mensual.xlsx",
-                    "Plan_Actividades_Semanales.xlsx"
-                ]
-            },
-            "04 COMERCIAL Y VENTAS": {
-                "Manual de Ventas": [
-                    "Proceso_Ventas.docx"
-                ],
-                "Scripts de Venta WhatsApp": [
-                    "Mensajes_Promocionales.docx"
-                ],
-                "Respuestas a Objeciones Comunes": [
-                    "Listado_Objeciones.docx"
-                ],
-                "Política de Precios y Descuentos": [
-                    "Lista_Precios.xlsx",
-                    "Política_Descuentos.docx"
-                ],
-                "Paquetes y Promociones Vigentes": [
-                    "Promociones_2025.xlsx"
-                ],
-                "Calculadora de Costos": [
-                    "Costeo_Productos.xlsx"
-                ],
-                "Análisis de Rentabilidad": [
-                    "Rentabilidad_Lineas_Negocio.xlsx"
-                ],
-                "Plantillas Propuestas Corporativas": [
-                    "Plantilla_Propuesta_Corporativa.docx"
-                ],
-                "Base de Datos de Clientes": [
-                    "Base_de_Datos_Clientes.xlsx"
-                ]
-            },
-            "05 MARKETING Y CONTENIDO": {
-                "Plan de Marketing": [
-                    "Plan_Marketing_Anual.docx"
-                ],
-                "Calendario Editorial": [
-                    "Calendario_Contenido.xlsx"
-                ],
-                "Guía de Marca (Brand Guidelines)": [
-                    "Manual_Marca.pdf",
-                    "Paleta_Colores.png",
-                    "Tipografías.pdf"
-                ],
-                "Banco de Contenido (Posts pre-creados)": {
-                    "Material Promocional": [
-                        "Banners.jpg",
-                        "Post_Instagram.docx"
-                    ],
-                    "Diseños": [
-                        "Flyers.png",
-                        "Plantillas_Canva.pdf"
-                    ],
-                    "Plantillas": [
-                        "Plantilla_Post_Redes.docx",
-                        "Plantilla_Reel.docx"
-                    ]
-                },
-                "Estrategia Comercial": [
-                    "Campañas_Promocionales.docx",
-                    "Buyer_Personas.docx"
-                ],
-                "Plantillas de Diseño": [
-                    "Plantillas_Canales_Sociales.zip"
-                ],
-                "Análisis de Mercado y Competencia": [
-                    "Analisis_Redes.xlsx",
-                    "Benchmark_Marketing.docx"
-                ],
-                "Reportes de Marketing": [
-                    "Reporte_Mensual.pdf",
-                    "Reporte_Anual.pdf"
-                ]
-            },
-            "06 CLIENTES Y USUARIOS": {
-                "CRM": {
-                    "Base de Datos - CRM": [
-                        "Clientes_Activos.xlsx",
-                        "Historial_Interacciones.xlsx"
-                    ]
-                },
-                "Plantillas de Comunicación": {
-                    "Emails Templates": [
-                        "Confirmación.html",
-                        "Recordatorio_48h.html",
-                        "Recordatorio_24h.html",
-                        "Recordatorio_Día.html",
-                        "Agradecimiento_Post_Venta.html",
-                        "Solicitud_Review.html",
-                        "Newsletter_Mensual.html"
-                    ],
-                    "Whatsapp": [
-                        "Respuestas_Rápidas.docx",
-                        "Mensajes_Automáticos.docx"
-                    ]
-                },
-                "Contratos o Acuerdos con Clientes": [
-                    "Contrato_Servicio_Cliente.docx"
-                ],
-                "Formulario de Feedback": [
-                    "Encuesta_Satisfacción.docx",
-                    "Formulario_Google_Link.txt"
-                ],
-                "Registro de Reviews y Testimonios": [
-                    "Testimonios_Clientes.xlsx"
-                ],
-                "Programa de Fidelización y Referidos": [
-                    "Programa_Referidos.docx",
-                    "Bonificaciones.xlsx"
-                ]
-            },
-            "07 FINANZAS Y CONTABILIDAD": {
-                "Balance Inicial": [
-                    "Balance_2025.xlsx"
-                ],
-                "Presupuesto Anual": [
-                    "Presupuesto_Anual.xlsx"
-                ],
-                "Control de Gastos e Ingresos": [
-                    "Registro_Gastos.xlsx",
-                    "Ingresos_Mensuales.xlsx"
-                ],
-                "Flujo de Caja Proyectado": [
-                    "Cash_Flow_Proyectado.xlsx"
-                ],
-                "Reportes Financieros": [
-                    "Reporte_Trimestral.pdf",
-                    "Estado_Resultados.pdf"
-                ],
-                "Proyecciones": [
-                    "Proyeccion_Crecimiento.xlsx"
-                ],
-                "Calculadora Financiera": [
-                    "Calculadora_Financiera.xlsx"
-                ]
-            },
-            "08 RECURSOS HUMANOS Y EQUIPO": {
-                "Organigrama": [
-                    "Organigrama_Actualizado.pdf"
-                ],
-                "Roles y Responsabilidades": [
-                    "Matriz_Roles.xlsx"
-                ],
-                "Job Descriptions": [
-                    "JD_Marketing.docx",
-                    "JD_Operaciones.docx",
-                    "JD_Admin.docx"
-                ],
-                "KPIs": [
-                    "Rol.docx",
-                    "Evaluaciones.docx"
-                ],
-                "Manual de Cultura Organizacional": [
-                    "Valores_Corporativos.docx"
-                ],
-                "Descripciones de Puesto": [
-                    "Perfil_Puesto.docx"
-                ],
-                "Contratos - Freelancers": [
-                    "Contrato_Freelancer_Base.docx"
-                ],
-                "Políticas Internas - Cultura": [
-                    "Código_Conducta.docx",
-                    "Política_Teletrabajo.docx"
-                ],
-                "Política de Compensaciones": [
-                    "Tabla_Salarial.xlsx",
-                    "Bonos_Incentivos.docx"
-                ],
-                "Contratos Guías Freelance": [
-                    "Guía_Freelancer.docx"
-                ],
-                "Evaluaciones de Desempeño": [
-                    "Plantilla_Evaluacion.xlsx"
-                ]
-            },
-            "09_CAPACITACIÓN Y DOCUMENTACIÓN INTERNA": {
-                "Manuales": [
-                    "Manual_de_Inducción_Nuevos_Miembros.docx",
-                    "Manual_de_Inducción.docx"
-                ],
-                "Guías Operativas": [
-                    "Guía_Atención_Cliente.docx",
-                    "Guía_Procesos_Internos.docx"
-                ],
-                "Capacitación Técnica": [
-                    "Atencion_al_Cliente.docx",
-                    "Ventas.docx",
-                    "Operaciones.docx",
-                    "Uso_de_Herramientas.docx"
-                ],
-                "Videos - Material Didáctico": [
-                    "Video_Inducción.mp4",
-                    "Demo_Herramientas.mp4"
-                ],
-                "Registro de Capacitación": [
-                    "Asistencia_Capacitaciones.xlsx",
-                    "Historial_Entrenamientos.xlsx"
-                ]
-            },
-            "10 ANALÍTICA Y REPORTES": {
-                "Dashboards (Operativos - Financieros - Marketing)": [
-                    "Dashboard_PowerBI.pbix",
-                    "Dashboard_Online_Link.txt"
-                ],
-                "Reportes Periódicos (Semanal - Mensual - Trimestral)": [
-                    "Reporte_Semanal.xlsx",
-                    "Reporte_Mensual.xlsx",
-                    "Reporte_Trimestral.pdf"
-                ],
-                "Lecciones Aprendidas - Retrospectivas": [
-                    "Retrospectiva_Q1.docx",
-                    "Lecciones_Proyecto.docx"
-                ],
-                "Indicadores de Desempeño (KPIs globales)": [
-                    "KPIs_Globales.xlsx",
-                    "Indicadores_Por_Area.xlsx"
-                ],
-                "Dashboard Principal": [
-                    "Dashboard_Principal.xlsx"
-                ],
-                "KPIs Operativos": [
-                    "KPIs_Operativos.xlsx"
-                ],
-                "Análisis de Tendencias": [
-                    "Analisis_Tendencias.xlsx"
-                ]
-            }
-        }
+    def _get_default_structure(self) -> Dict[str, Any]:
+        """Load default structure from JSON template."""
+        template = self.enhanced_template_manager.get_structure_template("Default Business Structure")
+        if template:
+            return template['structure']
+        else:
+            # Fallback to empty dict if template not found
+            return {}
 
     @staticmethod
     def _get_folder_descriptions() -> Dict[str, str]:
@@ -562,9 +228,17 @@ Analizar rendimiento y generar reportes.
 Archiva análisis y reportes."""
         }
 
-    def create_structure(self, project_name: str, base_path: str, structure: Optional[Dict[str, Any]] = None) -> str:
+    def create_structure(self, project_name: str, base_path: str, structure: Optional[Dict[str, Any]] = None, structure_name: Optional[str] = None) -> str:
         if structure is None:
-            structure = self.default_structure
+            # Try to load from JSON template if structure_name is provided
+            if structure_name:
+                structure = self.enhanced_template_manager.get_structure_template(structure_name)
+                if structure is None:
+                    raise ValueError(f"Structure template '{structure_name}' not found")
+                structure = structure['structure']
+            else:
+                structure = self.default_structure
+
         root_path = os.path.join(base_path, project_name)
         try:
             os.makedirs(root_path, exist_ok=True)
@@ -864,7 +538,7 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
 
     @staticmethod
     def _get_file_description(file_name: str) -> str:
-        """Get description of what goes in a specific file."""
+        """Get a description of what goes in a specific file."""
         descriptions = {
             "Confirmación_Reserva.html": "Email template para confirmar reservas de clientes",
             "Recordatorio_48h.html": "Email recordatorio 48 horas antes del servicio",
@@ -997,11 +671,11 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
         return self.save_to_db(project_name, structure)
 
     def create_structure_and_save(self, project_name: str, base_path: str,
-                                  structure: Optional[Dict[str, Any]] = None) -> str:
+                                  structure: Optional[Dict[str, Any]] = None, structure_name: Optional[str] = None) -> str:
         """Create a structure and save to the database."""
         if structure is None:
             structure = self.default_structure
-        root_path = self.create_structure(project_name, base_path, structure)
+        root_path = self.create_structure(project_name, base_path, structure, structure_name)
         project_id = self.save_to_db(project_name, structure, root_path)
         return root_path
 
@@ -1036,3 +710,113 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
     def check_path_conflict(self, project_name: str, path: str) -> Optional[str]:
         """Check if there's a conflict with the project path."""
         return self.db_manager.check_project_path_conflict(project_name, path)
+
+    def convert_md_to_pdf(self, project_path: str, mode: str) -> None:
+        """Convert INFO.md files to PDF using reportlab.
+
+        Args:
+            project_path: Path to the project root directory
+            mode: 'root' to convert only root INFO.md, 'all' to convert all INFO.md files
+        """
+        try:
+            import markdown
+            from reportlab.lib.pagesizes import letter
+            from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+            from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+            from reportlab.lib.units import inch
+        except ImportError as e:
+            raise ImportError(f"Required packages not installed: {e}. Install with: pip install reportlab markdown")
+
+        def convert_single_md_to_pdf(md_path: str, pdf_path: str) -> None:
+            """Convert a single markdown file to PDF."""
+            try:
+                # Read markdown content
+                with open(md_path, 'r', encoding='utf-8') as f:
+                    md_content = f.read()
+
+                # Convert markdown to HTML
+                html_content = markdown.markdown(md_content, extensions=['tables', 'fenced_code'])
+
+                # Create PDF document
+                doc = SimpleDocTemplate(pdf_path, pagesize=letter)
+                styles = getSampleStyleSheet()
+
+                # Create custom styles
+                title_style = ParagraphStyle(
+                    'CustomTitle',
+                    parent=styles['Heading1'],
+                    fontSize=18,
+                    spaceAfter=30,
+                )
+
+                heading_style = ParagraphStyle(
+                    'CustomHeading',
+                    parent=styles['Heading2'],
+                    fontSize=14,
+                    spaceAfter=20,
+                )
+
+                normal_style = styles['Normal']
+
+                # Parse HTML and create PDF elements
+                elements = []
+                lines = html_content.split('\n')
+
+                for line in lines:
+                    line = line.strip()
+                    if not line:
+                        continue
+
+                    if line.startswith('<h1>') and line.endswith('</h1>'):
+                        text = line.replace('<h1>', '').replace('</h1>', '')
+                        elements.append(Paragraph(text, title_style))
+                    elif line.startswith('<h2>') and line.endswith('</h2>'):
+                        text = line.replace('<h2>', '').replace('</h2>', '')
+                        elements.append(Paragraph(text, heading_style))
+                    elif line.startswith('<h3>') and line.endswith('</h3>'):
+                        text = line.replace('<h3>', '').replace('</h3>', '')
+                        elements.append(Paragraph(text, styles['Heading3']))
+                    elif line.startswith('<p>') and line.endswith('</p>'):
+                        text = line.replace('<p>', '').replace('</p>', '')
+                        elements.append(Paragraph(text, normal_style))
+                    elif line.startswith('<ul>') or line.startswith('<ol>'):
+                        # Handle lists (simplified)
+                        continue
+                    elif line.startswith('<li>') and line.endswith('</li>'):
+                        text = '• ' + line.replace('<li>', '').replace('</li>', '')
+                        elements.append(Paragraph(text, normal_style))
+                    elif line.startswith('<pre><code>') and line.endswith('</code></pre>'):
+                        text = line.replace('<pre><code>', '').replace('</code></pre>', '')
+                        elements.append(Paragraph(text, styles['Code']))
+                    elif line.startswith('<table>'):
+                        # Skip table handling for now (complex)
+                        continue
+                    else:
+                        # Fallback for other content
+                        if line and not line.startswith('<'):
+                            elements.append(Paragraph(line, normal_style))
+
+                    elements.append(Spacer(1, 6))  # Small space between elements
+
+                # Build PDF
+                doc.build(elements)
+
+            except Exception as e:
+                raise RuntimeError(f"Failed to convert {md_path} to PDF: {e}")
+
+        # Find INFO.md files based on mode
+        info_files = []
+
+        if mode == 'root':
+            root_info = os.path.join(project_path, 'INFO.md')
+            if os.path.exists(root_info):
+                info_files.append(root_info)
+        elif mode == 'all':
+            for root, dirs, files in os.walk(project_path):
+                if 'INFO.md' in files:
+                    info_files.append(os.path.join(root, 'INFO.md'))
+
+        # Convert each INFO.md to PDF
+        for md_file in info_files:
+            pdf_file = md_file.replace('.md', '.pdf')
+            convert_single_md_to_pdf(md_file, pdf_file)
