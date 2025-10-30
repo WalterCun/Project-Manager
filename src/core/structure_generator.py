@@ -12,11 +12,10 @@ from templates.renderers import RendererFactory
 class StructureGenerator:
     def __init__(self, db_manager: DatabaseManager):
         self.db_manager = db_manager
-        self.default_structure = self._get_default_structure()
-
         self.template_manager = TemplateManager(db_manager)
         self.enhanced_template_manager = EnhancedTemplateManager(db_manager)
         self.folder_descriptions = self._get_folder_descriptions()
+        self.default_structure = self._get_default_structure()
 
     def _get_default_structure(self) -> Dict[str, Any]:
         """Load default structure from JSON template."""
@@ -228,7 +227,8 @@ Analizar rendimiento y generar reportes.
 Archiva análisis y reportes."""
         }
 
-    def create_structure(self, project_name: str, base_path: str, structure: Optional[Dict[str, Any]] = None, structure_name: Optional[str] = None) -> str:
+    def create_structure(self, project_name: str, base_path: str, structure: Optional[Dict[str, Any]] = None,
+                         structure_name: Optional[str] = None) -> str:
         if structure is None:
             # Try to load from JSON template if structure_name is provided
             if structure_name:
@@ -243,14 +243,15 @@ Archiva análisis y reportes."""
         try:
             os.makedirs(root_path, exist_ok=True)
             self._create_folders(root_path, structure, is_root=True)
-            # Create root INFO.md file
-            self._create_root_info_md(root_path, structure)
+            # Create root STRUCTURE.md file
+            self._create_root_structure_md(root_path, structure)
             return root_path
         except OSError as e:
             raise RuntimeError(f"Failed to create structure: {e}")
 
     def _create_folders(self, base_path: str, structure: Dict[str, Any], is_root: bool = True) -> None:
         for folder, subfolders in structure.items():
+
             folder_path = os.path.join(base_path, folder)
             os.makedirs(folder_path, exist_ok=True)
 
@@ -309,8 +310,8 @@ Archiva análisis y reportes."""
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(f"# {os.path.basename(file_path)}\n\nContenido base para {os.path.basename(file_path)}.")
 
-    def _create_root_info_md(self, root_path: str, structure: Dict[str, Any]) -> None:
-        """Create INFO.md file in the root directory with complete structure information."""
+    def _create_root_structure_md(self, root_path: str, structure: Dict[str, Any]) -> None:
+        """Create STRUCTURE.md file in the root directory with complete structure information."""
         info_content = f"""# Estructura del Proyecto: {os.path.basename(root_path)}
 
 Esta carpeta contiene la estructura completa del proyecto organizacional, diseñada para empresas de servicios turísticos y similares.
@@ -367,8 +368,8 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
 *Estructura generada automáticamente por Project Structure Manager*
 """
 
-        info_path = os.path.join(root_path, "INFO.md")
-        with open(info_path, 'w', encoding='utf-8') as f:
+        structure_path = os.path.join(root_path, "STRUCTURE.md")
+        with open(structure_path, 'w', encoding='utf-8') as f:
             f.write(info_content)
 
     def _generate_tree_structure(self, structure: Dict[str, Any], prefix: str = "", level: int = 0) -> str:
@@ -671,7 +672,8 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
         return self.save_to_db(project_name, structure)
 
     def create_structure_and_save(self, project_name: str, base_path: str,
-                                  structure: Optional[Dict[str, Any]] = None, structure_name: Optional[str] = None) -> str:
+                                  structure: Optional[Dict[str, Any]] = None,
+                                  structure_name: Optional[str] = None) -> str:
         """Create a structure and save to the database."""
         if structure is None:
             structure = self.default_structure
