@@ -4,7 +4,6 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from core.database import DatabaseManager
 from .models import TemplateManager, TemplateNotFoundError, InvalidPlaceholderError
-from .renderers import RendererFactory
 
 def create_template(args: argparse.Namespace) -> None:
     db_manager = DatabaseManager()
@@ -34,12 +33,18 @@ def render_template(args: argparse.Namespace) -> None:
         params = dict(zip(args.params[::2], args.params[1::2]))
         rendered_content = tm.render_template(template, params)
 
-        # Generate file
-        output_path = args.output or f"{args.id}.{template['extension']}"
-        renderer = RendererFactory.get_renderer(template['extension'])
-        renderer.render(rendered_content, output_path)
+        # Print rendered content for immediate feedback/testing
+        print(rendered_content)
 
-        print(f"Template rendered and saved to: {output_path}")
+        # Optionally write to a file if output path specified
+        output_path = args.output or f"{args.id}.{template['extension']}"
+        try:
+            # Write as text by default for DB templates
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(rendered_content)
+            print(f"Template rendered and saved to: {output_path}")
+        except OSError as file_err:
+            print(f"Warning: Could not write output file: {file_err}")
     except (TemplateNotFoundError, InvalidPlaceholderError) as e:
         print(f"Error: {e}")
 

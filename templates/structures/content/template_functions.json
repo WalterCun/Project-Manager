@@ -1,0 +1,196 @@
+{
+  "functions": {
+    "DATE": {
+      "now": {
+        "description": "Fecha y hora actual",
+        "returns": "string",
+        "example": "{{DATE.now()}}"
+      },
+      "year": {
+        "description": "Año actual",
+        "returns": "number",
+        "example": "{{DATE.year()}}"
+      },
+      "month": {
+        "description": "Mes actual (1-12)",
+        "returns": "number",
+        "example": "{{DATE.month()}}"
+      },
+      "day": {
+        "description": "Día actual (1-31)",
+        "returns": "number",
+        "example": "{{DATE.day()}}"
+      },
+      "format": {
+        "description": "Formatear fecha según patrón",
+        "params": ["pattern"],
+        "returns": "string",
+        "example": "{{DATE.format('DD/MM/YYYY')}}"
+      }
+    },
+    "MATH": {
+      "round": {
+        "description": "Redondear número",
+        "params": ["value", "decimals"],
+        "returns": "number",
+        "example": "{{MATH.round(3.14159, 2)}}"
+      },
+      "sum": {
+        "description": "Sumar valores",
+        "params": ["...values"],
+        "returns": "number",
+        "example": "{{MATH.sum(10, 20, 30)}}"
+      },
+      "avg": {
+        "description": "Promedio de valores",
+        "params": ["...values"],
+        "returns": "number",
+        "example": "{{MATH.avg(10, 20, 30)}}"
+      },
+      "percentage": {
+        "description": "Calcular porcentaje",
+        "params": ["value", "total"],
+        "returns": "number",
+        "example": "{{MATH.percentage(25, 100)}}"
+      },
+      "min": {
+        "description": "Valor mínimo",
+        "params": ["...values"],
+        "returns": "number",
+        "example": "{{MATH.min(10, 5, 20)}}"
+      },
+      "max": {
+        "description": "Valor máximo",
+        "params": ["...values"],
+        "returns": "number",
+        "example": "{{MATH.max(10, 5, 20)}}"
+      }
+    },
+    "STRING": {
+      "upper": {
+        "description": "Convertir a mayúsculas",
+        "params": ["text"],
+        "returns": "string",
+        "example": "{{STRING.upper('hola')}}"
+      },
+      "lower": {
+        "description": "Convertir a minúsculas",
+        "params": ["text"],
+        "returns": "string",
+        "example": "{{STRING.lower('HOLA')}}"
+      },
+      "capitalize": {
+        "description": "Primera letra mayúscula",
+        "params": ["text"],
+        "returns": "string",
+        "example": "{{STRING.capitalize('hola mundo')}}"
+      },
+      "replace": {
+        "description": "Reemplazar texto",
+        "params": ["text", "find", "replace"],
+        "returns": "string",
+        "example": "{{STRING.replace('Hola mundo', 'mundo', 'amigo')}}"
+      },
+      "trim": {
+        "description": "Eliminar espacios al inicio y final",
+        "params": ["text"],
+        "returns": "string",
+        "example": "{{STRING.trim('  hola  ')}}"
+      },
+      "length": {
+        "description": "Longitud del texto",
+        "params": ["text"],
+        "returns": "number",
+        "example": "{{STRING.length('hola')}}"
+      }
+    },
+    "FORMAT": {
+      "currency": {
+        "description": "Formatear como moneda",
+        "params": ["amount", "symbol"],
+        "returns": "string",
+        "example": "{{FORMAT.currency(1000, '$')}}"
+      },
+      "number": {
+        "description": "Formatear número con separadores",
+        "params": ["value", "decimals"],
+        "returns": "string",
+        "example": "{{FORMAT.number(1000000, 2)}}"
+      },
+      "phone": {
+        "description": "Formatear teléfono",
+        "params": ["number"],
+        "returns": "string",
+        "example": "{{FORMAT.phone('1234567890')}}"
+      },
+      "percent": {
+        "description": "Formatear como porcentaje",
+        "params": ["value"],
+        "returns": "string",
+        "example": "{{FORMAT.percent(0.75)}}"
+      }
+    },
+    "RANDOM": {
+      "number": {
+        "description": "Número aleatorio",
+        "params": ["min", "max"],
+        "returns": "number",
+        "example": "{{RANDOM.number(1, 100)}}"
+      },
+      "uuid": {
+        "description": "UUID único",
+        "returns": "string",
+        "example": "{{RANDOM.uuid()}}"
+      },
+      "string": {
+        "description": "String aleatorio",
+        "params": ["length"],
+        "returns": "string",
+        "example": "{{RANDOM.string(10)}}"
+      }
+    },
+    "USER": {
+      "name": {
+        "description": "Nombre del usuario",
+        "returns": "string",
+        "example": "{{USER.name}}"
+      },
+      "email": {
+        "description": "Email del usuario",
+        "returns": "string",
+        "example": "{{USER.email}}"
+      },
+      "date": {
+        "description": "Fecha de creación",
+        "returns": "string",
+        "example": "{{USER.date}}"
+      }
+    }
+  },
+  "operators": {
+    "conditionals": {
+      "if": "{{#if condition}}...{{/if}}",
+      "if_else": "{{#if condition}}...{{else}}...{{/if}}",
+      "if_elif_else": "{{#if condition}}...{{elif condition2}}...{{else}}...{{/if}}"
+    },
+    "loops": {
+      "for_array": "{{#for item in array}}...{{/for}}",
+      "for_range": "{{#for i in 1..10}}...{{/for}}",
+      "each_object": "{{#each key, value in object}}...{{/each}}"
+    },
+    "switch": {
+      "switch_case": "{{#switch variable}}{{#case 'value'}}...{{/case}}{{#default}}...{{/default}}{{/switch}}"
+    },
+    "comparisons": {
+      "equal": "==",
+      "not_equal": "!=",
+      "greater": ">",
+      "less": "<",
+      "greater_equal": ">=",
+      "less_equal": "<=",
+      "and": "&&",
+      "or": "||",
+      "not": "!"
+    }
+  }
+}

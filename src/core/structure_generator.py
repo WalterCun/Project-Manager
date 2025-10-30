@@ -6,7 +6,6 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from templates.models import TemplateManager
-from templates.renderers import RendererFactory
 
 
 class StructureGenerator:
@@ -278,25 +277,31 @@ Archiva análisis y reportes."""
             if template:
                 try:
                     # Check if it's an external template
-                    if 'content' in template or 'sheets' in template:
-                        # External template - use external rendering
-                        content = self.template_manager.render_external_template(file_name)
-                        if content:
-                            extension = file_name.split('.')[-1] if '.' in file_name else 'txt'
-                            renderer = RendererFactory.get_renderer(extension)
-                            renderer.render(content, file_path)
-                        else:
-                            # Fallback to default parameters
+                    if 'content' in template or 'sheets' in template or 'document' in template:
+                        # External/native template - use enhanced native renderers
+                        try:
+                            extension = template.get('extension') or (file_name.split('.')[-1] if '.' in file_name else 'txt')
+                            params = self._get_default_params_for_file(file_name)
+                            rendered = self.enhanced_template_manager.render_template_from_data(template, extension, params)
+                            # Write output depending on type
+                            if isinstance(rendered, (bytes, bytearray)):
+                                with open(file_path, 'wb') as bf:
+                                    bf.write(rendered)
+                            else:
+                                with open(file_path, 'w', encoding='utf-8') as tf:
+                                    tf.write(str(rendered))
+                        except Exception as inner_e:
+                            # Fallback to simple text rendering if native fails
                             default_params = self._get_default_params_for_file(file_name)
-                            content = self.template_manager.render_template(template, default_params)
-                            renderer = RendererFactory.get_renderer(template.get('extension', 'txt'))
-                            renderer.render(content, file_path)
+                            content = self.template_manager.render_template({'contenido': str(template), 'extension': 'txt'}, default_params)
+                            with open(file_path, 'w', encoding='utf-8') as tf:
+                                tf.write(content)
                     else:
-                        # Database template - use traditional rendering
+                        # Database template - render plain text and write without legacy RendererFactory
                         default_params = self._get_default_params_for_file(file_name)
                         content = self.template_manager.render_template(template, default_params)
-                        renderer = RendererFactory.get_renderer(template.get('extension', 'txt'))
-                        renderer.render(content, file_path)
+                        with open(file_path, 'w', encoding='utf-8') as tf:
+                            tf.write(content)
                 except Exception as e:
                     # If template rendering fails, create the empty file
                     print(f"Warning: Failed to render template for {file_name}: {e}")

@@ -1,246 +1,530 @@
-# Project Structure Manager
+# Project Structure Manager 🚀
 
-A CLI tool for generating standardized business project folder structures. This tool helps create organized directory layouts for business projects, with support for database management, structure generation, and export functionality.
+Un gestor avanzado de estructuras de proyectos empresariales con sistema de plantillas programables, motor de expresiones y arquitectura SOLID.
 
-## Features
+## ✨ Características Principales
 
-- **Create Projects**: Define and save custom project structures to a SQLite database.
-- **Generate Structures**: Automatically create folder hierarchies based on saved projects.
-- **List Projects**: View all saved projects with their details.
-- **Export Structures**: Export project structures to JSON files for sharing or backup.
-- **Default Structure**: Includes a comprehensive default structure for business projects, covering administrative, strategic, legal, operational, and other key areas.
-- **Dynamic Templates**: Create, manage, and render dynamic templates with inheritance support for multiple file formats (DOCX, XLSX, HTML, MD, TXT).
-- **Template Inheritance**: Templates can inherit from parent templates, allowing for reusable and customizable content.
-- **Multi-Format Rendering**: Generate files in various formats with dynamic placeholder replacement.
+### 📁 Gestión de Proyectos
+- **Creación de Proyectos**: Define y guarda estructuras personalizadas en SQLite
+- **Generación Automática**: Crea jerarquías completas de carpetas y archivos
+- **Estructuras Predeterminadas**: 15+ carpetas principales para negocios
+- **Import/Export JSON**: Comparte o respalda estructuras fácilmente
+- **Escaneo de Directorios**: Captura estructuras existentes
 
-## Installation
+### 🎨 Sistema de Plantillas Programables
+- **Motor de Expresiones**: Procesa expresiones dinámicas con sintaxis `{{variable}}`
+- **Funciones Integradas**: DATE, MATH, STRING, FORMAT, RANDOM, USER
+- **Condicionales**: `{{#if}}`, `{{else}}`, `{{elif}}`
+- **Loops**: `{{#for item in array}}`, `{{#for i in 1..10}}`
+- **Switch/Case**: `{{#switch}}` con múltiples casos
+- **Parámetros Dinámicos**: Personaliza plantillas con parámetros
+- **Multi-Formato**: DOCX, XLSX, HTML, MD, TXT, PDF
 
-### Prerequisites
+### 🏗️ Arquitectura SOLID
+- **Separación de Responsabilidades**: Módulos independientes (domain, repositories, services)
+- **Motor de Plantillas**: Parser, Evaluator, Functions, Renderer separados
+- **Escalable y Mantenible**: Fácil de extender sin modificar código existente
 
-- Python 3.12 or higher
-- Required dependencies: `openpyxl`, `pyinstaller`, `python-docx`, `sqlalchemy`
+## 📦 Instalación
 
-### Setup
+### Requisitos Previos
+- Python 3.12+
+- pip o uv para gestión de dependencias
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd base-de-proyecto
-   ```
+### Instalación Rápida
 
-2. Install dependencies:
-   ```bash
-   pip install -e .
-   ```
-
-3. Run the CLI:
-   ```bash
-   project-manager --help
-   ```
-
-## Usage
-
-The tool is accessed via the `project-manager` command (or `python __main__.py` directly).
-
-### Available Commands
-
-#### Create a New Project
 ```bash
-project-manager create-project "My Project Name"
-```
-Creates a new project with the default structure and saves it to the database.
+# Clonar repositorio
+git clone <repository-url>
+cd BASE-DE-PROYECTO
 
-#### List All Projects
+# Instalar dependencias
+pip install -e .
+
+# O con uv
+uv pip install -e .
+
+# Verificar instalación
+python __main__.py --help
+```
+
+### Dependencias Principales
+- `sqlalchemy`: ORM para base de datos
+- `python-docx`: Generación de documentos Word
+- `openpyxl`: Generación de Excel
+- `reportlab`: Conversión PDF
+- `markdown`: Procesamiento Markdown
+
+## 🎯 Uso Básico
+
+### Crear Proyecto
+
 ```bash
-project-manager list-projects
-```
-Displays all saved projects with their IDs, names, and last updated timestamps.
+# Crear con estructura predeterminada
+python __main__.py create-project "Mi Empresa"
 
-#### Generate Folder Structure
+# Crear en ubicación específica
+python __main__.py create-project "Mi Empresa" --path ./proyectos
+
+# Usar estructura personalizada
+python __main__.py create-project "Mi Empresa" --structure "Custom Structure"
+
+# Forzar sobrescritura
+python __main__.py create-project "Mi Empresa" --force
+
+# Regenerar proyecto existente
+python __main__.py create-project "Mi Empresa" --regenerate
+
+# Reiniciar con estructura por defecto
+python __main__.py create-project "Mi Empresa" --restart
+
+# Convertir INFO.md a PDF
+python __main__.py create-project "Mi Empresa" --convert-md-to-pdf all
+```
+
+### Listar Proyectos
+
 ```bash
-project-manager generate-structure <project-id> <output-path>
+python __main__.py list-projects
 ```
-Generates the folder structure for the specified project ID at the given output path.
 
-Example:
+### Generar Estructura
+
 ```bash
-project-manager generate-structure 1 ./my-business-project
+python __main__.py generate-structure <project-id> <output-path>
+
+# Ejemplo
+python __main__.py generate-structure 1 ./mi-proyecto
 ```
 
-#### Export Structure to JSON
+### Import/Export
+
 ```bash
-project-manager export-json <project-id> <output-file>
-```
-Exports the project structure to a JSON file.
+# Exportar a JSON
+python __main__.py export-json 1 estructura.json
 
-Example:
+# Importar desde JSON
+python __main__.py import-json "Proyecto Importado" estructura.json
+
+# Escanear directorio existente
+python __main__.py scan-directory "Proyecto Escaneado" ./directorio-existente
+```
+
+## 🎨 Sistema de Plantillas Programables
+
+### Sintaxis de Expresiones
+
+#### Variables Simples
+```
+{{empresa_nombre}}
+{{fecha}}
+{{usuario}}
+```
+
+#### Funciones
+
+```
+# Funciones de Fecha
+{{DATE.now()}}                           # 2025-01-15 10:30:00
+{{DATE.year()}}                          # 2025
+{{DATE.format('DD/MM/YYYY')}}            # 15/01/2025
+
+# Funciones Matemáticas
+{{MATH.round(3.14159, 2)}}               # 3.14
+{{MATH.sum(10, 20, 30)}}                 # 60
+{{MATH.avg(10, 20, 30)}}                 # 20
+{{MATH.percentage(25, 100)}}             # 25
+
+# Funciones de String
+{{STRING.upper('hola')}}                 # HOLA
+{{STRING.lower('HOLA')}}                 # hola
+{{STRING.capitalize('hola mundo')}}      # Hola mundo
+{{STRING.replace('hola mundo', 'mundo', 'amigo')}}  # hola amigo
+
+# Funciones de Formato
+{{FORMAT.currency(1000)}}                # $1,000.00
+{{FORMAT.number(1000000, 2)}}            # 1,000,000.00
+{{FORMAT.phone('1234567890')}}           # (123) 456-7890
+{{FORMAT.percent(0.75)}}                 # 75.0%
+
+# Funciones Random
+{{RANDOM.number(1, 100)}}                # Número aleatorio entre 1-100
+{{RANDOM.uuid()}}                        # UUID único
+{{RANDOM.string(10)}}                    # String aleatorio de 10 caracteres
+
+# Funciones de Usuario
+{{USER.name}}                            # Nombre del usuario
+{{USER.email}}                           # Email del usuario
+```
+
+#### Condicionales
+
+```
+{{#if inversion_inicial > 100000}}
+⚠️ **Nota:** Inversión alta requiere análisis detallado
+{{/if}}
+
+{{#if mercado_objetivo == 'B2B'}}
+### Estrategia B2B
+- Enfoque corporativo
+{{else}}
+### Estrategia B2C
+- Marketing directo
+{{/if}}
+
+{{#if edad >= 18}}
+Mayor de edad
+{{elif edad >= 13}}
+Adolescente
+{{else}}
+Menor de edad
+{{/if}}
+```
+
+#### Loops
+
+```
+# Loop simple
+{{#for i in 1..5}}
+Iteración {{i}}
+{{/for}}
+
+# Loop con array
+{{#for empleado in empleados}}
+- {{empleado}}
+{{/for}}
+
+# Loop con key-value
+{{#for key, value in configuracion}}
+{{key}}: {{value}}
+{{/for}}
+```
+
+#### Switch/Case
+
+```
+{{#switch tipo_negocio}}
+  {{#case 'turismo'}}
+  ### Servicios Turísticos
+  - Tours guiados
+  - Experiencias locales
+  {{/case}}
+
+  {{#case 'tecnología'}}
+  ### Soluciones Tecnológicas
+  - Desarrollo software
+  - Consultoría IT
+  {{/case}}
+
+  {{#default}}
+  ### Servicios Generales
+  {{/default}}
+{{/switch}}
+```
+
+### Ejemplo Completo de Plantilla
+
+```json
+{
+  "plan_negocios": {
+    "type": "docx",
+    "parameters": {
+      "empresa_nombre": {"type": "string", "default": "[EMPRESA]"},
+      "industria": {"type": "string", "default": "servicios"},
+      "mercado_objetivo": {"type": "select", "options": ["B2B", "B2C"], "default": "B2C"},
+      "inversion_inicial": {"type": "number", "default": 50000},
+      "equipo_size": {"type": "number", "default": 5}
+    },
+    "content_template": "# Plan de Negocios - {{empresa_nombre}}\n\n## Resumen Ejecutivo\n**Empresa:** {{empresa_nombre}}\n**Industria:** {{industria}}\n**Fecha:** {{DATE.format('DD/MM/YYYY')}}\n\n## Análisis de Mercado\n{{#if mercado_objetivo == 'B2B'}}\n### Estrategia B2B\n- Contratos largo plazo\n{{else}}\n### Estrategia B2C\n- Marketing digital\n{{/if}}\n\n## Estructura Financiera\nInversión: ${{FORMAT.currency(inversion_inicial)}}\n\n## Equipo Inicial\n{{#for i in 1..equipo_size}}\n### Posición {{i}}\n- Rol: [Definir]\n{{/for}}\n\n---\n*Generado: {{DATE.now()}}*"
+  }
+}
+```
+
+### Uso con Parámetros
+
 ```bash
-project-manager export-json 1 project-structure.json
+# Crear proyecto con parámetros personalizados
+python __main__.py create-project "Mi Empresa" \
+  --param empresa_nombre="Tech Solutions S.A." \
+  --param industria="tecnología" \
+  --param mercado_objetivo="B2B" \
+  --param inversion_inicial=150000 \
+  --param equipo_size=10
+
+# O usar archivo de configuración
+python __main__.py create-project "Mi Empresa" --config params.json
 ```
 
-#### Import Structure from JSON
-```bash
-project-manager import-json <project-name> <input-file>
-```
-Imports a project structure from a JSON file and saves it to the database.
-
-Example:
-```bash
-project-manager import-json "My Imported Project" project-structure.json
-```
-
-#### Scan Directory and Save
-```bash
-project-manager scan-directory <project-name> <directory-path>
-```
-Scans an existing directory structure and saves it to the database.
-
-Example:
-```bash
-project-manager scan-directory "Scanned Project" ./existing-project
+**params.json:**
+```json
+{
+  "empresa_nombre": "EcoTours Ecuador",
+  "proyecto_tipo": "turismo",
+  "industria": "turismo sostenible",
+  "mercado_objetivo": "B2C",
+  "inversion_inicial": 75000,
+  "equipo_size": 8,
+  "incluir_financiero": true,
+  "años_proyeccion": 5
+}
 ```
 
-### Template Management
-
-The tool now supports dynamic templates with inheritance and multi-format rendering.
-
-#### Create a Template
-```bash
-project-manager template crear "Contract Template" --extension docx --contenido "This is a contract for {{client}} from {{company}}."
-```
-Creates a new template with placeholders.
-
-#### Create a Template with Inheritance
-```bash
-project-manager template heredar "Specific Contract" --padre 1 --extension docx
-```
-Creates a child template inheriting from template ID 1.
-
-#### Render a Template
-```bash
-project-manager template render 1 --output ./contract.docx client "John Doe" company "Acme Corp"
-```
-Renders the template with provided parameters and generates the file.
-
-#### List Templates
-```bash
-project-manager template listar
-```
-Lists all templates.
-
-#### Modify a Template
-```bash
-project-manager template modificar 1 --contenido "Updated content with {{new_placeholder}}."
-```
-Updates the content of template ID 1.
-
-#### Delete a Template
-```bash
-project-manager template eliminar 1
-```
-Deletes template ID 1.
-
-### Default Project Structure
-
-The tool includes a comprehensive default structure organized into the following main categories:
-
-- **00_ADMINISTRATIVO**: General project information, legal data, contracts, intellectual property, official correspondence.
-- **01_ESTRATÉGICO**: Vision, mission, business model, market analysis, strategic roadmap, objectives, financial projections.
-- **02_LEGAL_Y_CONSTITUCIÓN**: RUC, permits, insurance, partner agreements, client terms, supplier contracts.
-- **03_OPERACIONES**: Manuals, processes, protocols, supplier control, quality standards, operational calendars.
-- **04_COMERCIAL_Y_VENTAS**: Sales manuals, scripts, objection responses, pricing policies, promotions, cost calculators.
-- **05_MARKETING_Y_CONTENIDO**: Marketing plans, editorial calendars, brand guidelines, content banks, strategies.
-- **06_CLIENTES_Y_USUARIOS**: CRM, communication templates, client contracts, feedback forms, loyalty programs.
-- **07_FINANZAS_Y_CONTABILIDAD**: Initial balance, annual budgets, expense control, cash flow, financial reports.
-- **08_RECURSOS_HUMANOS_Y_EQUIPO**: Organizational chart, roles, job descriptions, KPIs, culture manuals.
-- **09_CAPACITACIÓN_Y_DOCUMENTACIÓN_INTERNA**: Induction manuals, operational guides, technical training, videos.
-- **10_ANALÍTICA_Y_REPORTES**: Dashboards, periodic reports, lessons learned, performance indicators.
-
-## Project Structure
+## 📂 Estructura del Proyecto
 
 ```
-base-de-proyecto/
-├── __main__.py              # CLI entry point
-├── pyproject.toml           # Project configuration and dependencies
-├── project_structure.db     # SQLite database for projects and templates (created on first run)
-├── README.md                # This file
-├── tests/
-│   └── templates/
-│       └── test_models.py   # Unit tests for template functionality
+BASE-DE-PROYECTO/
+├── __main__.py                  # Punto de entrada CLI
+├── pyproject.toml               # Configuración y dependencias
+├── project-manager.db           # Base de datos SQLite
+├── README.md                    # Esta documentación
+│
 ├── src/
 │   ├── cli/
-│   │   ├── __init__.py
-│   │   └── commands.py      # CLI command implementations
+│   │   ├── commands.py          # Comandos CLI
+│   │   └── __init__.py
+│   │
 │   ├── core/
-│   │   ├── __init__.py
-│   │   ├── database.py      # Database management (SQLAlchemy models and operations)
-│   │   └── structure_generator.py  # Structure generation logic
+│   │   ├── database.py          # Gestión BD
+│   │   ├── structure_generator.py  # Generador principal
+│   │   ├── enhanced_template_manager.py
+│   │   ├── template_loader.py
+│   │   ├── external_templates.py
+│   │   ├── base_templates.py
+│   │   ├── native_renderers.py
+│   │   │
+│   │   ├── domain/              # Entidades de dominio
+│   │   ├── repositories/        # Repositorios (acceso datos)
+│   │   ├── services/            # Servicios de negocio
+│   │   ├── builders/            # Builders para construcción
+│   │   │
+│   │   └── template_engine/     # Motor de plantillas programables
+│   │       ├── parser.py        # Parser de expresiones
+│   │       ├── evaluator.py     # Evaluador de condicionales
+│   │       ├── functions.py     # Funciones integradas
+│   │       └── renderer.py      # Renderizador final
+│   │
 │   └── templates/
-│       ├── __init__.py
-│       ├── models.py        # Template management and inheritance logic
-│       ├── renderers.py     # File format renderers (DOCX, XLSX, HTML, MD, TXT)
-│       └── cli.py           # Template-specific CLI commands
+│       ├── models.py            # Gestión de plantillas
+│       ├── renderers.py         # Renderizadores por formato
+│       └── cli.py               # CLI de plantillas
+│
+├── templates/
+│   ├── structures/
+│   │   ├── default_business_structure.json
+│   │   └── content/
+│   │       ├── folder_descriptions.json    # INFO.md carpetas
+│   │       ├── file_templates.json         # Plantillas archivos
+│   │       └── template_functions.json     # Definición funciones
+│   │
+│   ├── docx/                    # Plantillas DOCX
+│   ├── excel/                   # Plantillas Excel
+│   ├── html/                    # Plantillas HTML
+│   ├── md/                      # Plantillas Markdown
+│   └── xlsx/                    # Plantillas XLSX
+│
+└── tests/
+    ├── test_core.py
+    ├── test_cli.py
+    ├── test_edge_cases.py
+    └── templates/
+        └── test_models.py
 ```
 
-## Development
+## 🏗️ Arquitectura SOLID
 
-### Running Locally
+### Principios Aplicados
 
-1. Ensure Python 3.12+ is installed.
-2. Activate a virtual environment (optional but recommended):
-   ```bash
-   python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-   ```
-3. Install in development mode:
-   ```bash
-   pip install -e .
-   ```
-4. Run the CLI:
-   ```bash
-   python __main__.py create-project "Test Project"
-   ```
+1. **Single Responsibility (SRP)**
+   - Cada clase tiene una única responsabilidad
+   - `TemplateParser`: Solo parsea
+   - `ExpressionEvaluator`: Solo evalúa
+   - `TemplateFunctions`: Solo ejecuta funciones
+   - `TemplateRenderer`: Solo renderiza
 
-### Database
+2. **Open/Closed (OCP)**
+   - Extensible sin modificar código existente
+   - Nuevas funciones se agregan sin cambiar `TemplateFunctions`
+   - Nuevos renderers sin modificar `RendererFactory`
 
-The tool uses SQLite (`project_structure.db`) for persistence. The database is created automatically on first run. It includes tables for projects, templates, and change history.
+3. **Liskov Substitution (LSP)**
+   - Renderers intercambiables
+   - Repositorios intercambiables
 
-- **Projects Table**: Stores project structures and metadata.
-- **Templates Table**: Stores dynamic templates with inheritance support.
-- **Changes Table**: Logs all modifications for audit purposes.
+4. **Interface Segregation (ISP)**
+   - Interfaces específicas por responsabilidad
+   - No interfaces gordas
 
-### Adding New Features
+5. **Dependency Inversion (DIP)**
+   - Dependencias a abstracciones, no implementaciones
+   - Inyección de dependencias en constructores
 
-1. **CLI Commands**: Add new commands in `src/cli/commands.py` by defining functions and adding them to the argument parser in the `main()` function.
-2. **Core Logic**: Extend `src/core/structure_generator.py` for new structure generation features.
-3. **Database Models**: Modify `src/core/database.py` to add new tables or fields as needed.
+## 🎯 Estructura Empresarial Predeterminada
 
-### Testing
+### Carpetas Principales
 
-Run tests (if implemented):
+1. **00 ADMINISTRATIVO**: Información general, documentos legales, contratos, propiedad intelectual
+2. **01 ESTRATÉGICO**: Visión/misión, business model, análisis mercado, roadmap, KPIs
+3. **02 LEGAL Y CONSTITUCIÓN**: RUC, permisos, seguros, acuerdos socios, términos
+4. **03 OPERACIONES**: Manuales, procesos, protocolos, control proveedores, calidad
+5. **04 COMERCIAL Y VENTAS**: Manual ventas, scripts, objeciones, precios, promociones
+6. **05 MARKETING Y CONTENIDO**: Plan marketing, calendario, brand, contenido, diseños
+7. **06 CLIENTES Y USUARIOS**: CRM, comunicación, contratos, feedback, fidelización
+8. **07 FINANZAS Y CONTABILIDAD**: Balance, presupuesto, gastos/ingresos, flujo caja
+9. **08 RECURSOS HUMANOS Y EQUIPO**: Organigrama, roles, KPIs, cultura, contratos
+10. **09 CAPACITACIÓN Y DOCUMENTACIÓN**: Manuales inducción, guías, capacitación
+11. **10 ANALÍTICA Y REPORTES**: Dashboards, reportes periódicos, KPIs globales
+12. **11 TECNOLOGÍA E IT**: Infraestructura, licencias, backup, seguridad
+13. **12 GESTIÓN DE RIESGOS**: Matriz riesgos, contingencia, auditorías, compliance
+14. **13 INNOVACIÓN Y DESARROLLO**: Proyectos I+D, POCs, pilotos, alianzas
+15. **14 SOSTENIBILIDAD Y RSE**: Responsabilidad social, sostenibilidad, reportes
+16. **15 ARCHIVO HISTÓRICO**: Documentos históricos, proyectos cerrados
+
+Cada carpeta incluye:
+- ✅ Archivo `INFO.md` con descripción detallada
+- ✅ Subcarpetas organizadas por tema
+- ✅ Archivos de plantilla pre-generados
+
+## 🔧 Desarrollo
+
+### Ejecutar en Modo Desarrollo
+
 ```bash
-python -m pytest
+# Activar entorno virtual
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Instalar en modo editable
+pip install -e .
+
+# Ejecutar
+python __main__.py create-project "Test"
 ```
 
-### Building Executable
+### Ejecutar Tests
 
-To create a standalone executable using PyInstaller:
 ```bash
-pyinstaller --onefile __main__.py
+# Todos los tests
+pytest
+
+# Tests específicos
+pytest tests/test_core.py
+pytest tests/templates/test_models.py
+
+# Con coverage
+pytest --cov=src tests/
 ```
 
-## Contributing
+### Agregar Nuevas Funciones al Motor
 
-1. Fork the repository.
-2. Create a feature branch: `git checkout -b feature/new-feature`.
-3. Commit changes: `git commit -am 'Add new feature'`.
-4. Push to the branch: `git push origin feature/new-feature`.
-5. Submit a pull request.
+```python
+# En src/core/template_engine/functions.py
 
-## License
+class TemplateFunctions:
+    def custom_function(self, param1, param2):
+        """Tu nueva función."""
+        return param1 + param2
+```
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+Uso en plantilla:
+```
+{{CUSTOM.function(10, 20)}}
+```
 
-## Support
+### Renderizado de Plantillas (nuevo)
 
-For issues or questions, please open an issue on the GitHub repository.
+El antiguo sistema basado en RendererFactory fue retirado. Ahora existen dos flujos:
+
+- Plantillas en base de datos (texto con placeholders) → se renderizan a texto y se escriben directamente a archivo.
+- Plantillas externas nativas (docx, xlsx, html) → se renderizan con los renderers nativos desde src/core/native_renderers.py a través de EnhancedTemplateManager.
+
+Ejemplo de uso programático:
+
+```python
+from src.core.database import DatabaseManager
+from src.core.enhanced_template_manager import EnhancedTemplateManager
+
+db = DatabaseManager()
+etm = EnhancedTemplateManager(db)
+
+# Renderizar plantilla nativa desde archivo JSON (templates/html/Professional Report.json)
+params = {"titulo": "Reporte", "empresa": "ACME"}
+html_bytes_or_str = etm.render_native_template("Professional Report", "html", params)
+
+# O renderizar desde un diccionario ya cargado (sin tocar disco)
+template_data = {"content": "<h1>{{titulo}}</h1>", "extension": "html"}
+rendered = etm.render_template_from_data(template_data, "html", params)
+```
+
+## 📝 Ejemplos Avanzados
+
+### Plantilla con Lógica Compleja
+
+```
+# Manual de Empleado - {{empresa_nombre}}
+
+## Información Personal
+Nombre: {{empleado_nombre}}
+Cargo: {{cargo}}
+Fecha Ingreso: {{DATE.format('DD/MM/YYYY')}}
+
+## Compensación
+Salario Base: ${{FORMAT.currency(salario_base)}}
+
+{{#if cargo == 'Gerente'}}
+Bono Anual: ${{FORMAT.currency(MATH.round(salario_base * 0.20, 2))}}
+{{elif cargo == 'Supervisor'}}
+Bono Anual: ${{FORMAT.currency(MATH.round(salario_base * 0.10, 2))}}
+{{/if}}
+
+## Beneficios
+{{#for beneficio in beneficios}}
+- {{beneficio}}
+{{/for}}
+
+## Políticas Aplicables
+{{#switch departamento}}
+  {{#case 'Ventas'}}
+  - Comisiones por venta
+  - Gastos de representación
+  {{/case}}
+  {{#case 'IT'}}
+  - Equipo de cómputo
+  - Capacitación técnica
+  {{/case}}
+  {{#default}}
+  - Beneficios estándar
+  {{/default}}
+{{/switch}}
+
+---
+Generado: {{DATE.now()}}
+Código: {{STRING.upper(empresa_nombre)}}-{{DATE.year()}}-{{RANDOM.number(1000, 9999)}}
+```
+
+## 🤝 Contribuir
+
+1. Fork el repositorio
+2. Crea branch: `git checkout -b feature/nueva-funcionalidad`
+3. Commit: `git commit -am 'Agregar nueva funcionalidad'`
+4. Push: `git push origin feature/nueva-funcionalidad`
+5. Crea Pull Request
+
+## 📄 Licencia
+
+MIT License - Ver archivo LICENSE para detalles
+
+## 💡 Soporte
+
+- **Issues**: [GitHub Issues](https://github.com/tu-repo/issues)
+- **Documentación**: Este README
+- **Email**: soporte@proyecto.com
+
+## 🎉 Créditos
+
+Desarrollado con ❤️ para facilitar la gestión de proyectos empresariales
+
+---
+
+**Versión**: 2.0.0
+**Última Actualización**: Enero 2025
+**Estado**: ✅ Producción

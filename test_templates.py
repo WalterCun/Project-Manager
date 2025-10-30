@@ -15,7 +15,6 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 from core.database import DatabaseManager
 from core.base_templates import get_base_templates, get_template_params_for_file
 from templates.models import TemplateManager
-from templates.renderers import RendererFactory
 
 def test_base_templates():
     """Test that base templates are loaded correctly."""
@@ -102,10 +101,10 @@ def test_template_rendering():
             # Render template
             content = template_manager.render_template(template, params)
 
-            # Save using appropriate renderer
+            # Save to file directly (legacy RendererFactory removed)
             output_path = os.path.join(test_output_dir, f"test_{template_info['id']}.{template['extension']}")
-            renderer = RendererFactory.get_renderer(template['extension'])
-            renderer.render(content, output_path)
+            with open(output_path, 'w', encoding='utf-8') as f:
+                f.write(content)
 
             print(f"Rendered {template['nombre']} ({template['extension']}) -> {output_path}")
 

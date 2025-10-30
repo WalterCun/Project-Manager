@@ -1,0 +1,93 @@
+{
+  "resumen_ejecutivo": {
+    "type": "docx",
+    "template": "advanced_business_document",
+    "parameters": {
+      "empresa_nombre": {
+        "type": "string",
+        "default": "[NOMBRE DE LA EMPRESA]",
+        "description": "Nombre de la empresa"
+      },
+      "proyecto_descripcion": {
+        "type": "string",
+        "default": "[DESCRIPCIÓN DEL PROYECTO]",
+        "description": "Descripción breve del proyecto"
+      },
+      "industria": {
+        "type": "string",
+        "default": "servicios",
+        "description": "Industria principal"
+      },
+      "año_actual": {
+        "type": "number",
+        "default": "{{DATE.year()}}",
+        "description": "Año actual"
+      }
+    },
+    "content_template": "# Resumen Ejecutivo - {{empresa_nombre}}\n\n## Información General\n**Empresa:** {{empresa_nombre}}\n**Industria:** {{industria}}\n**Fecha:** {{DATE.format('DD/MM/YYYY')}}\n**Año Fiscal:** {{año_actual}}\n\n## Descripción del Proyecto\n{{proyecto_descripcion}}\n\n## Objetivos Principales\n1. Establecer presencia en el mercado de {{industria}}\n2. Alcanzar rentabilidad sostenible\n3. Construir equipo de alto rendimiento\n\n---\n*Documento generado automáticamente el {{DATE.now()}}*"
+  },
+
+  "plan_negocios": {
+    "type": "docx",
+    "template": "advanced_business_document",
+    "parameters": {
+      "empresa_nombre": {"type": "string", "default": "[EMPRESA]"},
+      "industria": {"type": "string", "default": "servicios"},
+      "mercado_objetivo": {"type": "select", "options": ["B2B", "B2C", "B2B2C"], "default": "B2C"},
+      "inversion_inicial": {"type": "number", "default": 50000},
+      "equipo_size": {"type": "number", "default": 5}
+    },
+    "content_template": "# Plan de Negocios - {{empresa_nombre}}\n\n## 1. Resumen Ejecutivo\n**Empresa:** {{empresa_nombre}}\n**Industria:** {{industria}}\n**Fecha:** {{DATE.format('DD/MM/YYYY')}}\n\n## 2. Análisis de Mercado\nMercado objetivo: {{mercado_objetivo}}\n\n{{#if mercado_objetivo == 'B2B'}}\n### Estrategia B2B\n- Enfoque en empresas corporativas\n- Contratos a largo plazo\n- Ventas consultivas\n{{else}}\n### Estrategia B2C\n- Marketing digital directo\n- Redes sociales\n- E-commerce\n{{/if}}\n\n## 3. Estructura Financiera\nInversión inicial: ${{FORMAT.currency(inversion_inicial)}}\n\n{{#if inversion_inicial > 100000}}\n⚠️ **Nota:** Inversión alta requiere análisis de riesgo detallado\n{{/if}}\n\n## 4. Equipo\nTamaño del equipo inicial: {{equipo_size}} personas\n\n{{#for i in 1..equipo_size}}\n### Posición {{i}}\n- Rol: [Definir rol]\n- Responsabilidades: [Definir]\n{{/for}}\n\n---\n*Generado automáticamente el {{DATE.format('DD/MM/YYYY HH:mm')}}*"
+  },
+
+  "base_datos_clientes": {
+    "type": "xlsx",
+    "template": "excel_database",
+    "parameters": {
+      "incluir_campos_extra": {"type": "boolean", "default": false},
+      "tipo_negocio": {"type": "select", "options": ["servicios", "turismo", "tecnología"], "default": "servicios"}
+    },
+    "sheets": [
+      {
+        "name": "Clientes",
+        "columns": [
+          {"name": "ID", "type": "auto_increment", "width": 10},
+          {"name": "Nombre", "type": "string", "width": 30},
+          {"name": "Email", "type": "email", "width": 35},
+          {"name": "Teléfono", "type": "phone", "width": 20},
+          {"name": "Estado", "type": "select", "options": ["Activo", "Inactivo", "Prospecto"], "width": 15},
+          "{{#if incluir_campos_extra}}",
+          {"name": "Empresa", "type": "string", "width": 30},
+          {"name": "Cargo", "type": "string", "width": 25},
+          "{{/if}}",
+          "{{#if tipo_negocio == 'turismo'}}",
+          {"name": "Tours Realizados", "type": "number", "width": 20},
+          {"name": "Preferencias", "type": "text", "width": 40},
+          "{{/if}}"
+        ]
+      }
+    ]
+  },
+
+  "vision_mision_valores": {
+    "type": "docx",
+    "template": "advanced_business_document",
+    "parameters": {
+      "empresa_nombre": {"type": "string", "default": "[EMPRESA]"},
+      "vision": {"type": "text", "default": "[Definir visión]"},
+      "mision": {"type": "text", "default": "[Definir misión]"},
+      "valores": {"type": "array", "default": ["Integridad", "Excelencia", "Innovación"]}
+    },
+    "content_template": "# Visión, Misión y Valores - {{empresa_nombre}}\n\n## Visión\n{{vision}}\n\n## Misión\n{{mision}}\n\n## Valores Corporativos\n{{#for valor in valores}}\n### {{valor}}\n[Descripción del valor]\n\n{{/for}}\n\n---\n*Documento actualizado: {{DATE.format('DD/MM/YYYY')}}*"
+  },
+
+  "manual_induccion": {
+    "type": "docx",
+    "template": "advanced_business_document",
+    "parameters": {
+      "empresa_nombre": {"type": "string", "default": "[EMPRESA]"},
+      "version": {"type": "string", "default": "1.0"}
+    },
+    "content_template": "# Manual de Inducción - {{empresa_nombre}}\n**Versión:** {{version}}\n**Fecha:** {{DATE.format('DD/MM/YYYY')}}\n\n## Bienvenida\n¡Bienvenido a {{empresa_nombre}}!\n\n## Información General\n### Nuestra Empresa\n[Descripción de la empresa]\n\n### Cultura Organizacional\n[Valores y cultura]\n\n## Procedimientos Básicos\n1. Horarios de trabajo\n2. Código de vestimenta\n3. Políticas internas\n\n---\n*Generado automáticamente*"
+  }
+}

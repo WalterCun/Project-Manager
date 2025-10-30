@@ -224,6 +224,7 @@ class WordNativeRenderer:
         """Apply custom styles to the document."""
         try:
             from docx.enum.style import WD_STYLE_TYPE
+            from docx.enum.text import WD_ALIGN_PARAGRAPH
             from docx.shared import Pt, RGBColor
 
             for style_name, style_config in styles_config.items():
@@ -320,6 +321,7 @@ class WordNativeRenderer:
         """Apply footer to all sections."""
         try:
             from docx.enum.text import WD_ALIGN_PARAGRAPH
+            from docx.shared import Pt
 
             for section in doc.sections:
                 footer = section.footer
