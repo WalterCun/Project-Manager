@@ -1,4 +1,6 @@
-import os
+raise ImportError("src/templates/renderers.py is deprecated and no longer used. Use core/enhanced_template_manager.py with native renderers instead.")
+# Legacy module retained only for backward compatibility. All imports should be removed.
+# If you hit this error, update your code to use EnhancedTemplateManager and native renderers.
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List
 from .models import TemplateManager

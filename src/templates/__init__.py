@@ -1,5 +1,4 @@
-# Templates module for dynamic template management
+# Templates module for dynamic template management (legacy renderers removed)
 from .models import TemplateManager
-from .renderers import FileRenderer, DocxRenderer, XlsxRenderer, HtmlRenderer, MdRenderer, TxtRenderer
 
-__all__ = ['TemplateManager', 'FileRenderer', 'DocxRenderer', 'XlsxRenderer', 'HtmlRenderer', 'MdRenderer', 'TxtRenderer']
+__all__ = ['TemplateManager']

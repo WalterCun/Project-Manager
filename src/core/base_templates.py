@@ -4,10 +4,7 @@ These templates are loaded automatically when the database is initialized.
 """
 
 from typing import Dict, List
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from core.database import DatabaseManager
+from .database import DatabaseManager
 
 def get_base_templates() -> List[Dict[str, str]]:
     """Get base templates with common elements."""

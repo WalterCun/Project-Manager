@@ -210,7 +210,7 @@ def scan_directory(args: argparse.Namespace) -> None:
     except RuntimeError as e:
         print(f"Error: {e}")
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description="Project Structure Manager CLI")
     subparsers = parser.add_subparsers(dest='command', help='Available commands')
 
@@ -258,6 +258,19 @@ def main() -> None:
 
     args = parser.parse_args()
     if hasattr(args, 'func'):
-        args.func(args)
+        try:
+            args.func(args)
+            return 0
+        except Exception as e:
+            # If the subcommand already printed an error, just return non-zero
+            # Otherwise, print a generic error
+            if str(e):
+                print(f"Error: {e}")
+            return 1
     else:
         parser.print_help()
+        return 0
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(main())

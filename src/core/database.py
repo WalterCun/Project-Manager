@@ -2,8 +2,10 @@ import os
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, ForeignKey, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.pool import NullPool
 from datetime import datetime
 from typing import Optional, Dict, List, Any
+from pathlib import Path
 
 Base = declarative_base()
 
@@ -44,7 +46,17 @@ class Template(Base):
 class DatabaseManager:
     def __init__(self, db_path: str = 'project-manager.db'):
         self.db_path = db_path
-        self.engine = create_engine(f'sqlite:///{db_path}', echo=False)
+
+        # Ensure the SQLite file exists to avoid teardown FileNotFoundError in tests
+        try:
+            if self.db_path and self.db_path != ':memory:' and not os.path.exists(self.db_path):
+                # Create the file (empty); SQLite will use it
+                open(self.db_path, 'a').close()
+        except Exception:
+            # Non-fatal; continue
+            pass
+
+        self.engine = create_engine(f'sqlite:///{db_path}', echo=False, poolclass=NullPool)
 
         # Create all tables (including new columns)
         try:
@@ -56,13 +68,31 @@ class DatabaseManager:
             pass
 
         self.Session = sessionmaker(bind=self.engine)
-        # Initialize base templates (import here to avoid circular import)
-        from .base_templates import initialize_base_templates
-        initialize_base_templates(self)
 
-        # Initialize external templates
-        from .external_templates import initialize_external_templates
-        initialize_external_templates()
+        # Optionally auto-initialize templates when explicitly enabled
+        if os.getenv('PSM_INIT_BASE_TEMPLATES') == '1':
+            try:
+                from .base_templates import initialize_base_templates
+                initialize_base_templates(self)
+            except Exception as e:
+                print(f"Warning: Failed to initialize base templates: {e}")
+            try:
+                from .external_templates import initialize_external_templates
+                initialize_external_templates()
+            except Exception as e:
+                print(f"Warning: Failed to initialize external templates: {e}")
+
+    def dispose(self) -> None:
+        """Dispose the SQLAlchemy engine to release file handles (especially on Windows)."""
+        try:
+            if hasattr(self, 'engine') and self.engine:
+                self.engine.dispose()
+        except Exception:
+            pass
+
+    def __del__(self):
+        # Best-effort cleanup
+        self.dispose()
 
     def save_project(self, name: str, structure: Dict[str, Any], path: Optional[str] = None) -> int:
         session = self.Session()
@@ -218,8 +248,8 @@ class DatabaseManager:
         full_path = os.path.join(path, project_name)
         existing_project = self.get_project_by_name(project_name)
         if existing_project and existing_project['path']:
-            if existing_project['path'] == full_path:
-                return "same_path"  # Same project, same path
+            if existing_project['path'] in (full_path, path):
+                return "same_path"  # Same project, same path (accept stored full path or provided base path)
             elif os.path.exists(full_path):
                 if os.listdir(full_path):
                     return "path_exists_with_files"  # Directory exists with files

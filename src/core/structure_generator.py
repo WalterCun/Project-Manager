@@ -1,11 +1,8 @@
 from typing import Dict, Any, Optional, List
 from .database import DatabaseManager
 from .enhanced_template_manager import EnhancedTemplateManager
-import sys
 import os
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from templates.models import TemplateManager
+from ..templates.models import TemplateManager
 
 
 class StructureGenerator:
@@ -17,13 +14,28 @@ class StructureGenerator:
         self.default_structure = self._get_default_structure()
 
     def _get_default_structure(self) -> Dict[str, Any]:
-        """Load default structure from JSON template."""
+        """Load default structure from JSON template and normalize keys (spaces -> underscores)."""
         template = self.enhanced_template_manager.get_structure_template("Default Business Structure")
         if template:
-            return template['structure']
+            return self._normalize_structure_keys(template['structure'])
         else:
             # Fallback to empty dict if template not found
             return {}
+
+    def _normalize_structure_keys(self, data: Any) -> Any:
+        """Recursively normalize dictionary keys: replace spaces with underscores.
+        Keeps list items intact.
+        """
+        if isinstance(data, dict):
+            normalized = {}
+            for k, v in data.items():
+                new_key = k.replace(' ', '_') if isinstance(k, str) else k
+                normalized[new_key] = self._normalize_structure_keys(v)
+            return normalized
+        elif isinstance(data, list):
+            return [self._normalize_structure_keys(x) for x in data]
+        else:
+            return data
 
     @staticmethod
     def _get_folder_descriptions() -> Dict[str, str]:
@@ -228,6 +240,14 @@ Archiva análisis y reportes."""
 
     def create_structure(self, project_name: str, base_path: str, structure: Optional[Dict[str, Any]] = None,
                          structure_name: Optional[str] = None) -> str:
+        # Basic validations
+        if not project_name or not project_name.strip():
+            raise ValueError("Project name cannot be empty")
+        if any(sep in project_name for sep in ['/', '\\']):
+            raise ValueError("Project name cannot contain path separators")
+        if not base_path or not base_path.strip():
+            raise ValueError("Base path cannot be empty")
+
         if structure is None:
             # Try to load from JSON template if structure_name is provided
             if structure_name:
@@ -239,6 +259,12 @@ Archiva análisis y reportes."""
                 structure = self.default_structure
 
         root_path = os.path.join(base_path, project_name)
+        # Prevent path traversal: ensure root_path is within base_path
+        abs_base = os.path.abspath(base_path)
+        abs_root = os.path.abspath(root_path)
+        if not abs_root.startswith(abs_base):
+            raise ValueError("Invalid base path; path traversal detected")
+
         try:
             os.makedirs(root_path, exist_ok=True)
             self._create_folders(root_path, structure, is_root=True)
@@ -638,7 +664,7 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
     def _get_default_params_for_file(file_name: str) -> Dict[str, str]:
         """Get default parameters for a file based on its name."""
         # Try external template parameters first
-        from core.external_templates import get_external_template_params
+        from .external_templates import get_external_template_params
         return get_external_template_params(file_name)
 
     def save_to_db(self, project_name: str, structure: Dict[str, Any], path: Optional[str] = None) -> int:
@@ -689,6 +715,10 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
     def check_duplicate_name(self, project_name: str) -> bool:
         """Check if a project name already exists."""
         return self.db_manager.check_duplicate_name(project_name)
+
+    def check_path_conflict(self, project_name: str, path: str) -> Optional[str]:
+        """Proxy to database path conflict check."""
+        return self.db_manager.check_project_path_conflict(project_name, path)
 
     def regenerate_structure(self, project_name: str, base_path: str) -> str:
         """Regenerate existing project structure."""
