@@ -10,5 +10,5 @@ def main() -> None:
 if __name__ == "__main__":
     # sys.argv = ['__main__.py', 'create-project', 'Estructura Documental de Empresa 1']
     # main()
-    sys.argv = ['__main__.py','create-project', 'Estructura Documental de Empresa 2', '--force']
+    sys.argv = ['__main__.py','create-project', 'Estructura Documental', '--force']
     main()

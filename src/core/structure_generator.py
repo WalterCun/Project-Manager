@@ -14,7 +14,7 @@ class StructureGenerator:
         self.default_structure = self._get_default_structure()
 
     def _get_default_structure(self) -> Dict[str, Any]:
-        """Load default structure from JSON template and normalize keys (spaces -> underscores)."""
+        """Load default structure from JSON template and normalize keys (underscores -> spaces)."""
         template = self.enhanced_template_manager.get_structure_template("Default Business Structure")
         if template:
             return self._normalize_structure_keys(template['structure'])
@@ -23,13 +23,13 @@ class StructureGenerator:
             return {}
 
     def _normalize_structure_keys(self, data: Any) -> Any:
-        """Recursively normalize dictionary keys: replace spaces with underscores.
+        """Recursively normalize dictionary keys: replace underscores with spaces.
         Keeps list items intact.
         """
         if isinstance(data, dict):
             normalized = {}
             for k, v in data.items():
-                new_key = k.replace(' ', '_') if isinstance(k, str) else k
+                new_key = k.replace('_', ' ') if isinstance(k, str) else k
                 normalized[new_key] = self._normalize_structure_keys(v)
             return normalized
         elif isinstance(data, list):
@@ -41,7 +41,7 @@ class StructureGenerator:
     def _get_folder_descriptions() -> Dict[str, str]:
         """Get descriptions for main folders."""
         return {
-            "00_ADMINISTRATIVO": """# 00_ADMINISTRATIVO
+            "00 ADMINISTRATIVO": """# 00 ADMINISTRATIVO
 
 Esta carpeta contiene documentos administrativos generales del proyecto.
 
@@ -57,7 +57,7 @@ Almacenar información esencial para la gestión administrativa y legal del proy
 
 ## Uso
 Coloca aquí todos los documentos relacionados con la administración y legalidad del proyecto.""",
-            "01_ESTRATÉGICO": """# 01_ESTRATÉGICO
+            "01 ESTRATÉGICO": """# 01 ESTRATÉGICO
 
 Esta carpeta contiene elementos estratégicos del proyecto.
 
@@ -75,7 +75,7 @@ Definir la dirección estratégica, objetivos y planificación del negocio.
 
 ## Uso
 Utiliza esta carpeta para todos los documentos que guíen la estrategia del proyecto.""",
-            "02_LEGAL_Y_CONSTITUCIÓN": """# 02_LEGAL_Y_CONSTITUCIÓN
+            "02 LEGAL Y CONSTITUCIÓN": """# 02 LEGAL Y CONSTITUCIÓN
 
 Documentos legales y de constitución del proyecto.
 
@@ -94,7 +94,7 @@ Mantener todos los aspectos legales y de constitución en orden.
 
 ## Uso
 Archiva aquí todos los documentos legales y de constitución.""",
-            "03_OPERACIONES": """# 03_OPERACIONES
+            "03 OPERACIONES": """# 03 OPERACIONES
 
 Documentos operativos del proyecto.
 
@@ -111,7 +111,7 @@ Gestionar las operaciones diarias y procesos del negocio.
 
 ## Uso
 Coloca aquí documentos relacionados con las operaciones diarias.""",
-            "04_COMERCIAL_Y_VENTAS": """# 04_COMERCIAL_Y_VENTAS
+            "04 COMERCIAL Y VENTAS": """# 04 COMERCIAL Y VENTAS
 
 Materiales comerciales y de ventas.
 
@@ -130,7 +130,7 @@ Apoyar las actividades de ventas y comerciales.
 
 ## Uso
 Archiva aquí todo lo relacionado con ventas y comercialización.""",
-            "05_MARKETING_Y_CONTENIDO": """# 05_MARKETING_Y_CONTENIDO
+            "05 MARKETING Y CONTENIDO": """# 05 MARKETING Y CONTENIDO
 
 Estrategias y contenido de marketing.
 
@@ -149,7 +149,7 @@ Gestionar el marketing y la creación de contenido.
 
 ## Uso
 Utiliza para marketing y contenido.""",
-            "06_CLIENTES_Y_USUARIOS": """# 06_CLIENTES_Y_USUARIOS
+            "06 CLIENTES Y USUARIOS": """# 06 CLIENTES Y USUARIOS
 
 Gestión de clientes y usuarios.
 
@@ -166,7 +166,7 @@ Mantener información y herramientas para clientes.
 
 ## Uso
 Archiva información relacionada con clientes.""",
-            "07_FINANZAS_Y_CONTABILIDAD": """# 07_FINANZAS_Y_CONTABILIDAD
+            "07 FINANZAS Y CONTABILIDAD": """# 07 FINANZAS Y CONTABILIDAD
 
 Documentos financieros y contables.
 
@@ -183,7 +183,7 @@ Gestionar aspectos financieros del proyecto.
 
 ## Uso
 Coloca aquí todos los documentos financieros.""",
-            "08_RECURSOS_HUMANOS_Y_EQUIPO": """# 08_RECURSOS_HUMANOS_Y_EQUIPO
+            "08 RECURSOS HUMANOS Y EQUIPO": """# 08 RECURSOS HUMANOS Y EQUIPO
 
 Gestión de recursos humanos.
 
@@ -205,7 +205,7 @@ Administrar el equipo y recursos humanos.
 
 ## Uso
 Archiva documentos de RRHH.""",
-            "09_CAPACITACIÓN_Y_DOCUMENTACIÓN_INTERNA": """# 09_CAPACITACIÓN_Y_DOCUMENTACIÓN_INTERNA
+            "09 CAPACITACIÓN Y DOCUMENTACIÓN INTERNA": """# 09 CAPACITACIÓN Y DOCUMENTACIÓN INTERNA
 
 Capacitación y documentación interna.
 
@@ -221,7 +221,7 @@ Formar y documentar internamente.
 
 ## Uso
 Utiliza para capacitación y documentación.""",
-            "10_ANALÍTICA_Y_REPORTES": """# 10_ANALÍTICA_Y_REPORTES
+            "10 ANALÍTICA Y REPORTES": """# 10 ANALÍTICA Y REPORTES
 
 Análisis y reportes del proyecto.
 
@@ -249,7 +249,7 @@ Archiva análisis y reportes."""
             raise ValueError("Base path cannot be empty")
 
         if structure is None:
-            # Try to load from JSON template if structure_name is provided
+            # Try to load from the JSON template if structure_name is provided
             if structure_name:
                 structure = self.enhanced_template_manager.get_structure_template(structure_name)
                 if structure is None:
@@ -268,7 +268,7 @@ Archiva análisis y reportes."""
         try:
             os.makedirs(root_path, exist_ok=True)
             self._create_folders(root_path, structure, is_root=True)
-            # Create root STRUCTURE.md file
+            # Create a root STRUCTURE.md file
             self._create_root_structure_md(root_path, structure)
             return root_path
         except OSError as e:
@@ -336,13 +336,14 @@ Archiva análisis y reportes."""
                 # Create the empty file
                 self._create_empty_file(file_path)
 
-    def _create_empty_file(self, file_path: str) -> None:
+    @staticmethod
+    def _create_empty_file(file_path: str) -> None:
         """Create an empty file."""
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(f"# {os.path.basename(file_path)}\n\nContenido base para {os.path.basename(file_path)}.")
 
     def _create_root_structure_md(self, root_path: str, structure: Dict[str, Any]) -> None:
-        """Create STRUCTURE.md file in the root directory with complete structure information."""
+        """Create the STRUCTURE.md file in the root directory with complete structure information."""
         info_content = f"""# Estructura del Proyecto: {os.path.basename(root_path)}
 
 Esta carpeta contiene la estructura completa del proyecto organizacional, diseñada para empresas de servicios turísticos y similares.
@@ -674,7 +675,7 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
         return self.db_manager.get_project(project_id)
 
     def update_in_db(self, project_id: int, structure: Dict[str, Any]) -> None:
-        self.db_manager.update_project(project_id, structure)
+        selfse.db_manager.update_project(project_id, structure)
 
     def get_templates(self) -> List[Dict[str, Any]]:
         return self.db_manager.get_templates()
@@ -739,7 +740,7 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
             # Update existing project
             self.db_manager.update_project(existing_project['id'], structure=self.default_structure, path=root_path)
         else:
-            # Create new project
+            # Create a new project
             self.save_to_db(project_name, self.default_structure, root_path)
 
         return root_path
@@ -748,8 +749,9 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
         """Check if there's a conflict with the project path."""
         return self.db_manager.check_project_path_conflict(project_name, path)
 
-    def convert_md_to_pdf(self, project_path: str, mode: str) -> None:
-        """Convert INFO.md files to PDF using reportlab.
+    @staticmethod
+    def convert_md_to_pdf(project_path: str, mode: str) -> None:
+        """Convert INFO.md files to PDF using the reportlab.
 
         Args:
             project_path: Path to the project root directory
@@ -765,13 +767,13 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
             raise ImportError(f"Required packages not installed: {e}. Install with: pip install reportlab markdown")
 
         def convert_single_md_to_pdf(md_path: str, pdf_path: str) -> None:
-            """Convert a single markdown file to PDF."""
+            """Convert a single Markdown file to PDF."""
             try:
                 # Read markdown content
                 with open(md_path, 'r', encoding='utf-8') as f:
                     md_content = f.read()
 
-                # Convert markdown to HTML
+                # Convert Markdown to HTML
                 html_content = markdown.markdown(md_content, extensions=['tables', 'fenced_code'])
 
                 # Create PDF document
