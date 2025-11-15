@@ -7,7 +7,8 @@ from ..templates.cli import setup_template_parser
 
 def create_project(args: argparse.Namespace) -> None:
     db_manager = DatabaseManager()
-    generator = StructureGenerator(db_manager)
+    # Pass the format argument to the generator
+    generator = StructureGenerator(db_manager, doc_format=args.format)
 
     # Determine action based on arguments
     action = None
@@ -39,14 +40,6 @@ def create_project(args: argparse.Namespace) -> None:
                 try:
                     path = generator.restart_structure(args.name, args.path)
                     print(f"Project '{args.name}' restarted at: {path}")
-
-                    # Convert INFO.md files to PDF if requested
-                    if hasattr(args, 'convert_md_to_pdf') and args.convert_md_to_pdf:
-                        try:
-                            generator.convert_md_to_pdf(path, args.convert_md_to_pdf)
-                            print(f"INFO.md files converted to PDF ({args.convert_md_to_pdf})")
-                        except Exception as e:
-                            print(f"Warning: Failed to convert INFO.md to PDF: {e}")
                     return
                 except Exception as e:
                     print(f"Error restarting project: {e}")
@@ -58,14 +51,6 @@ def create_project(args: argparse.Namespace) -> None:
             try:
                 path = generator.regenerate_structure(args.name, args.path)
                 print(f"Project '{args.name}' regenerated at: {path}")
-
-                # Convert INFO.md files to PDF if requested
-                if hasattr(args, 'convert_md_to_pdf') and args.convert_md_to_pdf:
-                    try:
-                        generator.convert_md_to_pdf(path, args.convert_md_to_pdf)
-                        print(f"INFO.md files converted to PDF ({args.convert_md_to_pdf})")
-                    except Exception as e:
-                        print(f"Warning: Failed to convert INFO.md to PDF: {e}")
                 return
             except Exception as e:
                 print(f"Error regenerating project: {e}")
@@ -89,14 +74,6 @@ def create_project(args: argparse.Namespace) -> None:
                 try:
                     path = generator.regenerate_structure(args.name, args.path)
                     print(f"Project '{args.name}' regenerated at: {path}")
-
-                    # Convert INFO.md files to PDF if requested
-                    if hasattr(args, 'convert_md_to_pdf') and args.convert_md_to_pdf:
-                        try:
-                            generator.convert_md_to_pdf(path, args.convert_md_to_pdf)
-                            print(f"INFO.md files converted to PDF ({args.convert_md_to_pdf})")
-                        except Exception as e:
-                            print(f"Warning: Failed to convert INFO.md to PDF: {e}")
                 except Exception as e:
                     print(f"Error regenerating project: {e}")
             elif choice == '2':
@@ -104,14 +81,6 @@ def create_project(args: argparse.Namespace) -> None:
                 try:
                     path = generator.restart_structure(args.name, args.path)
                     print(f"Project '{args.name}' restarted at: {path}")
-
-                    # Convert INFO.md files to PDF if requested
-                    if hasattr(args, 'convert_md_to_pdf') and args.convert_md_to_pdf:
-                        try:
-                            generator.convert_md_to_pdf(path, args.convert_md_to_pdf)
-                            print(f"INFO.md files converted to PDF ({args.convert_md_to_pdf})")
-                        except Exception as e:
-                            print(f"Warning: Failed to convert INFO.md to PDF: {e}")
                 except Exception as e:
                     print(f"Error restarting project: {e}")
             else:
@@ -126,7 +95,6 @@ def create_project(args: argparse.Namespace) -> None:
         print(f"Warning: Directory '{os.path.join(args.path, args.name)}' already exists and contains files.")
         print("This may overwrite existing files.")
  
-        # In non-interactive mode, require explicit confirmation or fail
         if not hasattr(args, 'force') or not args.force:
             print("Use --force to override this check in non-interactive mode.")
             print("Operation cancelled.")
@@ -135,20 +103,11 @@ def create_project(args: argparse.Namespace) -> None:
         print("Continuing with --force flag...")
     elif conflict == "path_exists_empty":
         print(f"Directory '{os.path.join(args.path, args.name)}' already exists but is empty. Proceeding without --force.")
-        # Continue to creation
 
     # Create new project
     try:
         path = generator.create_structure_and_save(args.name, args.path, structure_name=structure_name)
         print(f"Project '{args.name}' created and structure generated at: {path}")
-
-        # Convert INFO.md files to PDF if requested
-        if hasattr(args, 'convert_md_to_pdf') and args.convert_md_to_pdf:
-            try:
-                generator.convert_md_to_pdf(path, args.convert_md_to_pdf)
-                print(f"INFO.md files converted to PDF ({args.convert_md_to_pdf})")
-            except Exception as e:
-                print(f"Warning: Failed to convert INFO.md to PDF: {e}")
     except Exception as e:
         print(f"Error creating project: {e}")
 
@@ -163,7 +122,7 @@ def list_projects(args: argparse.Namespace) -> None:
 
 def generate_structure(args: argparse.Namespace) -> None:
     db_manager = DatabaseManager()
-    generator = StructureGenerator(db_manager)
+    generator = StructureGenerator(db_manager, doc_format=args.format)
     project = generator.load_from_db(args.id)
     if not project:
         print(f"Project with ID {args.id} not found.")
@@ -219,10 +178,10 @@ def main() -> int:
     create_parser.add_argument('name', help='Name of the project')
     create_parser.add_argument('--path', default='.', help='Path to generate the project structure (default: current directory)')
     create_parser.add_argument('--structure', help='Name of structure template to use (from templates/structures/)')
+    create_parser.add_argument('--format', choices=['md', 'pdf'], default='pdf', help='Format for documentation files (INFO, STRUCTURE). Default: pdf')
     create_parser.add_argument('--regenerate', action='store_true', help='Regenerate existing project structure (non-interactive)')
     create_parser.add_argument('--restart', action='store_true', help='Restart project with default structure (non-interactive)')
     create_parser.add_argument('--force', action='store_true', help='Force overwrite existing directories (non-interactive)')
-    create_parser.add_argument('--convert-md-to-pdf', choices=['root', 'all'], help='Convert INFO.md files to PDF (root: only root INFO.md, all: all INFO.md files)')
     create_parser.set_defaults(func=create_project)
 
     # List projects
@@ -233,6 +192,7 @@ def main() -> int:
     gen_parser = subparsers.add_parser('generate-structure', help='Generate folder structure for a project')
     gen_parser.add_argument('id', type=int, help='Project ID')
     gen_parser.add_argument('path', help='Base path to generate structure')
+    gen_parser.add_argument('--format', choices=['md', 'pdf'], default='pdf', help='Format for documentation files. Default: pdf')
     gen_parser.set_defaults(func=generate_structure)
 
     # Export JSON
@@ -262,8 +222,6 @@ def main() -> int:
             args.func(args)
             return 0
         except Exception as e:
-            # If the subcommand already printed an error, just return non-zero
-            # Otherwise, print a generic error
             if str(e):
                 print(f"Error: {e}")
             return 1

@@ -5,15 +5,28 @@ from .database import DatabaseManager
 from .enhanced_template_manager import EnhancedTemplateManager
 from ..templates.models import TemplateManager
 
+# Import PDF generation libraries, handling potential ImportError
+try:
+    import markdown
+    from reportlab.lib.pagesizes import letter
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Preformatted
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.units import inch
+    PDF_SUPPORT = True
+except ImportError:
+    PDF_SUPPORT = False
+
 class StructureGenerator:
-    def __init__(self, db_manager: DatabaseManager):
+    def __init__(self, db_manager: DatabaseManager, doc_format: str = 'pdf'):
+        if doc_format == 'pdf' and not PDF_SUPPORT:
+            raise ImportError("PDF generation is selected, but required libraries (reportlab, markdown) are not installed. Please run 'pip install reportlab markdown'.")
         self.db_manager = db_manager
         self.template_manager = TemplateManager(db_manager)
         self.enhanced_template_manager = EnhancedTemplateManager(db_manager)
         self.default_structure = self._get_default_structure()
+        self.doc_format = doc_format
 
-    @staticmethod
-    def _get_default_structure() -> List[Dict[str, Any]]:
+    def _get_default_structure(self) -> List[Dict[str, Any]]:
         """Load the default structure directly from the 'meta-JSON' file."""
         base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         structure_path = os.path.join(base_dir, 'templates', 'structures', 'default_business_structure.json')
@@ -47,41 +60,106 @@ class StructureGenerator:
         try:
             os.makedirs(root_path, exist_ok=True)
             self._create_items_recursively(root_path, structure_to_use)
-            self._create_root_structure_md(root_path, structure_to_use)
+            self._create_root_structure_file(root_path, structure_to_use)
             return root_path
         except OSError as e:
             raise RuntimeError(f"Failed to create structure: {e}")
+
+    def _write_doc_file(self, file_path_without_ext: str, content: str):
+        """Writes content to a file, either .md or .pdf based on doc_format."""
+        if self.doc_format == 'pdf':
+            pdf_path = file_path_without_ext + '.pdf'
+            self._convert_md_to_pdf(content, pdf_path)
+        else:
+            md_path = file_path_without_ext + '.md'
+            with open(md_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+
+    def _convert_md_to_pdf(self, md_content: str, pdf_path: str):
+        """Converts a string of Markdown content to a PDF file with a fallback."""
+        if not PDF_SUPPORT:
+            print("Warning: PDF libraries not installed. Skipping PDF generation.")
+            return
+
+        try:
+            doc = SimpleDocTemplate(pdf_path, pagesize=letter, topMargin=0.5*inch, bottomMargin=0.5*inch, leftMargin=0.7*inch, rightMargin=0.7*inch)
+            styles = getSampleStyleSheet()
+            
+            styles.add(ParagraphStyle(name='H1', parent=styles['h1'], fontSize=18, spaceAfter=12))
+            styles.add(ParagraphStyle(name='H2', parent=styles['h2'], fontSize=14, spaceAfter=10))
+            styles.add(ParagraphStyle(name='H3', parent=styles['h3'], fontSize=12, spaceAfter=8))
+            styles.add(ParagraphStyle(name='Body', parent=styles['Normal'], spaceAfter=6, leading=14))
+            code_style = ParagraphStyle(name='Code', parent=styles['Normal'], fontName='Courier', fontSize=8.5, leading=10, leftIndent=10, rightIndent=10)
+
+            story = []
+            in_code_block = False
+            code_text = []
+
+            for line in md_content.split('\n'):
+                stripped_line = line.strip()
+                if stripped_line.startswith('```'):
+                    if in_code_block:
+                        story.append(Preformatted('\n'.join(code_text), code_style))
+                        code_text = []
+                    in_code_block = not in_code_block
+                    continue
+
+                if in_code_block:
+                    code_text.append(line)
+                    continue
+
+                if line.startswith('# '):
+                    story.append(Paragraph(line[2:], styles['H1']))
+                elif line.startswith('## '):
+                    story.append(Paragraph(line[3:], styles['H2']))
+                elif line.startswith('### '):
+                    story.append(Paragraph(line[4:], styles['H3']))
+                elif stripped_line.startswith('- '):
+                    story.append(Paragraph(f'• {stripped_line[2:]}', styles['Body'], leftIndent=10))
+                else:
+                    story.append(Paragraph(line, styles['Body']))
+            
+            doc.build(story)
+        except Exception as e:
+            print(f"CRITICAL WARNING: Failed to generate PDF '{os.path.basename(pdf_path)}'. Writing as .md instead. Error: {e}")
+            md_path = pdf_path.replace('.pdf', '.md')
+            with open(md_path, 'w', encoding='utf-8') as f:
+                f.write("--- PDF GENERATION FAILED ---\n\n" + md_content)
 
     def _create_items_recursively(self, base_path: str, items: List[Dict[str, Any]]):
         """Recursively create directories and files based on the structure definition."""
         for item in items:
             item_name = item.get("name")
-            item_type = item.get("type")
+            if not item_name:
+                continue
+            
             item_path = os.path.join(base_path, item_name)
+            item_type = item.get("type")
 
             if item_type == "dir":
                 os.makedirs(item_path, exist_ok=True)
                 
-                if "description" in item and item["description"]:
-                    info_path = os.path.join(item_path, "INFO.md")
-                    with open(info_path, 'w', encoding='utf-8') as f:
-                        f.write(item["description"])
+                description_content = item.get("description", "")
+                if "content" in item and item["content"]:
+                    tree_for_info_md = self._generate_tree_from_list(item["content"])
+                    description_content += f"\n\n## Estructura\n```\n{item_name}/\n{tree_for_info_md}```"
                 
+                if description_content:
+                    try:
+                        self._write_doc_file(os.path.join(item_path, "INFO"), description_content)
+                    except Exception as e:
+                        print(f"ERROR: Failed to generate documentation for {item_path}. Error: {e}")
+
                 if "content" in item and isinstance(item["content"], list):
                     self._create_items_recursively(item_path, item["content"])
 
-            elif item_type == "file":
-                content = item.get("content_template", f"# {item_name}\n\nContenido base.")
-                with open(item_path, 'w', encoding='utf-8') as f:
-                    f.write(content)
-            
-            elif item.get('template'):
+            elif item_type == "file" or item.get('template'):
                 content = item.get("content_template", f"# {item_name}\n\nContenido base.")
                 with open(item_path, 'w', encoding='utf-8') as f:
                     f.write(content)
 
-    def _create_root_structure_md(self, root_path: str, structure: List[Dict[str, Any]]) -> None:
-        """Create the main STRUCTURE.md file from the hierarchical structure."""
+    def _create_root_structure_file(self, root_path: str, structure: List[Dict[str, Any]]) -> None:
+        """Create the main STRUCTURE file in the chosen format."""
         tree_structure = self._generate_tree_from_list(structure)
         detailed_structure = self._generate_detailed_docs_from_list(structure)
         total_folders, total_files = self._count_items_from_list(structure)
@@ -109,9 +187,10 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
 ---
 *Estructura generada automáticamente por Project Structure Manager*
 """
-        structure_path = os.path.join(root_path, "STRUCTURE.md")
-        with open(structure_path, 'w', encoding='utf-8') as f:
-            f.write(info_content)
+        try:
+            self._write_doc_file(os.path.join(root_path, "STRUCTURE"), info_content)
+        except Exception as e:
+            print(f"ERROR: Failed to generate root STRUCTURE file. Error: {e}")
 
     def _generate_tree_from_list(self, items: List[Dict[str, Any]], prefix: str = "") -> str:
         """Generate a string representation of the directory tree from the list structure."""
@@ -135,20 +214,30 @@ Proporcionar una organización sistemática y profesional para todos los aspecto
     def _generate_detailed_docs_from_list(self, items: List[Dict[str, Any]], level: int = 0) -> str:
         """Generate the detailed documentation section for STRUCTURE.md."""
         result = ""
-        heading = "#" * (level + 2)
+        heading_level = level + 2
+        heading = "#" * heading_level
 
         for item in items:
             name = item.get("name")
-            description = item.get("description")
+            description = item.get("description", "Sin descripción.")
             
             if item.get("type") == "dir":
-                result += f"\n{heading} 📁 {name}\n\n"
-                if description:
-                    result += f"{description}\n\n"
+                if level == 0:
+                    result += f"\n{heading} 📁 {name}\n\n{description}\n"
+                else:
+                    result += f"\n{heading} 📁 {name}\n\n**Propósito**: {description}\n"
+
                 if "content" in item and item["content"]:
-                    result += self._generate_detailed_docs_from_list(item["content"], level + 1)
-            elif item.get("type") == "file":
-                 result += f"- **📄 {name}**: {description or 'Archivo de datos.'}\n"
+                    files_in_dir = [f for f in item["content"] if f.get("type") != "dir"]
+                    if files_in_dir:
+                        result += "\n**Archivos:**\n"
+                        for file_item in files_in_dir:
+                            result += f"- **{file_item.get('name')}**: {file_item.get('description', 'Archivo de datos.')}\n"
+                    
+                    sub_dirs = [d for d in item["content"] if d.get("type") == "dir"]
+                    if sub_dirs:
+                         result += self._generate_detailed_docs_from_list(sub_dirs, level + 1)
+                result += "\n---\n"
         return result
 
     def _count_items_from_list(self, items: List[Dict[str, Any]]) -> tuple[int, int]:
