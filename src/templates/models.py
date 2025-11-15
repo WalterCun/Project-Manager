@@ -25,7 +25,7 @@ class TemplateManager:
 
         # If mocked DB returns a different id first (e.g., parent), fetch again
         if first.get('id') != template_id and first.get('padre_id') is None:
-            # Treat this as parent, then fetch the child
+            # Treat this as a parent, then fetch the child
             parent = first
             child = self.db_manager.get_template(template_id)
             if not child:

@@ -1,584 +1,291 @@
 {
   "name": "Default Business Structure",
-  "description": "Complete business project structure for service companies with 10 main folders and detailed sub-organization",
-  "version": "1.0",
-  "author": "Project Manager",
-  "structure": {
-    "00 ADMINISTRATIVO": {
-      "Información General del Proyecto": [
-        "Resumen Ejecutivo.docx",
-        "Ficha Técnica_Proyecto.docx",
-        "Datos Contacto_Equipo.docx",
-        "Cronograma Global.xlsx",
-        "Presentación Corporativa.pptx"
-      ],
-      "Contratos - Acuerdos": [
-        "Contrato Servicios.docx",
-        "Contrato Confidencialidad NDA.docx",
-        "Acuerdo Colaboración.docx"
-      ],
-      "Documentos de Propiedad Intelectual": [
-        "Registro Marca.pdf",
-        "Derechos Autor.pdf",
-        "Patentes y Modelos Utilidad.pdf"
-      ],
-      "Correspondencia Oficial - Ofertas - Licencias": [
-        "Carta Presentación.docx",
-        "Solicitud Licencia.docx",
-        "Ofertas Comerciales.docx"
+  "description": "Estructura de carpetas estándar para una empresa de servicios, definida en un único archivo.",
+  "structure": [
+    {
+      "type": "dir",
+      "name": "00 ADMINISTRATIVO",
+      "description": "# 00 ADMINISTRATIVO\n\nEsta carpeta contiene documentos administrativos generales del proyecto.\n\n## Propósito\nAlmacenar información esencial para la gestión administrativa y legal del proyecto.",
+      "content": [
+        { "type": "dir", "name": "Información General del Proyecto", "description": "Documentos básicos del proyecto como descripción, alcance y objetivos.", "content": [] },
+        { "type": "dir", "name": "Datos Legales - RUC - Permisos", "description": "Documentación legal, RUC, permisos y licencias necesarias.", "content": [] },
+        { "type": "dir", "name": "Contratos - Acuerdos", "description": "Todos los contratos y acuerdos firmados.", "content": [] },
+        { "type": "dir", "name": "Documentos de Propiedad Intelectual", "description": "Patentes, marcas, derechos de autor y propiedad intelectual.", "content": [] },
+        { "type": "dir", "name": "Correspondencia Oficial - Ofertas - Licencias", "description": "Cartas oficiales, ofertas comerciales y licencias.", "content": [] }
       ]
     },
-    "01 ESTRATÉGICO": {
-      "Informacion Base": [
-        "Visión - Misión - Valores.docx"
-      ],
-      "Business Model Canvas": [
-        "Canvas Modelo Negocio.pdf",
-        "Propuesta Valor.docx"
-      ],
-      "Plan de Negocios": [
-        "Plan Negocio Completo.docx",
-        "Resumen Ejecutivo.pdf"
-      ],
-      "Análisis de Mercado y Competencia": [
-        "Estudio Mercado.pdf",
-        "Competencia Directa Indirecta.xlsx",
-        "Benchmarking.docx"
-      ],
-      "Roadmap Estratégico (Anual - Semestral)": [
-        "Roadmap 2025.xlsx",
-        "Metas Trimestrales.docx"
-      ],
-      "Objetivos y KPIs": [
-        "OKRs Globales.xlsx",
-        "Indicadores Estrategicos.docx"
-      ],
-      "Proyecciones Financieras": [
-        "Proyeccion 5 Años.xlsx",
-        "Escenarios Optimista Pesimista.xlsx"
-      ],
-      "FODA - Análisis Estratégico": [
-        "Matriz FODA.xlsx",
-        "Análisis PESTEL.docx"
+    {
+      "type": "dir",
+      "name": "01 ESTRATÉGICO",
+      "description": "# 01 ESTRATÉGICO\n\nEsta carpeta contiene elementos estratégicos del proyecto.\n\n## Propósito\nDefinir la dirección estratégica, objetivos y planificación del negocio.",
+      "content": [
+        { "type": "dir", "name": "Visión - Misión - Valores", "description": "Declaraciones estratégicas de la empresa.", "content": [] },
+        { "type": "dir", "name": "Business Model Canvas", "description": "Modelo de negocio canvas con componentes clave.", "content": [] },
+        { "type": "dir", "name": "Plan de Negocios", "description": "Plan detallado del negocio con proyecciones.", "content": [] },
+        { "type": "dir", "name": "Análisis de Mercado y Competencia", "description": "Estudios de mercado y análisis competitivo.", "content": [] },
+        { "type": "dir", "name": "Roadmap Estratégico (Anual - Semestral)", "description": "Planificación estratégica temporal.", "content": [] },
+        { "type": "dir", "name": "Objetivos y KPIs", "description": "Objetivos específicos e indicadores clave de rendimiento.", "content": [] },
+        { "type": "dir", "name": "Proyecciones Financieras", "description": "Proyecciones y presupuestos financieros.", "content": [] }
       ]
     },
-    "02 LEGAL Y CONSTITUCIÓN": {
-      "RUC y documentos fiscales": [
-        "Certificado RUC.pdf",
-        "Constancia Inscripción.pdf"
-      ],
-      "Permisos de Operaciones": [
-        "Permiso Municipal.pdf",
-        "Certificado Seguridad.pdf",
-        "Licencia Funcionamiento.pdf"
-      ],
-      "Póliza de Seguros": [
-        "Seguro Responsabilidad_Civil.pdf",
-        "Seguro Equipo.pdf",
-        "Seguro Empleados.pdf"
-      ],
-      "Acuerdo entre Socios Fundadores": [
-        "Pacto Socios.docx",
-        "Acta Constitución.pdf",
-        "Estatutos Sociales.pdf"
-      ],
-      "Términos y Condiciones Clientes": [
-        "Términos Servicio.docx",
-        "Política Privacidad.docx",
-        "Política Cookies.docx"
-      ],
-      "Contrato Servicios (Cliente)": [
-        "Plantilla Contrato Cliente.docx"
-      ],
-      "Waiver - Liberación Responsabilidad": [
-        "Documento Waiver.docx"
-      ],
-      "Plantilla Contrato Proveedores": [
-        "Plantilla_Proveedor.docx"
-      ],
-      "Registro de Documentos Legales": [
-        "Índice Documentos_Legales.xlsx",
-        "Vencimientos Permisos.xlsx"
+    {
+      "type": "dir",
+      "name": "02 LEGAL Y CONSTITUCIÓN",
+      "description": "# 02 LEGAL Y CONSTITUCIÓN\n\nDocumentos legales y de constitución del proyecto.\n\n## Propósito\nMantener todos los aspectos legales y de constitución en orden.",
+      "content": [
+        { "type": "dir", "name": "RUC y documentos fiscales", "description": "Documentos fiscales y RUC de la empresa.", "content": [] },
+        { "type": "dir", "name": "Permisos de Operaciones", "description": "Permisos necesarios para operar legalmente.", "content": [] },
+        { "type": "dir", "name": "Póliza de Seguros", "description": "Pólizas de seguro vigentes.", "content": [] },
+        { "type": "dir", "name": "Acuerdo entre Socios Fundadores", "description": "Acuerdos entre los fundadores.", "content": [] },
+        { "type": "dir", "name": "Términos y Condiciones Clientes", "description": "T&C para clientes.", "content": [] },
+        { "type": "dir", "name": "Contrato Servicios (Cliente)", "description": "Plantillas de contratos de servicios.", "content": [] },
+        { "type": "dir", "name": "Waiver - Liberación Responsabilidad", "description": "Documentos de liberación de responsabilidad.", "content": [] },
+        { "type": "dir", "name": "Plantilla Contrato Proveedores", "description": "Plantillas para contratos con proveedores.", "content": [] }
       ]
     },
-    "03 OPERACIONES": {
-      "Manuales": [
-        "Manual Operativo.docx",
-        "Guía Logística.docx"
-      ],
-      "Procesos": [
-        "Mapa_Procesos.pdf",
-        "Procedimientos Operativos Estandar.docx",
-        "Diagrama Flujo Procesos.pdf"
-      ],
-      "Protocolos y Checklists": [
-        "Checklist Control Calidad.xlsx",
-        "Protocolo Seguridad.docx",
-        "Checklist Apertura Cierre.xlsx"
-      ],
-      "Control de Proveedores": [
-        "Base Proveedores.xlsx",
-        "Evaluación Proveedores.xlsx",
-        "Contratos Proveedores.xlsx"
-      ],
-      "Manual de Calidad - Estándares": [
-        "Normas ISO Requeridas.pdf",
-        "Manual Calidad.docx",
-        "Certificaciones.pdf"
-      ],
-      "Calendario Operativo - Cronogramas": [
-        "Cronograma Mensual.xlsx",
-        "Plan Actividades Semanales.xlsx"
-      ],
-      "Inventario y Logística": [
-        "Control Inventario.xlsx",
-        "Kardex.xlsx",
-        "Gestión Almacén.docx"
+    {
+      "type": "dir",
+      "name": "03 OPERACIONES",
+      "description": "# 03 OPERACIONES\n\nDocumentos operativos del proyecto.\n\n## Propósito\nGestionar las operaciones diarias y procesos del negocio.",
+      "content": [
+        {
+          "type": "dir",
+          "name": "Manuales",
+          "description": "Manuales de procedimientos operativos.",
+          "content": [
+            { "type": "file", "name": "Atencion_al_Cliente.docx", "description": "Manual de atención al cliente", "content_template": "# Manual de Atención al Cliente\n\nEste documento detalla los protocolos y buenas prácticas para la atención a clientes." },
+            { "type": "file", "name": "Ventas.docx", "description": "Manual de procedimientos de ventas", "content_template": "# Manual de Ventas\n\nGuía de procedimientos y estrategias para el equipo de ventas." },
+            { "type": "file", "name": "Operaciones.docx", "description": "Manual de operaciones", "content_template": "# Manual de Operaciones\n\nProcedimientos operativos estándar para el día a día." },
+            { "type": "file", "name": "Uso_de_Herramientas.docx", "description": "Guía de uso de herramientas", "content_template": "# Guía de Uso de Herramientas\n\nInstrucciones para el uso del software y herramientas internas." }
+          ]
+        },
+        { "type": "dir", "name": "Procesos", "description": "Definición de procesos operativos.", "content": [] },
+        { "type": "dir", "name": "Protocolos y Checklists", "description": "Protocolos y listas de verificación.", "content": [] },
+        { "type": "dir", "name": "Control de Proveedores", "description": "Gestión y control de proveedores.", "content": [] },
+        { "type": "dir", "name": "Manual de Calidad - Estándares", "description": "Estándares de calidad y procedimientos.", "content": [] },
+        { "type": "dir", "name": "Calendario Operativo - Cronogramas", "description": "Calendarios y cronogramas operativos.", "content": [] }
       ]
     },
-    "04 COMERCIAL Y VENTAS": {
-      "Manual de Ventas": [
-        "Proceso_Ventas.docx",
-        "Embudo Ventas.pdf"
-      ],
-      "Scripts de Venta WhatsApp": [
-        "Mensajes Promocionales.docx",
-        "Plantillas Conversación.docx"
-      ],
-      "Respuestas a Objeciones Comunes": [
-        "Listado Objeciones.docx",
-        "Guía Manejo Objeciones.docx"
-      ],
-      "Política de Precios y Descuentos": [
-        "Lista Precios.xlsx",
-        "Política Descuentos.docx",
-        "Matriz Precios.xlsx"
-      ],
-      "Paquetes y Promociones Vigentes": [
-        "Promociones 2025.xlsx",
-        "Combos Productos.docx"
-      ],
-      "Calculadora de Costos": [
-        "Costeo Productos.xlsx",
-        "Margen Contribución.xlsx"
-      ],
-      "Análisis de Rentabilidad": [
-        "Rentabilidad Lineas Negocio.xlsx",
-        "Análisis Producto.xlsx"
-      ],
-      "Plantillas Propuestas Corporativas": [
-        "Plantilla_Propuesta_Corporativa.docx",
-        "Portafolio_Servicios.pdf"
-      ],
-      "Base de Datos de Clientes": [
-        "Base de Datos Clientes.xlsx",
-        "Segmentación Clientes.xlsx"
-      ],
-      "Pipeline y Pronóstico de Ventas": [
-        "Pipeline Ventas.xlsx",
-        "Pronóstico Mensual.xlsx"
+    {
+      "type": "dir",
+      "name": "04 COMERCIAL Y VENTAS",
+      "description": "# 04 COMERCIAL Y VENTAS\n\nMateriales comerciales y de ventas.\n\n## Propósito\nApoyar las actividades de ventas y comerciales.",
+      "content": [
+        { "type": "dir", "name": "Manual de Ventas", "description": "Guías y procedimientos de ventas.", "content": [] },
+        { "type": "dir", "name": "Scripts de Venta WhatsApp", "description": "Scripts para ventas por WhatsApp.", "content": [] },
+        { "type": "dir", "name": "Respuestas a Objeciones Comunes", "description": "Respuestas estándar a objeciones de venta.", "content": [] },
+        { "type": "dir", "name": "Política de Precios y Descuentos", "description": "Políticas de pricing y descuentos.", "content": [] },
+        { "type": "dir", "name": "Paquetes y Promociones Vigentes", "description": "Ofertas y promociones actuales.", "content": [] },
+        { "type": "dir", "name": "Calculadora de Costos", "description": "Herramientas para calcular costos.", "content": [] },
+        { "type": "dir", "name": "Análisis de Rentabilidad", "description": "Análisis de rentabilidad de productos/servicios.", "content": [] },
+        { "type": "dir", "name": "Plantillas Propuestas Corporativas", "description": "Plantillas para propuestas comerciales.", "content": [] }
       ]
     },
-    "05 MARKETING Y CONTENIDO": {
-      "Plan de Marketing": [
-        "Plan Marketing Anual.docx",
-        "Estrategia Digital.docx"
-      ],
-      "Calendario Editorial": [
-        "Calendario Contenido.xlsx",
-        "Planificación Mensual.xlsx"
-      ],
-      "Guía de Marca (Brand Guidelines)": [
-        "Manual_Marca.pdf",
-        "Paleta_Colores.png",
-        "Tipografías.pdf"
-      ],
-      "Banco de Contenido (Posts pre-creados)": {
-        "Material Promocional": [
-          "Banners.jpg",
-          "Post_Instagram.docx",
-          "Stories.png"
-        ],
-        "Diseños": [
-          "Flyers.png",
-          "Plantillas_Canva.pdf",
-          "Brochures.pdf"
-        ],
-        "Plantillas": [
-          "Plantilla Post Redes.docx",
-          "Plantilla Reel.docx",
-          "Plantilla Carrusel.pptx"
-        ],
-        "Fotografías y Videos": [
-          "Banco_Fotos_README.txt",
-          "Videos_Corporativos_README.txt"
-        ]
-      },
-      "Estrategia Comercial": [
-        "Campañas_Promocionales.docx",
-        "Buyer_Personas.docx",
-        "Customer_Journey.pdf"
-      ],
-      "Plantillas de Diseño": [
-        "Plantillas Canales Sociales_README.txt"
-      ],
-      "Análisis de Marketing Digital": [
-        "Analisis_Redes.xlsx",
-        "Benchmark_Marketing.docx",
-        "SEO_Keywords.xlsx"
-      ],
-      "Reportes de Marketing": [
-        "Reporte Mensual.pdf",
-        "Reporte Anual.pdf",
-        "Métricas Redes Sociales.xlsx"
-      ],
-      "Publicidad y Medios": [
-        "Presupuesto Publicidad.xlsx",
-        "Campañas Activas.docx",
-        "ROI Publicidad.xlsx"
+    {
+      "type": "dir",
+      "name": "05 MARKETING Y CONTENIDO",
+      "description": "# 05 MARKETING Y CONTENIDO\n\nEstrategias y contenido de marketing.\n\n## Propósito\nGestionar el marketing y la creación de contenido.",
+      "content": [
+        { "type": "dir", "name": "Plan de Marketing", "description": "Estrategia general de marketing.", "content": [] },
+        { "type": "dir", "name": "Calendario Editorial", "description": "Calendario de publicaciones y contenido.", "content": [] },
+        { "type": "dir", "name": "Guía de Marca (Brand Guidelines)", "description": "Directrices de marca e identidad.", "content": [] },
+        { "type": "dir", "name": "Banco de Contenido (Posts pre-creados)", "description": "Contenido preparado para redes sociales.", "content": [] },
+        { "type": "dir", "name": "Estrategia Comercial", "description": "Estrategias comerciales específicas.", "content": [] },
+        { "type": "dir", "name": "Plantillas de Diseño", "description": "Plantillas para diseños gráficos.", "content": [] },
+        { "type": "dir", "name": "Análisis de Mercado y Competencia", "description": "Estudios de mercado y competencia.", "content": [] },
+        { "type": "dir", "name": "Reportes de Marketing", "description": "Reportes de campañas de marketing.", "content": [] }
       ]
     },
-    "06 CLIENTES Y USUARIOS": {
-      "CRM": {
-        "Base de Datos - CRM": [
-          "Clientes_Activos.xlsx",
-          "Historial_Interacciones.xlsx",
-          "Leads.xlsx"
-        ]
-      },
-      "Plantillas de Comunicación": {
-        "Emails Templates": [
-          "Confirmación.html",
-          "Recordatorio 48h.html",
-          "Recordatorio 24h.html",
-          "Recordatorio Día.html",
-          "Agradecimiento Post Venta.html",
-          "Solicitud Review.html",
-          "Newsletter Mensual.html",
-          "Recuperación Cliente.html"
-        ],
-        "Whatsapp": [
-          "Respuestas Rápidas.docx",
-          "Mensajes Automáticos.docx",
-          "Plantillas Seguimiento.docx"
-        ]
-      },
-      "Contratos o Acuerdos con Clientes": [
-        "Contrato Servicio Cliente.docx",
-        "Términos Condiciones Cliente.docx"
-      ],
-      "Formulario de Feedback": [
-        "Encuesta Satisfacción.docx",
-        "Formulario Google Link.txt",
-        "NPS Survey.docx"
-      ],
-      "Registro de Reviews y Testimonios": [
-        "Testimonios Clientes.xlsx",
-        "Reviews Plataformas.xlsx"
-      ],
-      "Programa de Fidelización y Referidos": [
-        "Programa Referidos.docx",
-        "Bonificaciones.xlsx",
-        "Club Lealtad.docx"
-      ],
-      "Gestión de Quejas y Reclamos": [
-        "Registro Quejas.xlsx",
-        "Protocolo Reclamos.docx",
-        "Resolución Casos.xlsx"
-      ],
-      "Políticas de Atención al Cliente": [
-        "Política Devoluciones.docx",
-        "Política Reembolsos.docx",
-        "Garantías.docx"
+    {
+      "type": "dir",
+      "name": "06 CLIENTES Y USUARIOS",
+      "description": "# 06 CLIENTES Y USUARIOS\n\nGestión de clientes y usuarios.\n\n## Propósito\nMantener información y herramientas para clientes.",
+      "content": [
+        {
+          "type": "dir",
+          "name": "CRM",
+          "description": "Sistema de gestión de relaciones con clientes.",
+          "content": [
+            { "type": "file", "name": "Base de Datos de Clientes.xlsx", "description": "Base de datos completa de clientes", "content_template": "Hoja de cálculo para la gestión de la base de datos de clientes." }
+          ]
+        },
+        {
+          "type": "dir",
+          "name": "Plantillas de Comunicación",
+          "description": "Templates para emails y WhatsApp.",
+          "content": [
+            { "type": "file", "name": "Confirmación_Reserva.html", "description": "Email template para confirmar reservas de clientes", "content_template": "<h1>Confirmación de Reserva</h1><p>Gracias por su reserva.</p>" },
+            { "type": "file", "name": "Recordatorio_48h.html", "description": "Email recordatorio 48 horas antes del servicio", "content_template": "<h1>Recordatorio de Servicio</h1><p>Le recordamos su servicio en 48 horas.</p>" },
+            { "type": "file", "name": "Recordatorio_24h.html", "description": "Email recordatorio 24 horas antes del servicio", "content_template": "<h1>Recordatorio de Servicio</h1><p>Le recordamos su servicio en 24 horas.</p>" },
+            { "type": "file", "name": "Recordatorio_Día_Tour.html", "description": "Email recordatorio el día del tour", "content_template": "<h1>Recordatorio de Servicio</h1><p>Su servicio es hoy.</p>" },
+            { "type": "file", "name": "Agradecimiento_Post_Tour.html", "description": "Email de agradecimiento después del servicio", "content_template": "<h1>Gracias por preferirnos</h1><p>Esperamos que haya disfrutado su experiencia.</p>" },
+            { "type": "file", "name": "Solicitud_Review.html", "description": "Email solicitando reseñas y testimonios", "content_template": "<h1>¡Valora tu experiencia!</h1><p>Nos encantaría conocer tu opinión.</p>" },
+            { "type": "file", "name": "Newsletter_Mensual.html", "description": "Boletín mensual informativo", "content_template": "<h1>Novedades del Mes</h1><p>Descubre nuestras últimas noticias y ofertas.</p>" },
+            { "type": "file", "name": "Respuestas_Rápidas.docx", "description": "Documento con respuestas rápidas para WhatsApp", "content_template": "# Respuestas Rápidas para WhatsApp\n\n- Saludo: ¡Hola! Gracias por contactarnos.\n- Despedida: Estamos para servirle." }
+          ]
+        },
+        { "type": "dir", "name": "Contratos o Acuerdos con Clientes", "description": "Contratos y acuerdos con clientes.", "content": [] },
+        { "type": "dir", "name": "Formulario de Feedback", "description": "Formularios para retroalimentación.", "content": [] },
+        { "type": "dir", "name": "Registro de Reviews y Testimonios", "description": "Reseñas y testimonios de clientes.", "content": [] },
+        { "type": "dir", "name": "Programa de Fidelización y Referidos", "description": "Programas de lealtad y referidos.", "content": [] }
       ]
     },
-    "07 FINANZAS Y CONTABILIDAD": {
-      "Balance Inicial": [
-        "Balance 2025.xlsx",
-        "Balance Apertura.xlsx"
-      ],
-      "Presupuesto Anual": [
-        "Presupuesto Anual.xlsx",
-        "Presupuesto Departamentos.xlsx"
-      ],
-      "Control de Gastos e Ingresos": [
-        "Registro Gastos.xlsx",
-        "Ingresos Mensuales.xlsx",
-        "Libro Diario.xlsx"
-      ],
-      "Flujo de Caja Proyectado": [
-        "Cash Flow Proyectado.xlsx",
-        "Flujo Caja Semanal.xlsx"
-      ],
-      "Reportes Financieros": [
-        "Reporte_Trimestral.pdf",
-        "Estado_Resultados.pdf",
-        "Balance_General.pdf"
-      ],
-      "Proyecciones": [
-        "Proyeccion Crecimiento.xlsx",
-        "Análisis Sensibilidad.xlsx"
-      ],
-      "Calculadora Financiera": [
-        "Calculadora Financiera.xlsx",
-        "ROI Calculator.xlsx"
-      ],
-      "Facturación": [
-        "Facturas Emitidas.xlsx",
-        "Facturas Recibidas.xlsx",
-        "Control Cobros.xlsx"
-      ],
-      "Conciliaciones Bancarias": [
-        "Conciliación Mensual.xlsx",
-        "Estados Cuenta.pdf"
-      ],
-      "Declaraciones Fiscales": [
-        "Declaración IVA.xlsx",
-        "Declaración Renta.pdf",
-        "Retenciones.xlsx"
-      ],
-      "Cuentas por Cobrar - Pagar": [
-        "Cuentas Cobrar.xlsx",
-        "Cuentas Pagar.xlsx",
-        "Antigüedad Saldos.xlsx"
+    {
+      "type": "dir",
+      "name": "07 FINANZAS Y CONTABILIDAD",
+      "description": "# 07 FINANZAS Y CONTABILIDAD\n\nDocumentos financieros y contables.\n\n## Propósito\nGestionar aspectos financieros del proyecto.",
+      "content": [
+        { "type": "dir", "name": "Balance Inicial", "description": "Balance inicial del negocio.", "content": [] },
+        { "type": "dir", "name": "Presupuesto Anual", "description": "Presupuesto anual detallado.", "content": [] },
+        { "type": "dir", "name": "Control de Gastos e Ingresos", "description": "Control financiero diario.", "content": [] },
+        { "type": "dir", "name": "Flujo de Caja Proyectado", "description": "Proyecciones de flujo de caja.", "content": [] },
+        { "type": "dir", "name": "Reportes Financieros", "description": "Reportes financieros periódicos.", "content": [] },
+        { "type": "dir", "name": "Proyecciones", "description": "Proyecciones financieras futuras.", "content": [] },
+        {
+          "type": "dir",
+          "name": "Herramientas",
+          "description": "Herramientas y calculadoras financieras.",
+          "content": [
+            { "type": "file", "name": "Calculadora Financiera.xlsx", "description": "Herramientas de cálculo financiero", "content_template": "Hoja de cálculo con herramientas financieras." }
+          ]
+        }
       ]
     },
-    "08 RECURSOS HUMANOS Y EQUIPO": {
-      "Organigrama": [
-        "Organigrama Actualizado.pdf",
-        "Estructura Organizacional.png"
-      ],
-      "Roles y Responsabilidades": [
-        "Matriz Roles.xlsx",
-        "RACI Matrix.xlsx"
-      ],
-      "Job Descriptions": [
-        "JD Marketing.docx",
-        "JD Operaciones.docx",
-        "JD Admin.docx",
-        "JD Ventas.docx"
-      ],
-      "KPIs": [
-        "KPIs Rol.xlsx",
-        "Evaluaciones.docx",
-        "Metas Individuales.xlsx"
-      ],
-      "Manual de Cultura Organizacional": [
-        "Valores Corporativos.docx",
-        "Cultura Empresa.pdf"
-      ],
-      "Descripciones de Puesto": [
-        "Perfil Puesto.docx",
-        "Requisitos Posición.docx"
-      ],
-      "Contratos - Freelancers": [
-        "Contrato Freelancer Base.docx",
-        "Contrato Temporal.docx"
-      ],
-      "Políticas Internas - Cultura": [
-        "Código Conducta.docx",
-        "Política Teletrabajo.docx",
-        "Reglamento Interno.docx"
-      ],
-      "Política de Compensaciones": [
-        "Tabla Salarial.xlsx",
-        "Bonos Incentivos.docx",
-        "Beneficios.docx"
-      ],
-      "Contratos Guías Freelance": [
-        "Guía_Freelancer.docx"
-      ],
-      "Evaluaciones de Desempeño": [
-        "Plantilla Evaluacion.xlsx",
-        "Feedback_360.docx"
-      ],
-      "Nómina y Planillas": [
-        "Registro Nómina.xlsx",
-        "Planilla Mensual.xlsx",
-        "Aportes IESS.xlsx"
-      ],
-      "Reclutamiento y Selección": [
-        "Proceso Reclutamiento.docx",
-        "Banco Candidatos.xlsx",
-        "Evaluación Candidatos.xlsx"
-      ],
-      "Expedientes de Personal": [
-        "Expediente Empleado Plantilla.docx",
-        "Documentos Ingreso.xlsx"
-      ],
-      "Vacaciones y Permisos": [
-        "Control Vacaciones.xlsx",
-        "Solicitud Permisos.docx",
-        "Calendario Ausencias.xlsx"
+    {
+      "type": "dir",
+      "name": "08 RECURSOS HUMANOS Y EQUIPO",
+      "description": "# 08 RECURSOS HUMANOS Y EQUIPO\n\nGestión de recursos humanos.\n\n## Propósito\nAdministrar el equipo y recursos humanos.",
+      "content": [
+        { "type": "dir", "name": "Organigrama", "description": "Estructura organizacional de la empresa.", "content": [] },
+        {
+          "type": "dir",
+          "name": "Roles y Responsabilidades",
+          "description": "Definición de roles y responsabilidades.",
+          "content": [
+            { "type": "file", "name": "Rol.docx", "description": "Documento con definición de roles", "content_template": "# Definición de Rol\n\n**Rol:**\n**Responsabilidades:**" }
+          ]
+        },
+        { "type": "dir", "name": "Job Descriptions", "description": "Descripciones detalladas de puestos.", "content": [] },
+        { "type": "dir", "name": "KPIs", "description": "Indicadores clave de rendimiento para el personal.", "content": [] },
+        { "type": "dir", "name": "Manual de Cultura Organizacional", "description": "Cultura y valores de la empresa.", "content": [] },
+        { "type": "dir", "name": "Descripciones de Puesto", "description": "Detalles específicos de cada puesto.", "content": [] },
+        { "type": "dir", "name": "Contratos - Freelancers", "description": "Contratos con freelancers y personal externo.", "content": [] },
+        { "type": "dir", "name": "Políticas Internas - Cultura", "description": "Políticas internas y de cultura organizacional.", "content": [] },
+        { "type": "dir", "name": "Política de Compensaciones", "description": "Políticas de compensación y beneficios.", "content": [] },
+        { "type": "dir", "name": "Contratos Guías Freelance", "description": "Plantillas de contratos para guías freelance.", "content": [] },
+        {
+          "type": "dir",
+          "name": "Evaluaciones de Desempeño",
+          "description": "Formatos y registros de evaluaciones de desempeño.",
+          "content": [
+            { "type": "file", "name": "Evaluaciones.docx", "description": "Documento de evaluaciones de desempeño", "content_template": "# Evaluación de Desempeño\n\n**Empleado:**\n**Periodo:**\n**Resultados:**" }
+          ]
+        }
       ]
     },
-    "09 CAPACITACIÓN Y DOCUMENTACIÓN INTERNA": {
-      "Manuales": [
-        "Manual_de_Inducción_Nuevos_Miembros.docx",
-        "Manual_de_Inducción.docx",
-        "Manual_Bienvenida.pdf"
-      ],
-      "Guías Operativas": [
-        "Guía Atención Cliente.docx",
-        "Guía Procesos Internos.docx",
-        "Guía Uso Sistemas.docx"
-      ],
-      "Capacitación Técnica": [
-        "Atencion al Cliente.docx",
-        "Ventas.docx",
-        "Operaciones.docx",
-        "Uso de Herramientas.docx",
-        "Seguridad Información.docx"
-      ],
-      "Videos - Material Didáctico": [
-        "Video_Inducción.mp4",
-        "Demo_Herramientas.mp4"
-      ],
-      "Registro de Capacitación": [
-        "Asistencia Capacitaciones.xlsx",
-        "Historial Entrenamientos.xlsx",
-        "Certificaciones_Personal.xlsx"
-      ],
-      "Plan de Desarrollo": [
-        "Plan_Capacitación_Anual.docx",
-        "Desarrollo_Carrera.xlsx"
+    {
+      "type": "dir",
+      "name": "09 CAPACITACIÓN Y DOCUMENTACIÓN INTERNA",
+      "description": "# 09 CAPACITACIÓN Y DOCUMENTACIÓN INTERNA\n\nCapacitación y documentación interna.\n\n## Propósito\nFormar y documentar internamente.",
+      "content": [
+        {
+          "type": "dir",
+          "name": "Manuales",
+          "description": "Manuales de inducción y procedimientos.",
+          "content": [
+            { "type": "file", "name": "Manual_de_Inducción.docx", "description": "Manual de inducción para nuevos miembros", "content_template": "# Manual de Inducción\n\nBienvenido a la empresa. Este manual contiene todo lo que necesita saber para comenzar." }
+          ]
+        },
+        { "type": "dir", "name": "Guías Operativas", "description": "Guías para operaciones diarias.", "content": [] },
+        { "type": "dir", "name": "Capacitación Técnica", "description": "Material de capacitación técnica.", "content": [] },
+        { "type": "dir", "name": "Videos - Material Didáctico", "description": "Contenido audiovisual educativo.", "content": [] },
+        { "type": "dir", "name": "Registro de Capacitación", "description": "Registros de capacitaciones realizadas.", "content": [] }
       ]
     },
-    "10 ANALÍTICA Y REPORTES": {
-      "Dashboards (Operativos - Financieros - Marketing)": [
-        "Dashboard PowerBI.pbix",
-        "Dashboard Online_Link.txt",
-        "Dashboard Ejecutivo.xlsx"
-      ],
-      "Reportes Periódicos (Semanal - Mensual - Trimestral)": [
-        "Reporte Semanal.xlsx",
-        "Reporte Mensual.xlsx",
-        "Reporte Trimestral.pdf"
-      ],
-      "Lecciones Aprendidas - Retrospectivas": [
-        "Retrospectiva Q1.docx",
-        "Lecciones Proyecto.docx",
-        "Post Mortem.docx"
-      ],
-      "Indicadores de Desempeño (KPIs globales)": [
-        "KPIs Globales.xlsx",
-        "Indicadores Por Area.xlsx",
-        "Balanced Scorecard.xlsx"
-      ],
-      "Dashboard Principal": [
-        "Dashboard Principal.xlsx"
-      ],
-      "KPIs Operativos": [
-        "KPIs Operativos.xlsx",
-        "Métricas Tiempo Real.xlsx"
-      ],
-      "Análisis de Tendencias": [
-        "Analisis Tendencias.xlsx",
-        "Pronósticos.xlsx"
+    {
+      "type": "dir",
+      "name": "10 ANALÍTICA Y REPORTES",
+      "description": "# 10 ANALÍTICA Y REPORTES\n\nAnálisis y reportes del proyecto.\n\n## Propósito\nAnalizar rendimiento y generar reportes.",
+      "content": [
+        {
+          "type": "dir",
+          "name": "Dashboards (Operativos - Financieros - Marketing)",
+          "description": "Paneles de control interactivos.",
+          "content": [
+            { "type": "file", "name": "Dashboard Principal.xlsx", "description": "Dashboard principal con métricas clave", "content_template": "Dashboard principal con métricas clave." }
+          ]
+        },
+        { "type": "dir", "name": "Reportes Periódicos (Semanal - Mensual - Trimestral)", "description": "Reportes regulares de rendimiento.", "content": [] },
+        { "type": "dir", "name": "Lecciones Aprendidas - Retrospectivas", "description": "Análisis de experiencias y mejoras.", "content": [] },
+        {
+          "type": "dir",
+          "name": "Indicadores de Desempeño (KPIs globales)",
+          "description": "KPIs generales del negocio.",
+          "content": [
+            { "type": "file", "name": "KPIs Operativos.xlsx", "description": "Indicadores operativos en Excel", "content_template": "Hoja de cálculo para seguimiento de KPIs operativos." },
+            { "type": "file", "name": "Análisis de Tendencias.xlsx", "description": "Análisis de tendencias del negocio", "content_template": "Hoja de cálculo para análisis de tendencias." }
+          ]
+        }
       ]
     },
-    "11 TECNOLOGÍA E IT": {
-      "Infraestructura Tecnológica": [
-        "Inventario Hardware.xlsx",
-        "Inventario Software.xlsx",
-        "Diagrama Red.pdf"
-      ],
-      "Licencias de Software": [
-        "Licencias Activas.xlsx",
-        "Renovaciones Software.xlsx",
-        "Credenciales Sistemas.xlsx"
-      ],
-      "Backup y Seguridad": [
-        "Política Backup.docx",
-        "Plan Recuperación Desastres.docx",
-        "Registro Backups.xlsx"
-      ],
-      "Documentación Técnica": [
-        "Arquitectura Sistemas.pdf",
-        "Manual Técnico.docx",
-        "APIs Documentación.pdf"
-      ],
-      "Seguridad Informática": [
-        "Política_Seguridad_IT.docx",
-        "Control Accesos.xlsx",
-        "Incidentes Seguridad.xlsx"
-      ],
-      "Soporte Técnico": [
-        "Tickets Soporte.xlsx",
-        "FAQ Técnico.docx",
-        "Procedimientos Soporte.docx"
+    {
+      "type": "dir",
+      "name": "11 TECNOLOGÍA E IT",
+      "description": "# 11 TECNOLOGÍA E IT\n\nGestión de la infraestructura tecnológica y sistemas de información.\n\n## Propósito\nAsegurar la disponibilidad, seguridad y eficiencia de los recursos tecnológicos.",
+      "content": [
+        { "type": "dir", "name": "Infraestructura y Redes", "description": "Documentación sobre servidores, redes y hardware.", "content": [] },
+        { "type": "dir", "name": "Seguridad Informática", "description": "Políticas, procedimientos y registros de seguridad.", "content": [] },
+        { "type": "dir", "name": "Desarrollo y Software", "description": "Proyectos de desarrollo, código fuente y documentación de software.", "content": [] },
+        { "type": "dir", "name": "Soporte Técnico", "description": "Manuales, guías y registros de soporte técnico.", "content": [] },
+        { "type": "dir", "name": "Políticas y Procedimientos IT", "description": "Políticas de uso de tecnología y procedimientos estándar.", "content": [] }
       ]
     },
-    "12 GESTIÓN DE RIESGOS Y COMPLIANCE": {
-      "Matriz de Riesgos": [
-        "Matriz Riesgos.xlsx",
-        "Mapa Calor Riesgos.pdf"
-      ],
-      "Plan de Contingencia": [
-        "Plan Continuidad Negocio.docx",
-        "Protocolos Emergencia.docx"
-      ],
-      "Auditorías": [
-        "Calendario Auditorías.xlsx",
-        "Reportes Auditoría.pdf",
-        "Plan Acción Hallazgos.xlsx"
-      ],
-      "Cumplimiento Regulatorio": [
-        "Check Cumplimiento.xlsx",
-        "Regulaciones Aplicables.docx",
-        "Certificados Cumplimiento.pdf"
-      ],
-      "Políticas de Compliance": [
-        "Política Anticorrupción.docx",
-        "Política Antilavado.docx",
-        "Código Ética.docx"
+    {
+      "type": "dir",
+      "name": "12 GESTIÓN DE RIESGOS Y COMPLIANCE",
+      "description": "# 12 GESTIÓN DE RIESGOS Y COMPLIANCE\n\nDocumentos relacionados con la gestión de riesgos y el cumplimiento normativo.\n\n## Propósito\nIdentificar, evaluar y mitigar riesgos, asegurando el cumplimiento de leyes y regulaciones.",
+      "content": [
+        { "type": "dir", "name": "Matriz de Riesgos", "description": "Identificación y evaluación de riesgos operativos, financieros y legales.", "content": [] },
+        { "type": "dir", "name": "Políticas de Compliance", "description": "Políticas para asegurar el cumplimiento normativo y ético.", "content": [] },
+        { "type": "dir", "name": "Auditorías Internas y Externas", "description": "Informes y hallazgos de auditorías.", "content": [] },
+        { "type": "dir", "name": "Planes de Continuidad de Negocio (BCP)", "description": "Planes para asegurar la operación ante contingencias.", "content": [] },
+        { "type": "dir", "name": "Reportes de Incidentes", "description": "Registro y análisis de incidentes de seguridad o compliance.", "content": [] }
       ]
     },
-    "13 INNOVACIÓN Y DESARROLLO": {
-      "Proyectos I+D": [
-        "Proyectos Investigación.xlsx",
-        "Propuestas Innovación.docx"
-      ],
-      "Pruebas de Concepto": [
-        "POC Activos.xlsx",
-        "Resultados Pruebas.docx"
-      ],
-      "Proyectos Piloto": [
-        "Plan Piloto.docx",
-        "Evaluación Piloto.xlsx"
-      ],
-      "Ideas y Mejoras": [
-        "Buzón Ideas.xlsx",
-        "Evaluación Ideas.docx",
-        "Pipeline Innovación.xlsx"
-      ],
-      "Alianzas Estratégicas": [
-        "Partners Tecnológicos.xlsx",
-        "Acuerdos Colaboración.docx"
+    {
+      "type": "dir",
+      "name": "13 INNOVACIÓN Y DESARROLLO",
+      "description": "# 13 INNOVACIÓN Y DESARROLLO\n\nProyectos e iniciativas de innovación y desarrollo de nuevos productos o servicios.\n\n## Propósito\nFomentar la creatividad y el desarrollo de nuevas oportunidades de negocio.",
+      "content": [
+        { "type": "dir", "name": "Investigación de Mercado (I+D)", "description": "Estudios y análisis para nuevos desarrollos.", "content": [] },
+        { "type": "dir", "name": "Proyectos de Innovación", "description": "Documentación y seguimiento de proyectos de innovación.", "content": [] },
+        { "type": "dir", "name": "Prototipos y Pruebas de Concepto (PoC)", "description": "Diseño y resultados de prototipos y PoCs.", "content": [] },
+        { "type": "dir", "name": "Banco de Ideas", "description": "Registro y evaluación de ideas innovadoras.", "content": [] },
+        { "type": "dir", "name": "Alianzas Estratégicas de Innovación", "description": "Acuerdos con socios para proyectos de innovación.", "content": [] }
       ]
     },
-    "14 SOSTENIBILIDAD Y RSE": {
-      "Responsabilidad Social Empresarial": [
-        "Plan RSE.docx",
-        "Proyectos Sociales.xlsx"
-      ],
-      "Sostenibilidad": [
-        "Política Ambiental.docx",
-        "Huella Carbono.xlsx",
-        "Iniciativas Verdes.docx"
-      ],
-      "Reportes de Sostenibilidad": [
-        "Reporte Anual RSE.pdf",
-        "Indicadores Sostenibilidad.xlsx"
+    {
+      "type": "dir",
+      "name": "14 SOSTENIBILIDAD Y RSE",
+      "description": "# 14 SOSTENIBILIDAD Y RSE\n\nIniciativas de sostenibilidad y Responsabilidad Social Empresarial.\n\n## Propósito\nGestionar el impacto social y ambiental de la empresa y promover prácticas responsables.",
+      "content": [
+        { "type": "dir", "name": "Políticas de Sostenibilidad", "description": "Políticas y compromisos de la empresa con la sostenibilidad.", "content": [] },
+        { "type": "dir", "name": "Reportes de Impacto Social y Ambiental", "description": "Medición y reporte del impacto de las operaciones.", "content": [] },
+        { "type": "dir", "name": "Proyectos de Responsabilidad Social Empresarial (RSE)", "description": "Iniciativas y proyectos de RSE.", "content": [] },
+        { "type": "dir", "name": "Certificaciones y Estándares", "description": "Documentación de certificaciones de sostenibilidad.", "content": [] },
+        { "type": "dir", "name": "Voluntariado Corporativo", "description": "Programas y actividades de voluntariado.", "content": [] }
       ]
     },
-    "15 ARCHIVO HISTÓRICO": {
-      "Documentos Históricos": [
-        "Archivo_2024_README.txt"
-      ],
-      "Proyectos Cerrados": [
-        "Proyectos Finalizados.xlsx"
+    {
+      "type": "dir",
+      "name": "15 ARCHIVO HISTÓRICO",
+      "description": "# 15 ARCHIVO HISTÓRICO\n\nDocumentación histórica y registros de años anteriores.\n\n## Propósito\nPreservar la memoria institucional y el acceso a información histórica relevante.",
+      "content": [
+        { "type": "dir", "name": "Proyectos Anteriores", "description": "Documentación de proyectos finalizados.", "content": [] },
+        { "type": "dir", "name": "Documentación Financiera Histórica", "description": "Estados financieros y reportes de años fiscales cerrados.", "content": [] },
+        { "type": "dir", "name": "Reportes Anuales Pasados", "description": "Informes de gestión y reportes anuales de años anteriores.", "content": [] },
+        { "type": "dir", "name": "Comunicaciones y Marketing Histórico", "description": "Campañas y material de marketing de años anteriores.", "content": [] }
       ]
     }
-  }
+  ]
 }
